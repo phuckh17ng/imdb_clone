@@ -1,13 +1,13 @@
 import React from "react";
+import SliderTopMovies from "../components/SliderTopMovies";
+import * as styles from "../styles/styles";
 
 const HomePage = () => {
-	const styles = {
-		clipPath: "polygon(25% 0, 25% 100%, 100% 50%)",
-		width: 40,
-		height: 40,
-		backgroundColor: "#f5c518",
-	};
-	return <div style={styles}></div>;
+	return (
+		<div>
+			<SliderTopMovies />
+		</div>
+	);
 };
 
 export default HomePage;
