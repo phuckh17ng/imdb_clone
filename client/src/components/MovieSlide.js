@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+require("dotenv").config();
 
 const MovieSlide = ({ id }) => {
 	const [mydata, setMyData] = useState({});
@@ -9,8 +10,8 @@ const MovieSlide = ({ id }) => {
 			url: "https://imdb8.p.rapidapi.com/title/get-details",
 			params: { tconst: id },
 			headers: {
-				"X-RapidAPI-Key": "bd07387548msh14594e64c16fd9fp19d3adjsn5520e10a3ffd",
-				"X-RapidAPI-Host": "imdb8.p.rapidapi.com",
+				"X-RapidAPI-Key": "",
+				"X-RapidAPI-Host": "",
 			},
 		};
 		axios
