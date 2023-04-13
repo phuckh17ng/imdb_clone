@@ -3,11 +3,11 @@
 //backgroundColor: "#f5c518"
 const bookmarkStyle = {
 	clipPath: "polygon(0 0, 100% 0, 100% 100%, 50% 75%, 0 100%)",
-	backgroundColor: "white",
-	width: 14,
-	height: 18,
 };
-
+const starStyle = {
+	clipPath:
+		"polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
+};
 const triangleStyle = {
 	clipPath: "polygon(25% 0, 25% 100%, 100% 50%)",
 	width: 40,
@@ -24,4 +24,4 @@ const forwardStyle = {
 
 const mainColor = { backgroundColor: "#f5c518" };
 
-export { bookmarkStyle, triangleStyle, mainColor, forwardStyle };
+export { bookmarkStyle, triangleStyle, mainColor, forwardStyle, starStyle };

@@ -48,7 +48,7 @@ const Navbar = () => {
 							<div className="flex items-center mx-3">
 								<div
 									style={bookmarkStyle}
-									className="flex justify-center mr-1 hover:!bg-[#f5c518]"
+									className="flex justify-center mr-1 hover:!bg-[#f5c518] w-[14px] h-[18px] bg-white"
 								>
 									<img
 										src={require("../images/icons8-plus-math-15.png")}
