@@ -1,14 +1,18 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { bookmarkStyle } from "../styles/styles";
 
 const Navbar = () => {
 	return (
-		<div className="bg-black">
+		<div className="bg-black z-50">
 			<div className=" bg-black h-14 text-white w-full max-w-[1280px] m-auto px-3">
 				<div className="flex items-center h-full">
-					<div className="bg-[#f5c518] rounded flex items-center justify-center text-black font-black text-lg w-16 px-4 h-8">
+					<Link
+						to="/"
+						className="bg-[#f5c518] rounded flex items-center justify-center text-black font-black text-lg w-16 px-4 h-8"
+					>
 						IMDb
-					</div>
+					</Link>
 					<div className="flex items-center mx-5">
 						<div className="h-[13px] flex flex-col justify-between mr-2">
 							<div className="w-4 h-[1.5px] bg-white"></div>

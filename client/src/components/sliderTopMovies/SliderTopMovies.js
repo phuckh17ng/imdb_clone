@@ -1,37 +1,26 @@
-// import axios from "axios";
+import axios from "axios";
 // import "~slick-carousel/slick/slick-theme.css";
 // import "~slick-carousel/slick/slick.css";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-slick";
+import { getMovies as listMovies } from "../../redux/actions/moviesActions";
 import * as style from "../../styles/styles";
 import MovieSlide from "./MovieSlide";
 import "./SliderTopMovie.css";
 
 const SliderTopMovies = () => {
-	const [mydata, setMyData] = useState({});
-	const [loading, setLoading] = useState(false);
-	useEffect(() => {
-		var requestOptions = {
-			method: "GET",
-			redirect: "follow",
-		};
-		fetch(
-			"https://imdb-api.com/en/API/IMDbList/k_98o8xknz/ls004285275",
-			requestOptions
-		)
-			.then((response) => response.text())
-			.then((result) => {
-				console.log(result);
-				const data = JSON.parse(result);
-				setMyData(data);
-				setLoading(true);
-			})
-			.catch((error) => console.log("error", error));
-		return () => {};
-	}, []);
+	const dispatch = useDispatch();
 
-	console.log(mydata.items);
+	const getMovies = useSelector((state) => state.getMovies);
+	const { movies, loading, error } = getMovies;
+
+	useEffect(() => {
+		dispatch(listMovies());
+	}, [dispatch]);
+	console.log(movies.items);
 	console.log(loading);
+
 	const settings = {
 		dots: false,
 		infinite: false,
@@ -57,27 +46,29 @@ const SliderTopMovies = () => {
 				This week's top TV and movies
 			</div>
 			<Slider {...settings}>
-				{loading === true ? (
-					mydata.items.map((item, index) => {
+				{loading ? (
+					<h2 className="text-white">Loading...</h2>
+				) : error ? (
+					<h2>{error}</h2>
+				) : (
+					movies.items?.map((movie, index) => {
 						if (index < 10) {
 							return (
 								<MovieSlide
-									key={item.id}
-									id={item.id}
-									title={item.title}
-									fullTitle={item.title}
-									imDbRating={item.imDbRating}
-									imDbRatingCount={item.imDbRatingCount}
-									image={item.image}
-									year={item.year}
-									description={item.description}
+									key={movie.id}
+									id={movie.id}
+									title={movie.title}
+									fullTitle={movie.title}
+									imDbRating={movie.imDbRating}
+									imDbRatingCount={movie.imDbRatingCount}
+									image={movie.image}
+									year={movie.year}
+									description={movie.description}
 								/>
 							);
 						}
 						return "";
 					})
-				) : (
-					<p className="text-white">Loading...</p>
 				)}
 			</Slider>
 		</div>

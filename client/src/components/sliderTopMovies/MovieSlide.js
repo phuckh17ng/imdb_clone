@@ -1,13 +1,18 @@
 // import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import * as styles from "../../styles/styles";
 import "./MovieSlide.css";
 
 const MovieSlide = ({ id, image, title, fullTitle, year, imDbRating }) => {
+	console.log(image);
 	return (
 		<div className="text-white">
 			<div className="relative h-[275px] w-[185px] cursor-pointer hover:brightness-125 transition-all duration-500">
-				<img src={image} alt={title} className="z-0 h-[275px] w-[185px]" />
+				<Link to={`details/${id}`}>
+					<img src={image} alt={title} className="z-0 h-[275px] w-[185px]" />
+				</Link>
+
 				<div
 					style={styles.bookmarkStyle}
 					className="absolute top-0 left-0 w-[32px] h-[42px] bg-zinc-800/70 flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:brightness-200"

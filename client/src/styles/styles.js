@@ -22,6 +22,23 @@ const forwardStyle = {
 	height: 20,
 };
 
+const movieBackgroundStyle = {
+	backgroundImage:
+		"url(https://m.media-amazon.com/images/M/MV5BOTJhNzlmNzctNTU5Yy00N2YwLThhMjQtZDM0YjEzN2Y0ZjNhXkEyXkFqcGdeQXVyMTEwMTQ4MzU5._V1_SL200_QL1.jpg)",
+	backgroundPosition: "center",
+	backgroundRepeat: "no-repeat",
+	backgroundSize: "cover",
+	backgroundBlendMode: "normal",
+	filter: "blur(120px)",
+};
+
 const mainColor = { backgroundColor: "#f5c518" };
 
-export { bookmarkStyle, triangleStyle, mainColor, forwardStyle, starStyle };
+export {
+	bookmarkStyle,
+	triangleStyle,
+	mainColor,
+	forwardStyle,
+	starStyle,
+	movieBackgroundStyle,
+};
