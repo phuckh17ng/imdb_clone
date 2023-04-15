@@ -6,10 +6,16 @@ import {
 } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
 
-import { getMoviesReducer } from "./reducers/moviesReducers";
+import {
+	getMovieDetailsReducer,
+	getMoviesReducer,
+	getMovieTrailerReducer,
+} from "./reducers/moviesReducers";
 
 let reducers = combineReducers({
 	getMovies: getMoviesReducer,
+	getMovieDetails: getMovieDetailsReducer,
+	getMovieTrailer: getMovieTrailerReducer,
 });
 
 const middleware = [thunk];

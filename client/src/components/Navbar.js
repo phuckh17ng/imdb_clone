@@ -46,7 +46,7 @@ const Navbar = () => {
 
 					<div className="flex items-center">
 						<div className="font-semibold tracking-[-1.25px] w-24 h-9 flex items-center justify-center border-r-2 border-r-zinc-700 mr-2">
-							IMDb<span className=" text-blue-300">Pro</span>
+							IMDb<span className=" text-[#5699ef]">Pro</span>
 						</div>
 						<div className="flex items-center">
 							<div className="flex items-center mx-3">
@@ -62,8 +62,8 @@ const Navbar = () => {
 								</div>
 								<label className="font-semibold">Watchlist</label>
 							</div>
-							<div className="font-semibold mx-3 w-16">Sign in</div>
-							<div className="flex items-center justify-evenly mx-3">
+							<div className="font-semibold mx-3 w-16 text-center">Sign in</div>
+							<div className="flex items-center justify-evenly ml-3">
 								<label className="font-semibold mr-1">EN</label>
 								<img
 									src={require("../images/icons8-sort-down-30 (1).png")}

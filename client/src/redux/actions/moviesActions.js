@@ -6,7 +6,7 @@ export const getMovies = () => async (dispatch) => {
 		dispatch({ type: actionTypes.GET_MOVIES_REQUEST });
 
 		const { data } = await axios.get(
-			"https://imdb-api.com/en/API/IMDbList/k_zt02vio8/ls004285275"
+			"https://imdb-api.com/en/API/IMDbList/k_ed69mhut/ls004285275"
 		);
 
 		console.log(data);
@@ -30,7 +30,7 @@ export const getMovieDetails = (id) => async (dispatch) => {
 		dispatch({ type: actionTypes.GET_MOVIE_DETAILS_REQUEST });
 
 		const { data } = await axios.get(
-			`https://imdb-api.com/en/API/Title/k_zt02vio8/${id}`
+			`https://imdb-api.com/en/API/Title/k_ed69mhut/${id}`
 		);
 
 		dispatch({
@@ -40,6 +40,29 @@ export const getMovieDetails = (id) => async (dispatch) => {
 	} catch (error) {
 		dispatch({
 			type: actionTypes.GET_MOVIE_DETAILS_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};
+
+export const getMovieTrailer = (id) => async (dispatch) => {
+	try {
+		dispatch({ type: actionTypes.GET_MOVIE_TRAILER_REQUEST });
+
+		const { data } = await axios.get(
+			`https://imdb-api.com/en/API/Trailer/k_ed69mhut/${id}`
+		);
+
+		dispatch({
+			type: actionTypes.GET_MOVIE_TRAILER_SUCCESS,
+			payload: data,
+		});
+	} catch (error) {
+		dispatch({
+			type: actionTypes.GET_MOVIE_TRAILER_FAIL,
 			payload:
 				error.response && error.response.data.message
 					? error.response.data.message

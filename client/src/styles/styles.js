@@ -1,6 +1,8 @@
 //max-width: 1280px;
 //px-3
-//backgroundColor: "#f5c518"
+//backgroundColor: "#f5c518" yellow
+//backgroundColor: "#5699ef" blue
+//hover:rounded border-solid rounded hover:bg-zinc-700/50
 const bookmarkStyle = {
 	clipPath: "polygon(0 0, 100% 0, 100% 100%, 50% 75%, 0 100%)",
 };
