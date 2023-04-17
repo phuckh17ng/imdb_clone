@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import SquareLoader from "react-spinners/SquareLoader";
 import {
 	getMovieDetails,
 	getMovieTrailer,
@@ -15,7 +16,7 @@ const MovieDetailsPage = () => {
 	const movieDetails = useSelector((state) => state.getMovieDetails);
 	const movieTrailer = useSelector((state) => state.getMovieTrailer);
 	const { loading, error, movie } = movieDetails;
-	const { trailerLoading, trailerError, trailer } = movieTrailer;
+	const { trailer } = movieTrailer;
 	const { id } = useParams();
 	// const history = useNavigate();
 
@@ -35,7 +36,17 @@ const MovieDetailsPage = () => {
 	return (
 		<div className="w-full bg-zinc-900">
 			{loading ? (
-				<h2>Loading...</h2>
+				<div className="w-full h-[100vh] flex items-center justify-center bg-zinc-900">
+					<SquareLoader
+						loading={loading}
+						// cssOverride={override}
+						aria-label="Loading Spinner"
+						data-testid="loader"
+						size="50"
+						color="#f5c518"
+						className="m-auto"
+					/>
+				</div>
 			) : error ? (
 				<h2>{error}</h2>
 			) : (
@@ -155,6 +166,7 @@ const MovieDetailsPage = () => {
 										frameborder="0"
 										border="0"
 										className="ml-1 h-[415px] w-full"
+										loading="lazy"
 									></iframe>
 								</div>
 							</div>

@@ -1,9 +1,10 @@
-import axios from "axios";
+// import axios from "axios";
 // import "~slick-carousel/slick/slick-theme.css";
 // import "~slick-carousel/slick/slick.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-slick";
+import PropagateLoader from "react-spinners/PropagateLoader";
 import { getMovies as listMovies } from "../../redux/actions/moviesActions";
 import * as style from "../../styles/styles";
 import MovieSlide from "./MovieSlide";
@@ -45,32 +46,44 @@ const SliderTopMovies = () => {
 			<div className="text-zinc-400 pt-3 pb-4">
 				This week's top TV and movies
 			</div>
-			<Slider {...settings}>
+			<div>
 				{loading ? (
-					<h2 className="text-white">Loading...</h2>
+					<div className="w-full h-12 flex items-center justify-center">
+						<PropagateLoader
+							loading={loading}
+							// cssOverride={override}
+							aria-label="Loading Spinner"
+							data-testid="loader"
+							size="15"
+							color="#f5c518"
+							className="m-auto"
+						/>
+					</div>
 				) : error ? (
 					<h2>{error}</h2>
 				) : (
-					movies.items?.map((movie, index) => {
-						if (index < 10) {
-							return (
-								<MovieSlide
-									key={movie.id}
-									id={movie.id}
-									title={movie.title}
-									fullTitle={movie.title}
-									imDbRating={movie.imDbRating}
-									imDbRatingCount={movie.imDbRatingCount}
-									image={movie.image}
-									year={movie.year}
-									description={movie.description}
-								/>
-							);
-						}
-						return "";
-					})
+					<Slider {...settings}>
+						{movies.items?.map((movie, index) => {
+							if (index < 10) {
+								return (
+									<MovieSlide
+										key={movie.id}
+										id={movie.id}
+										title={movie.title}
+										fullTitle={movie.title}
+										imDbRating={movie.imDbRating}
+										imDbRatingCount={movie.imDbRatingCount}
+										image={movie.image}
+										year={movie.year}
+										description={movie.description}
+									/>
+								);
+							}
+							return "";
+						})}
+					</Slider>
 				)}
-			</Slider>
+			</div>
 		</div>
 	);
 };
