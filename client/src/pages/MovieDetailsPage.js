@@ -104,7 +104,7 @@ const MovieDetailsPage = () => {
 										<p className="text-zinc-400 text-sm font-bold tracking-widest">
 											YOUR RATING
 										</p>
-										<div className="flex justify-center mt-1 hover:rounded border-solid rounded hover:bg-zinc-700/50 py-1">
+										<div className="flex justify-center mt-1 hover:rounded border-solid hover:bg-zinc-700/50 py-1">
 											<img
 												src={require("../images/icons8-star-35.png")}
 												alt="rating"
@@ -212,11 +212,11 @@ const MovieDetailsPage = () => {
 							<div className="w-full max-w-[813px]">
 								<div className="py-3 text-zinc-100">{movie.plot}</div>
 								<div className="h-12 border-y flex items-center border-zinc-400">
-									<span className="font-bold mr-3">Creators</span>
+									<span className="font-bold">Creators</span>
 									<span>
 										{movie.directorList?.map((list) => (
-											<span key={list.id} className="mr-3">
-												<span className="text-white">- </span>
+											<span key={list.id}>
+												<span className="text-white mx-3">-</span>
 												<span className=" text-[#5699ef] hover:underline">
 													{list.name}
 												</span>
@@ -225,11 +225,11 @@ const MovieDetailsPage = () => {
 									</span>
 								</div>
 								<div className="h-12 border-b flex items-center border-zinc-400">
-									<span className="font-bold mr-3">Stars</span>
+									<span className="font-bold">Stars</span>
 									<span>
 										{movie.starList?.map((list) => (
-											<span key={list.id} className="mr-3">
-												<span className="text-white">- </span>
+											<span key={list.id}>
+												<span className="text-white mx-3">-</span>
 												<span className=" text-[#5699ef] hover:underline">
 													{list.name}
 												</span>
