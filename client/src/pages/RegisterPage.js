@@ -8,20 +8,22 @@ const RegisterPage = () => {
 	const [email, setEmail] = useState();
 	const [password, setPassword] = useState();
 	const navigate = useNavigate();
-	const [user, loading, error] = useAuthState(auth);
+	const [user, loading] = useAuthState(auth);
 	const handleRegister = (e) => {
 		e.preventDefault();
 		registerWithEmailAndPassword(name, email, password);
 	};
-
+	useEffect(() => {
+		if (loading) return;
+		if (user) navigate("/");
+	}, [user, loading, navigate]);
 	// useEffect(() => {
 	// 	if (loading) return;
 	// 	if (user !== null) {
 	// 		navigate("/");
 	// 	}
 	// }, [user, loading, navigate]);
-	console.log(user);
-	console.log(name);
+
 	return (
 		<div className="m-auto h-[100vh] flex items-center">
 			<div className="w-[400px] m-auto flex justify-center items-center flex-col border py-10 rounded">
@@ -31,9 +33,7 @@ const RegisterPage = () => {
 				<div className="text-3xl pt-3 pb-12">Create account</div>
 				<form onSubmit={handleRegister}>
 					<div class="mb-3">
-						<label for="exampleInputEmail1" class="form-label">
-							User name
-						</label>
+						<label class="form-label">User name</label>
 						<input
 							type="text"
 							name="userName"

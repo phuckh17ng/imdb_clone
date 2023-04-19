@@ -1,13 +1,29 @@
+import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { auth, logout } from "../firebaseConfig";
+import { Link, useLocation } from "react-router-dom";
+import { auth, db, logout } from "../firebaseConfig";
 import { bookmarkStyle } from "../styles/styles";
 
 const Navbar = () => {
 	// const navigate = useNavigate();
 	const [user, loading] = useAuthState(auth);
+	const [userData, setUserData] = useState();
 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	useEffect(() => {
+		const fetchUserData = async () => {
+			if (loading) return;
+			if (user !== null) {
+				const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+				const docs = await getDocs(q);
+				docs.forEach((doc) => {
+					setUserData(doc.data());
+				});
+			}
+		};
+		fetchUserData();
+	}, [user?.uid, loading, user]);
 	// useEffect(() => {
 	// 	logout();
 	// 	if (loading) return;
@@ -17,7 +33,7 @@ const Navbar = () => {
 	// }, [loading, user, navigate]);
 
 	const [userMenuState, setUserMenuState] = useState(false);
-	console.log(user);
+	// console.log(user);
 	const location = useLocation();
 
 	const userMenu = (
@@ -26,7 +42,7 @@ const Navbar = () => {
 			className="font-normal w-[170px] bg-zinc-800 absolute top-10 right-0 z-50 flex flex-col justify-start items-start py-3 rounded"
 		>
 			<Link
-				to={`account/${user?.uid}/${user?.displayName}`}
+				to={`account/${userData?.uid}/${userData?.name}`}
 				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
 			>
 				Settings

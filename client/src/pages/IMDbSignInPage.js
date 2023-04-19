@@ -9,10 +9,9 @@ const IMDbSignInPage = () => {
 	const [email, setEmail] = useState();
 	const [password, setPassword] = useState();
 	const navigate = useNavigate();
-	const [user, loading, error] = useAuthState(auth);
+	const [user, loading] = useAuthState(auth);
 	const handleLogin = (e) => {
 		e.preventDefault();
-
 		logInWithEmailAndPassword(email, password);
 	};
 
@@ -79,10 +78,7 @@ const IMDbSignInPage = () => {
 							Remember me
 						</label>
 					</div>
-					<button
-						// type="submit"
-						className="text-zinc-800 w-full rounded py-1 bg-gradient-to-b from-cyan-500 to-blue-500 font-semibold"
-					>
+					<button className="text-zinc-800 w-full rounded py-1 bg-gradient-to-b from-cyan-500 to-blue-500 font-semibold">
 						Sign in
 					</button>
 

@@ -27,7 +27,7 @@ const SignInPage = () => {
 						<div className="mx-auto w-full">
 							<Link
 								to="/signin/imdb"
-								className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 flex items-center my-3 mx-auto"
+								className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 cursor-pointer flex items-center my-3 mx-auto"
 							>
 								<img
 									src={require("../images/icons8-imdb-an-online-database-of-information-related-to-films,-and-television-programs-25.png")}
@@ -37,7 +37,7 @@ const SignInPage = () => {
 								<span>Sign in with IMDb</span>
 							</Link>
 							<div
-								className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 flex items-center my-3 mx-auto"
+								className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 cursor-pointer flex items-center my-3 mx-auto"
 								onClick={signInWithGoogle}
 							>
 								<img
@@ -47,7 +47,7 @@ const SignInPage = () => {
 								/>
 								<span>Sign in with Google</span>
 							</div>
-							<div className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 flex items-center my-3 mx-auto">
+							<div className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 cursor-pointer flex items-center my-3 mx-auto">
 								<img
 									src={require("../images/icons8-amazon-30.png")}
 									alt="Amazon"
@@ -55,7 +55,7 @@ const SignInPage = () => {
 								/>
 								<span>Sign in with Amazon</span>
 							</div>
-							<div className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 flex items-center my-3 mx-auto">
+							<div className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 cursor-pointer flex items-center my-3 mx-auto">
 								<img
 									src={require("../images/icons8-apple-logo-30.png")}
 									alt="Apple"
@@ -63,7 +63,7 @@ const SignInPage = () => {
 								/>
 								<span>Sign in with Apple</span>
 							</div>
-							<div className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 flex items-center my-3 mx-auto">
+							<div className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 cursor-pointer flex items-center my-3 mx-auto">
 								<img
 									src={require("../images/icons8-facebook-30 (1).png")}
 									alt="facebook"
