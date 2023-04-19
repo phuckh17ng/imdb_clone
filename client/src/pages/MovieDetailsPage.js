@@ -1,26 +1,37 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SquareLoader from "react-spinners/SquareLoader";
 import {
 	getMovieDetails,
 	getMovieTrailer,
 } from "../redux/actions/moviesActions";
+import { addToWatchlist } from "../redux/actions/watchlistActions";
 import * as styles from "../styles/styles";
+
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../firebaseConfig";
 
 const MovieDetailsPage = () => {
 	// const [mydata, setMyData] = useState({});
 	// const [loading, setLoading] = useState(false);
+	const [user] = useAuthState(auth);
 	const movieDispatcher = useDispatch();
 	const trailerDispatcher = useDispatch();
+	const watchlistDisatcher = useDispatch();
 	const movieDetails = useSelector((state) => state.getMovieDetails);
 	const movieTrailer = useSelector((state) => state.getMovieTrailer);
+	const watchlist = useSelector((state) => state.watchlist);
+
+	console.log(watchlist);
+
 	const { loading, error, movie } = movieDetails;
 	const { trailer } = movieTrailer;
 	const { id } = useParams();
-	// const history = useNavigate();
+	const history = useNavigate();
 
 	console.log(id);
+	console.log(movie);
 	useEffect(() => {
 		if (movie && id !== movie.id) {
 			movieDispatcher(getMovieDetails(id));
@@ -32,6 +43,11 @@ const MovieDetailsPage = () => {
 			trailerDispatcher(getMovieTrailer(id));
 		}
 	}, [trailerDispatcher, trailer, id]);
+
+	const handleAddToWatchlist = () => {
+		watchlistDisatcher(addToWatchlist(movie?.id));
+		// history(`/${user?.uid}/watchlist`);
+	};
 
 	return (
 		<div className="w-full bg-zinc-900">
@@ -258,7 +274,10 @@ const MovieDetailsPage = () => {
 							</div>
 
 							<div className="flex mx-3">
-								<div className="h-12 w-[308px] bg-zinc-700/50 flex items-center rounded-l hover:brightness-125">
+								<div
+									onClick={handleAddToWatchlist}
+									className="h-12 w-[308px] cursor-pointer bg-zinc-700/50 flex items-center rounded-l hover:brightness-125"
+								>
 									<img
 										src={require("../images/icons8-plus-20.png")}
 										alt="watchlist"

@@ -1,7 +1,21 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { Link, useNavigate } from "react-router-dom";
+import { auth, signInWithGoogle } from "../firebaseConfig";
 
 const SignInPage = () => {
+	const [user, loading, error] = useAuthState(auth);
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (loading) return;
+		if (user !== null) {
+			navigate("/");
+		}
+	}, [user, loading, navigate]);
+
+	console.log(user);
+	console.log(error);
 	return (
 		<div className="w-full h-[80vh] bg-zinc-300">
 			<div className="w-full max-w-[1000px] bg-white mx-auto px-3 h-full flex">
@@ -13,7 +27,7 @@ const SignInPage = () => {
 						<div className="mx-auto w-full">
 							<Link
 								to="/signin/imdb"
-								className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 flex items-center my-3 mx-auto"
+								className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 cursor-pointer flex items-center my-3 mx-auto"
 							>
 								<img
 									src={require("../images/icons8-imdb-an-online-database-of-information-related-to-films,-and-television-programs-25.png")}
@@ -22,7 +36,10 @@ const SignInPage = () => {
 								/>
 								<span>Sign in with IMDb</span>
 							</Link>
-							<div className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 flex items-center my-3 mx-auto">
+							<div
+								className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 cursor-pointer flex items-center my-3 mx-auto"
+								onClick={signInWithGoogle}
+							>
 								<img
 									src={require("../images/icons8-google-30.png")}
 									alt="Google"
@@ -30,7 +47,7 @@ const SignInPage = () => {
 								/>
 								<span>Sign in with Google</span>
 							</div>
-							<div className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 flex items-center my-3 mx-auto">
+							<div className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 cursor-pointer flex items-center my-3 mx-auto">
 								<img
 									src={require("../images/icons8-amazon-30.png")}
 									alt="Amazon"
@@ -38,7 +55,7 @@ const SignInPage = () => {
 								/>
 								<span>Sign in with Amazon</span>
 							</div>
-							<div className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 flex items-center my-3 mx-auto">
+							<div className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 cursor-pointer flex items-center my-3 mx-auto">
 								<img
 									src={require("../images/icons8-apple-logo-30.png")}
 									alt="Apple"
@@ -46,7 +63,7 @@ const SignInPage = () => {
 								/>
 								<span>Sign in with Apple</span>
 							</div>
-							<div className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 flex items-center my-3 mx-auto">
+							<div className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 cursor-pointer flex items-center my-3 mx-auto">
 								<img
 									src={require("../images/icons8-facebook-30 (1).png")}
 									alt="facebook"
@@ -61,9 +78,12 @@ const SignInPage = () => {
 							</div>
 						</div>
 
-						<button className="bg-[#f5c518] mt-6 rounded hover:brightness-90 h-9 flex items-center justify-center text-black font-bold pb-1 w-[242px] mx-auto">
+						<Link
+							to="/signin/register"
+							className="bg-[#f5c518] mt-6 rounded hover:brightness-90 h-9 flex items-center justify-center text-black font-bold pb-1 w-[242px] mx-auto"
+						>
 							Create a New Account
-						</button>
+						</Link>
 						<div className="mx-auto text-center text-xs w-[242px] pt-12">
 							By signing in, you agree to IMDb's&nbsp;
 							<a

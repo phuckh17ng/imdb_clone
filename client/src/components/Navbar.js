@@ -1,17 +1,71 @@
-import React from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useLocation } from "react-router-dom";
+import { auth, db, logout } from "../firebaseConfig";
 import { bookmarkStyle } from "../styles/styles";
 
 const Navbar = () => {
+	// const navigate = useNavigate();
+	const [user, loading] = useAuthState(auth);
+	const [userData, setUserData] = useState();
+
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	useEffect(() => {
+		const fetchUserData = async () => {
+			if (loading) return;
+			if (user !== null) {
+				const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+				const docs = await getDocs(q);
+				docs.forEach((doc) => {
+					setUserData(doc.data());
+				});
+			}
+		};
+		fetchUserData();
+	}, [user?.uid, loading, user]);
+	// useEffect(() => {
+	// 	logout();
+	// 	if (loading) return;
+	// 	if (user === null) {
+	// 		navigate("/");
+	// 	}
+	// }, [loading, user, navigate]);
+
+	const [userMenuState, setUserMenuState] = useState(false);
+	// console.log(user);
 	const location = useLocation();
+
+	const userMenu = (
+		<div
+			onMouseLeave={() => setUserMenuState(false)}
+			className="font-normal w-[170px] bg-zinc-800 absolute top-10 right-0 z-50 flex flex-col justify-start items-start py-3 rounded"
+		>
+			<Link
+				to={`account/${userData?.uid}/${userData?.name}`}
+				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
+			>
+				Settings
+			</Link>
+			<Link
+				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
+				onClick={logout}
+				to="/"
+			>
+				Logout
+			</Link>
+		</div>
+	);
+
 	return (
 		<div className="bg-black z-50">
-			{location.pathname === "/signin/imdb" ? null : (
+			{location.pathname === "/signin/imdb" ||
+			location.pathname === "/signin/register" ? null : (
 				<div className=" bg-black h-14 text-white w-full max-w-[1280px] m-auto px-3">
 					<div className="flex items-center h-full">
 						<Link
 							to="/"
-							className="bg-[#f5c518] rounded flex items-center justify-center text-black font-black text-lg w-16 px-4 h-8"
+							className="bg-[#f5c518] rounded flex items-center justify-center text-black font-black text-lg w-16 px-4 h-8 no-underline"
 						>
 							IMDb
 						</Link>
@@ -54,7 +108,7 @@ const Navbar = () => {
 								<div className="flex items-center mx-3">
 									<div
 										style={bookmarkStyle}
-										className="flex justify-center mr-1 hover:!bg-[#f5c518] w-[14px] h-[18px] bg-white"
+										className="flex justify-center mr-2 hover:!bg-[#f5c518] w-[14px] h-[18px] bg-white"
 									>
 										<img
 											src={require("../images/icons8-plus-math-15.png")}
@@ -64,12 +118,39 @@ const Navbar = () => {
 									</div>
 									<label className="font-semibold">Watchlist</label>
 								</div>
-								<Link
-									className="font-semibold mx-3 w-16 text-center"
-									to="/signin"
-								>
-									Sign in
-								</Link>
+								<div className="font-semibold w-16 text-center text-white">
+									{user ? (
+										user.photoURL ? (
+											<div
+												className="p-[1.5px] w-fit h-fit rounded-full relative bg-[#5699ef] flex items-center justify-center mx-auto"
+												onClick={() => setUserMenuState(!userMenuState)}
+											>
+												<img
+													src={user.photoURL}
+													alt="avatar"
+													className="w-8 h-8 rounded-full hover:brightness-75"
+												/>
+												{userMenuState ? userMenu : ""}
+											</div>
+										) : (
+											<div
+												className="rounded-full w-8 h-8 bg-zinc-700/50 relative flex items-center justify-center mx-auto "
+												onClick={() => setUserMenuState(!userMenuState)}
+											>
+												<img
+													src={require("../images/icons8-customer-40.png")}
+													alt="blank-avatar"
+													className="w-6 h-6 hover:brightness-75"
+												/>
+												{userMenuState ? userMenu : ""}
+											</div>
+										)
+									) : (
+										<Link to="/signin" className="text-center pr-1">
+											Sign in
+										</Link>
+									)}
+								</div>
 								<div className="flex items-center justify-evenly ml-3">
 									<label className="font-semibold mr-1">EN</label>
 									<img

@@ -5,7 +5,8 @@ const Footer = () => {
 	const location = useLocation();
 	return (
 		<div className="bg-black text-white">
-			{location.pathname === "/signin/imdb" ? null : (
+			{location.pathname === "/signin/imdb" ||
+			location.pathname === "/signin/register" ? null : (
 				<div className="w-full max-w-[1280px] mx-auto px-3 pt-16 h-[260px]">
 					<button className="bg-[#f5c518] rounded hover:brightness-90 h-9 flex items-center justify-center text-black text-sm font-semibold pb-1 px-6 mx-auto">
 						Sign in for more access
