@@ -16,11 +16,14 @@ import {
 import {
 	addDoc,
 	collection,
+	doc,
 	getDocs,
 	getFirestore,
 	query,
+	updateDoc,
 	where,
 } from "firebase/firestore";
+
 // import { useNavigate } from "react-router-dom";
 // const navigate = useNavigate;
 const firebaseConfig = {
@@ -37,22 +40,26 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
+
 const signInWithGoogle = async () => {
 	try {
 		const res = await signInWithPopup(auth, googleProvider);
 		const user = res.user;
 		const q = query(collection(db, "users"), where("uid", "==", user.uid));
+		console.log(q);
+		console.log(user.uid);
 		const docs = await getDocs(q);
 		console.log(user.uid);
 		console.log(docs);
 		if (docs.docs.length === 0) {
+			console.log(1);
 			await addDoc(collection(db, "users"), {
 				uid: user.uid,
 				name: user.displayName,
 				authProvider: "google",
 				email: user.email,
 				profileImage: user.photoURL,
-				password: user.password,
+				watchlist: null,
 			});
 		}
 	} catch (err) {
@@ -73,9 +80,7 @@ const logInWithEmailAndPassword = async (email, password) => {
 const registerWithEmailAndPassword = async (name, email, password) => {
 	try {
 		const res = await createUserWithEmailAndPassword(auth, email, password);
-		console.log(res);
 		const user = res.user;
-		console.log(name);
 
 		await addDoc(collection(db, "users"), {
 			uid: user.uid,
@@ -84,13 +89,13 @@ const registerWithEmailAndPassword = async (name, email, password) => {
 			email,
 			password: password,
 			profileImage: require("./images/icons8-customer-96.png"),
+			watchlist: [],
 		});
 		alert("create account successfully");
 		return true;
 	} catch (err) {
 		console.error(err);
 		alert(err.message);
-		return false;
 	}
 };
 const sendPasswordReset = async (email) => {
@@ -101,6 +106,19 @@ const sendPasswordReset = async (email) => {
 		console.error(err);
 		console.log(err.message);
 	}
+};
+
+const addMovieToWatchlist = async (uid, watchlist) => {
+	const q = query(collection(db, "users"), where("uid", "==", uid));
+	const docs = await getDocs(q);
+	console.log(watchlist);
+	docs.forEach((document) => {
+		console.log(document.ref.id);
+		updateDoc(doc(db, "users", document.ref.id), {
+			watchlist: watchlist,
+		});
+		console.log("updated");
+	});
 };
 
 const logout = () => {
@@ -114,4 +132,5 @@ export {
 	registerWithEmailAndPassword,
 	sendPasswordReset,
 	logout,
+	addMovieToWatchlist,
 };

@@ -10,6 +10,7 @@ import MovieDetailsPage from "./pages/MovieDetailsPage";
 import RegisterPage from "./pages/RegisterPage";
 import SignInPage from "./pages/SignInPage";
 import UserSettingsPage from "./pages/UserSettingsPage";
+import WatchlistPage from "./pages/WatchlistPage";
 
 function App() {
 	return (
@@ -19,6 +20,7 @@ function App() {
 				<Routes>
 					<Route exact path="/" element={<HomePage />} />
 					<Route exact path="/details/:id" element={<MovieDetailsPage />} />
+					<Route exact path="/watchlist" element={<WatchlistPage />} />
 					<Route exact path="signin" element={<SignInPage />} />
 					<Route exact path="signin/imdb" element={<IMDbSignInPage />} />
 					<Route exact path="signin/register" element={<RegisterPage />} />

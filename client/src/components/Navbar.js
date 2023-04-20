@@ -105,7 +105,7 @@ const Navbar = () => {
 								IMDb<span className=" text-[#5699ef]">Pro</span>
 							</div>
 							<div className="flex items-center">
-								<div className="flex items-center mx-3">
+								<Link to="/watchlist" className="flex items-center mx-3">
 									<div
 										style={bookmarkStyle}
 										className="flex justify-center mr-2 hover:!bg-[#f5c518] w-[14px] h-[18px] bg-white"
@@ -117,7 +117,7 @@ const Navbar = () => {
 										/>
 									</div>
 									<label className="font-semibold">Watchlist</label>
-								</div>
+								</Link>
 								<div className="font-semibold w-16 text-center text-white">
 									{user ? (
 										user.photoURL ? (

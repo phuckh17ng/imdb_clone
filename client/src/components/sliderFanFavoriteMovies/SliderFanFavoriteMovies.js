@@ -12,7 +12,7 @@ const SliderFanFavoriteMovies = () => {
 			redirect: "follow",
 		};
 		fetch(
-			"https://imdb-api.com/en/API/IMDbList/k_ed69mhut/ls004285275",
+			"https://imdb-api.com/en/API/IMDbList/123/ls004285275",
 			requestOptions
 		)
 			.then((response) => response.text())

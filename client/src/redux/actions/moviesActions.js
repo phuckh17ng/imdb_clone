@@ -6,7 +6,7 @@ export const getMovies = () => async (dispatch) => {
 		dispatch({ type: actionTypes.GET_MOVIES_REQUEST });
 
 		const { data } = await axios.get(
-			"https://imdb-api.com/en/API/IMDbList/k_ed69mhut/ls004285275"
+			"https://imdb-api.com/en/API/IMDbList/k_pos0y1z2/ls004285275"
 		);
 
 		console.log(data);
@@ -30,7 +30,7 @@ export const getMovieDetails = (id) => async (dispatch) => {
 		dispatch({ type: actionTypes.GET_MOVIE_DETAILS_REQUEST });
 
 		const { data } = await axios.get(
-			`https://imdb-api.com/en/API/Title/k_ed69mhut/${id}`
+			`https://imdb-api.com/en/API/Title/k_pos0y1z2/${id}`
 		);
 
 		dispatch({
@@ -53,7 +53,7 @@ export const getMovieTrailer = (id) => async (dispatch) => {
 		dispatch({ type: actionTypes.GET_MOVIE_TRAILER_REQUEST });
 
 		const { data } = await axios.get(
-			`https://imdb-api.com/en/API/Trailer/k_ed69mhut/${id}`
+			`https://imdb-api.com/en/API/Trailer/k_pos0y1z2/${id}`
 		);
 
 		dispatch({

@@ -2,8 +2,17 @@
 import React from "react";
 import * as styles from "../../styles/styles";
 // import "./MovieSlide.css";
+import { useDispatch, useSelector } from "react-redux";
+import { addToWatchlist } from "../../redux/actions/watchlistActions";
 
 const MovieSlide = ({ id, image, title, fullTitle, year, imDbRating }) => {
+	// const dispatch = useDispatch();
+	// const handleAddToWatchlist = () => {
+	// 	dispatch(addToWatchlist(id));
+	// 	// history(`/${user?.uid}/watchlist`);
+	// };
+	// const watchlist = useSelector((state) => state.watchlist);
+	// console.log(watchlist);
 	return (
 		<div className="text-white">
 			<div className="relative h-[275px] w-[185px] cursor-pointer hover:brightness-125 transition-all duration-500">
@@ -38,7 +47,12 @@ const MovieSlide = ({ id, image, title, fullTitle, year, imDbRating }) => {
 							alt="bookmark"
 							className="w-[17px] h-[17px]"
 						/>
-						<div className="text-[#5699ef] font-semibold ml-2">Watchlist</div>
+						<div
+							className="text-[#5699ef] font-semibold ml-2"
+							// onClick={handleAddToWatchlist}
+						>
+							Watchlist
+						</div>
 					</div>
 					<div className=" text-center mt-2 hover:text-[#f5c518] h-[36px] hover:border-slate-400 border-solid rounded hover:bg-zinc-700/50 flex items-center justify-center w-[70px] m-auto cursor-pointer">
 						Trailer

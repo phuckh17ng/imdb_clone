@@ -1,32 +1,19 @@
-import axios from "axios";
+// import axios from "axios";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, db } from "../../firebaseConfig";
 import * as actionTypes from "../constants/watchlistConstants";
 
 export const addToWatchlist = (movieId) => async (dispatch, getState) => {
-	// try {
-	// const { data } = await axios.get(
-	// 	`https://imdb-api.com/en/API/Title/k_ed69mhut/${movieId}`
-	// );
-
 	dispatch({
 		type: actionTypes.ADD_TO_WATCHLIST,
 		payload: {
-			movieId: movieId,
+			id: movieId,
 		},
 	});
 
-	localStorage.setItem(
-		"watchlist",
-		JSON.stringify(getState().watchlist.watchlistItems)
-	);
-	// } catch (error) {
-	// 	dispatch({
-	// 		type: actionTypes.GET_MOVIES_FAIL,
-	// 		payload:
-	// 			error.response && error.response.data.message
-	// 				? error.response.data.message
-	// 				: error.message,
-	// 	});
-	// }
+	let movies = getState().watchlist.watchlistItems;
+	console.log(movies);
 };
 
 export const removeFromWatchlist = (movieId) => (dispatch, getState) => {

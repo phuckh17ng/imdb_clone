@@ -1,11 +1,36 @@
 // import axios from "axios";
 // import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
+import {
+	collection,
+	doc,
+	getDoc,
+	getDocs,
+	query,
+	updateDoc,
+	where,
+} from "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { addMovieToWatchlist, auth, db } from "../../firebaseConfig";
+import { addToWatchlist } from "../../redux/actions/watchlistActions";
 import * as styles from "../../styles/styles";
 import "./MovieSlide.css";
 
 const MovieSlide = ({ id, image, title, fullTitle, year, imDbRating }) => {
-	console.log(image);
+	const [user] = useAuthState(auth);
+
+	const dispatch = useDispatch();
+	const watchlist = useSelector((state) => state.watchlist);
+	console.log(watchlist.watchlistItems);
+	const handleAddToWatchlist = () => {
+		// addMovieToWatchlist(user?.uid, watchlist.watchlistItems);
+		dispatch(addToWatchlist(id));
+		// history(`/${user?.uid}/watchlist`);
+	};
+	console.log(watchlist);
+
 	return (
 		<div className="text-white">
 			<div className="relative h-[275px] w-[185px] cursor-pointer hover:brightness-75 transition-all duration-500">
@@ -37,7 +62,10 @@ const MovieSlide = ({ id, image, title, fullTitle, year, imDbRating }) => {
 					<div className="h-[50px] cursor-pointer hover:decoration-solid hover:underline ">
 						{title}
 					</div>
-					<div className=" bg-zinc-700/50 rounded h-[36px] flex items-center justify-center mt-4 cursor-pointer hover:bg-blue-400/10">
+					<div
+						className=" bg-zinc-700/50 rounded h-[36px] flex items-center justify-center mt-4 cursor-pointer hover:bg-blue-400/10"
+						onClick={handleAddToWatchlist}
+					>
 						<img
 							src={require("../../images/icons8-plus-24.png")}
 							alt="bookmark"

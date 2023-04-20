@@ -1,18 +1,20 @@
 // import axios from "axios";
 // import "~slick-carousel/slick/slick-theme.css";
 // import "~slick-carousel/slick/slick.css";
+// import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect } from "react";
+// import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-slick";
 import PropagateLoader from "react-spinners/PropagateLoader";
+// import { auth, db } from "../../firebaseConfig";
 import { getMovies as listMovies } from "../../redux/actions/moviesActions";
 import * as style from "../../styles/styles";
 import MovieSlide from "./MovieSlide";
 import "./SliderTopMovie.css";
 
-const SliderTopMovies = () => {
+const SliderTopMovies =  () => {
 	const dispatch = useDispatch();
-
 	const getMovies = useSelector((state) => state.getMovies);
 	const { movies, loading, error } = getMovies;
 

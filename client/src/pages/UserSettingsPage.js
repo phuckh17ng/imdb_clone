@@ -1,18 +1,19 @@
 import {
 	collection,
-	
 	getDocs,
 	query,
+	updateDoc,
 	where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 // import { useNavigate } from "react-router-dom";
-import { auth, db } from "../firebaseConfig";
+import { doc } from "firebase/firestore";
+import { useSelector } from "react-redux";
+import { addMovieToWatchlist, auth, db } from "../firebaseConfig";
 
 const UserSettingsPage = () => {
 	const [user, loading] = useAuthState(auth);
-
 	const [userData, setUserData] = useState();
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -21,9 +22,15 @@ const UserSettingsPage = () => {
 			if (loading) return;
 			if (user !== null) {
 				const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+				console.log(q);
 				const docs = await getDocs(q);
-				docs.forEach((doc) => {
-					setUserData(doc.data());
+				console.log(docs);
+				docs.forEach((docc) => {
+					setUserData(docc.data());
+					console.log(docc.ref.id);
+					// updateDoc(doc(db, "users", docc.ref.id), {
+					// 	watchlist: [{ id: "123123" }, { id: "gkdjsgkj" }],
+					// });
 				});
 			}
 		};
