@@ -16,20 +16,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { addMovieToWatchlist, auth, db } from "../../firebaseConfig";
 import { addToWatchlist } from "../../redux/actions/watchlistActions";
 import * as styles from "../../styles/styles";
+import WatchlistMovie from "../WatchlistMovie";
 import "./MovieSlide.css";
 
-const MovieSlide = ({ id, image, title, fullTitle, year, imDbRating }) => {
+const MovieSlide = ({
+	id,
+	image,
+	title,
+	fullTitle,
+	year,
+	imDbRating,
+	imDbRatingCount,
+	description,
+}) => {
 	const [user] = useAuthState(auth);
-
-	const dispatch = useDispatch();
-	const watchlist = useSelector((state) => state.watchlist);
-	console.log(watchlist.watchlistItems);
-	const handleAddToWatchlist = () => {
-		// addMovieToWatchlist(user?.uid, watchlist.watchlistItems);
-		dispatch(addToWatchlist(id));
-		// history(`/${user?.uid}/watchlist`);
+	const movie = {
+		id: id,
+		image: image,
+		title: title,
+		fullTitle: fullTitle,
+		year: year,
+		imDbRating: imDbRating,
+		imDbRatingCount: imDbRatingCount,
+		description: description,
 	};
-	console.log(watchlist);
+
+	console.log(movie.id);
+	const handleAddToWatchlist = () => {
+		addMovieToWatchlist(user?.uid, movie);
+	};
 
 	return (
 		<div className="text-white">

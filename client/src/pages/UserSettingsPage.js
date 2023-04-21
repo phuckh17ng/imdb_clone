@@ -1,20 +1,21 @@
-import {
-	collection,
-	getDocs,
-	query,
-	updateDoc,
-	where,
-} from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 // import { useNavigate } from "react-router-dom";
-import { doc } from "firebase/firestore";
-import { useSelector } from "react-redux";
-import { addMovieToWatchlist, auth, db } from "../firebaseConfig";
+// import { doc } from "firebase/firestore";
+// import { useSelector } from "react-redux";
+import { auth, db, updateUserName } from "../firebaseConfig";
 
 const UserSettingsPage = () => {
 	const [user, loading] = useAuthState(auth);
 	const [userData, setUserData] = useState();
+	const [disable, setDisable] = useState(true);
+	const [name, setName] = useState();
+	const handleChangeName = (e) => {
+		e.preventDefault();
+		updateUserName(user?.uid, name);
+		setDisable(!disable);
+	};
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => {
@@ -28,9 +29,6 @@ const UserSettingsPage = () => {
 				docs.forEach((docc) => {
 					setUserData(docc.data());
 					console.log(docc.ref.id);
-					// updateDoc(doc(db, "users", docc.ref.id), {
-					// 	watchlist: [{ id: "123123" }, { id: "gkdjsgkj" }],
-					// });
 				});
 			}
 		};
@@ -67,14 +65,33 @@ const UserSettingsPage = () => {
 								<span className="text-lg text-zinc-900 mr-2 font-light">
 									User name:
 								</span>
-								<span className="text-zinc-800/70 font-light">
-									{userData?.name}
-								</span>
-
+								<input
+									className={
+										disable
+											? ` bg-white font-light disabled:text-zinc-800/70`
+											: "text-black font-normal bg-white focus:border-black focus:border placeholder:text-black "
+									}
+									placeholder={userData?.name}
+									disabled={disable}
+									onChange={(e) => setName(e.target.value)}
+								/>
 								<img
 									src={require("../images/icons8-edit-24 (1).png")}
 									alt="edit"
-									className="w-[20px] h-[20px] inline ml-3 mb-1"
+									className={
+										disable ? `w-[20px] h-[20px] inline ml-3 mb-1` : "hidden"
+									}
+									onClick={() => setDisable(!disable)}
+								/>
+								<img
+									src={require("../images/icons8-save-30.png")}
+									alt="edit"
+									className={
+										disable === false
+											? `w-[20px] h-[20px] inline ml-3 mb-1`
+											: "hidden"
+									}
+									onClick={handleChangeName}
 								/>
 							</div>
 							<div className="my-2">

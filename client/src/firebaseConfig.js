@@ -15,8 +15,12 @@ import {
 } from "firebase/auth";
 import {
 	addDoc,
+	arrayRemove,
+	arrayUnion,
 	collection,
+	deleteDoc,
 	doc,
+	getDoc,
 	getDocs,
 	getFirestore,
 	query,
@@ -46,13 +50,8 @@ const signInWithGoogle = async () => {
 		const res = await signInWithPopup(auth, googleProvider);
 		const user = res.user;
 		const q = query(collection(db, "users"), where("uid", "==", user.uid));
-		console.log(q);
-		console.log(user.uid);
 		const docs = await getDocs(q);
-		console.log(user.uid);
-		console.log(docs);
 		if (docs.docs.length === 0) {
-			console.log(1);
 			await addDoc(collection(db, "users"), {
 				uid: user.uid,
 				name: user.displayName,
@@ -108,14 +107,48 @@ const sendPasswordReset = async (email) => {
 	}
 };
 
-const addMovieToWatchlist = async (uid, watchlist) => {
+const addMovieToWatchlist = async (uid, movie) => {
+	const q = query(
+		collection(db, "watchlist"),
+		where("watchlistId", "==", uid + movie.id)
+	);
+	const docs = await getDocs(q);
+	if (docs.docs.length === 0) {
+		addDoc(collection(db, "watchlist"), {
+			watchlistId: uid + movie.id,
+			uid: uid,
+			movieId: movie.id,
+			image: movie.image,
+			title: movie.title,
+			fullTitle: movie.fullTitle,
+			year: movie.year,
+			imDbRating: movie.imDbRating,
+			imDbRatingCount: movie.imDbRatingCount,
+			description: movie.description,
+		});
+	}
+};
+
+const removeFromWatchlist = async (watchlistId) => {
+	const q = query(
+		collection(db, "watchlist"),
+		where("watchlistId", "==", watchlistId)
+	);
+	const docs = await getDocs(q);
+	docs.forEach((document) => {
+		console.log(document);
+		console.log(document.ref.id);
+		deleteDoc(doc(db, "watchlist", document.ref.id));
+	});
+};
+
+const updateUserName = async (uid, name) => {
 	const q = query(collection(db, "users"), where("uid", "==", uid));
 	const docs = await getDocs(q);
-	console.log(watchlist);
 	docs.forEach((document) => {
 		console.log(document.ref.id);
 		updateDoc(doc(db, "users", document.ref.id), {
-			watchlist: watchlist,
+			name: name,
 		});
 		console.log("updated");
 	});
@@ -133,4 +166,6 @@ export {
 	sendPasswordReset,
 	logout,
 	addMovieToWatchlist,
+	updateUserName,
+	removeFromWatchlist,
 };

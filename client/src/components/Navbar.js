@@ -9,6 +9,7 @@ const Navbar = () => {
 	// const navigate = useNavigate();
 	const [user, loading] = useAuthState(auth);
 	const [userData, setUserData] = useState();
+	// const watchlist = useSelector((state) => state.watchlist);
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => {
@@ -105,7 +106,13 @@ const Navbar = () => {
 								IMDb<span className=" text-[#5699ef]">Pro</span>
 							</div>
 							<div className="flex items-center">
-								<Link to="/watchlist" className="flex items-center mx-3">
+								<Link
+									to="/watchlist"
+									className="flex items-center mx-3"
+									// onClick={() =>
+									// 	addMovieToWatchlist(user?.uid, watchlist?.watchlistItems)
+									// }
+								>
 									<div
 										style={bookmarkStyle}
 										className="flex justify-center mr-2 hover:!bg-[#f5c518] w-[14px] h-[18px] bg-white"
