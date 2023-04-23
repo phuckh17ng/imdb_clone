@@ -13,6 +13,8 @@ import {
 	signInWithPopup,
 	signOut,
 } from "firebase/auth";
+import firebase from "firebase/compat/app";
+import "firebase/compat/firestore";
 import {
 	addDoc,
 	arrayRemove,
@@ -113,6 +115,7 @@ const addMovieToWatchlist = async (uid, movie) => {
 		where("watchlistId", "==", uid + movie.id)
 	);
 	const docs = await getDocs(q);
+
 	if (docs.docs.length === 0) {
 		addDoc(collection(db, "watchlist"), {
 			watchlistId: uid + movie.id,
@@ -125,8 +128,17 @@ const addMovieToWatchlist = async (uid, movie) => {
 			imDbRating: movie.imDbRating,
 			imDbRatingCount: movie.imDbRatingCount,
 			description: movie.description,
+			isAdded: true,
+		});
+	} else {
+		docs.forEach((document) => {
+			updateDoc(doc(db, "watchlist", document.ref.id), {
+				isAdded: true,
+			});
 		});
 	}
+
+	console.log(docs);
 };
 
 const removeFromWatchlist = async (watchlistId) => {
@@ -136,9 +148,9 @@ const removeFromWatchlist = async (watchlistId) => {
 	);
 	const docs = await getDocs(q);
 	docs.forEach((document) => {
-		console.log(document);
-		console.log(document.ref.id);
-		deleteDoc(doc(db, "watchlist", document.ref.id));
+		updateDoc(doc(db, "watchlist", document.ref.id), {
+			isAdded: false,
+		});
 	});
 };
 
@@ -157,6 +169,7 @@ const updateUserName = async (uid, name) => {
 const logout = () => {
 	signOut(auth);
 };
+
 export {
 	auth,
 	db,

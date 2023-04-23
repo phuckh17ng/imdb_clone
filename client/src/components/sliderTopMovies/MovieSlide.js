@@ -11,6 +11,7 @@ import {
 	updateDoc,
 	where,
 } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { addMovieToWatchlist, auth, db } from "../../firebaseConfig";
@@ -41,21 +42,36 @@ const MovieSlide = ({
 		description: description,
 	};
 
-	console.log(movie.id);
-	const handleAddToWatchlist = () => {
-		addMovieToWatchlist(user?.uid, movie);
-	};
+	const [data, getData] = useState();
+	useEffect(() => {
+		const fetchUserData = async () => {
+			const q = query(collection(db, "watchlist"), where("movieId", "==", id));
+			const docs = await getDocs(q);
+			docs.forEach((doc) => {
+				getData(doc.data());
+			});
+		};
+		fetchUserData();
+	}, []);
 
+	useEffect(() => {
+		if (data?.isAdded) {
+		}
+	}, [data]);
 	return (
 		<div className="text-white">
-			<div className="relative h-[275px] w-[185px] cursor-pointer hover:brightness-75 transition-all duration-500">
+			<div className="relative h-[275px] w-[185px] cursor-pointer transition-all duration-500 hover:brightness-75 ">
 				<Link to={`details/${id}`}>
 					<img src={image} alt={title} className="z-0 h-[275px] w-[185px]" />
 				</Link>
 
 				<div
 					style={styles.bookmarkStyle}
-					className="absolute top-0 left-0 w-[32px] h-[42px] bg-zinc-800/70 flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:brightness-200"
+					className={
+						data?.isAdded
+							? `bg-[#f5c518] absolute top-0 left-0 w-[32px] h-[42px] flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:bg-yellow-600`
+							: `bg-zinc-800/50 absolute top-0 left-0 w-[32px] h-[42px] flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:bg-zinc-500/80`
+					}
 				>
 					<img
 						src={require("../../images/icons8-plus-20.png")}
@@ -79,7 +95,10 @@ const MovieSlide = ({
 					</div>
 					<div
 						className=" bg-zinc-700/50 rounded h-[36px] flex items-center justify-center mt-4 cursor-pointer hover:bg-blue-400/10"
-						onClick={handleAddToWatchlist}
+						onClick={() => {
+							// addMovieToWatchlist(user?.uid, movie);
+							console.log(addMovieToWatchlist(user?.uid, movie));
+						}}
 					>
 						<img
 							src={require("../../images/icons8-plus-24.png")}

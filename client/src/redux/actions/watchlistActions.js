@@ -1,7 +1,7 @@
 // import axios from "axios";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, db } from "../../firebaseConfig";
+// import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+// import { useAuthState } from "react-firebase-hooks/auth";
+// import { auth, db } from "../../firebaseConfig";
 import * as actionTypes from "../constants/watchlistConstants";
 
 export const addToWatchlist = (movieId) => async (dispatch, getState) => {

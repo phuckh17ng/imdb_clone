@@ -13,7 +13,7 @@ import * as style from "../../styles/styles";
 import MovieSlide from "./MovieSlide";
 import "./SliderTopMovie.css";
 
-const SliderTopMovies =  () => {
+const SliderTopMovies = () => {
 	const dispatch = useDispatch();
 	const getMovies = useSelector((state) => state.getMovies);
 	const { movies, loading, error } = getMovies;

@@ -49,6 +49,7 @@ const WatchlistPage = () => {
 											title={item.title}
 											year={item.year}
 											watchlistId={item.watchlistId}
+											isAdded={item.isAdded}
 										/>
 									);
 								})}

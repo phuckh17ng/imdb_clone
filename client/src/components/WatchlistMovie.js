@@ -1,20 +1,20 @@
-import {
-	collection,
-	doc,
-	getDoc,
-	getDocs,
-	query,
-	where,
-} from "firebase/firestore";
-import React, { useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useDispatch, useSelector } from "react-redux";
+// import {
+// 	collection,
+// 	doc,
+// 	getDoc,
+// 	getDocs,
+// 	query,
+// 	where,
+// } from "firebase/firestore";
+import React from "react";
+// import { useAuthState } from "react-firebase-hooks/auth";
+// import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { auth, db, removeFromWatchlist } from "../firebaseConfig";
-import {
-	getMovieDetails,
-	getMovieTrailer,
-} from "../redux/actions/moviesActions";
+import { removeFromWatchlist } from "../firebaseConfig";
+// import {
+// 	getMovieDetails,
+// 	getMovieTrailer,
+// } from "../redux/actions/moviesActions";
 import { starStyle } from "../styles/styles";
 
 const WatchlistMovie = ({
@@ -26,12 +26,20 @@ const WatchlistMovie = ({
 	description,
 	imDbRating,
 	imDbRatingCount,
+	isAdded,
 }) => {
-	const [user] = useAuthState(auth);
-	const [data, getData] = useState();
+	// const [user] = useAuthState(auth);
+	// const [data, getData] = useState();
 
-	return (
-		<div className="mx-auto px-3 text-white bg-zinc-800/50 h-36 my-2 rounded flex py-2 items-center justify-between">
+	const handleRemove = () => {
+		// if (window.confirm("Are you sure you want to remove")) {
+		removeFromWatchlist(watchlistId);
+		// } else return false;
+	};
+	return !isAdded ? (
+		""
+	) : (
+		<div className="mx-auto px-3 text-white h-36 my-2 rounded flex py-2 items-center justify-between  transition-all translate-y-0 hover:-translate-y-1  hover:shadow-lg hover:bg-zinc-700/30 hover:shadow-yellow-600 ">
 			<Link
 				to={`/details/${movieId}`}
 				className="flex items-center justify-center h-full"
@@ -62,22 +70,21 @@ const WatchlistMovie = ({
 				</span>
 			</div>
 
-			<div className="flex items-center mr-6 font-thin hover:bg-zinc-700/50 p-2 rounded hover:text-[#f5c518] ">
-				<span
-					style={starStyle}
-					className="w-5 h-5 bg-sky-500/20 inline-block mr-2 "
-				></span>
-				<span>Rate</span>
+			<div className="flex items-center mr-6 font-thin hover:bg-zinc-700/50 p-2 rounded cursor-pointer">
+				<img
+					src={require("../images/icons8-star-35.png")}
+					alt="rating"
+					className="w-6 h-6 mr-2"
+				/>
+				<span className="w-[40px] inline-block">Rate</span>
 			</div>
 			{/* <span>{id}</span> */}
-			<div className="px-4">
+			<div className="p-2 hover:bg-zinc-700/50 rounded-full">
 				<img
 					src={require("../images/icons8-trash-32.png")}
 					alt="delete"
 					className="w-7 h-7 cursor-pointer"
-					onClick={() => {
-						removeFromWatchlist(watchlistId);
-					}}
+					onClick={handleRemove}
 				/>
 			</div>
 		</div>
