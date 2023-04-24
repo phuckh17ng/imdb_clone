@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage";
 import IMDbSignInPage from "./pages/IMDbSignInPage";
 import MovieDetailsPage from "./pages/MovieDetailsPage";
 import RegisterPage from "./pages/RegisterPage";
+import SearchPage from "./pages/SearchPage";
 import SignInPage from "./pages/SignInPage";
 import UserSettingsPage from "./pages/UserSettingsPage";
 import WatchlistPage from "./pages/WatchlistPage";
@@ -24,6 +25,11 @@ function App() {
 					<Route exact path="signin" element={<SignInPage />} />
 					<Route exact path="signin/imdb" element={<IMDbSignInPage />} />
 					<Route exact path="signin/register" element={<RegisterPage />} />
+					<Route
+						exact
+						path="/search/:searchOption/:searchValue"
+						element={<SearchPage />}
+					/>
 					<Route
 						exact
 						path="account/:uid/:displayName"

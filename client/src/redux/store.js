@@ -11,6 +11,7 @@ import {
 	getMoviesReducer,
 	getMovieTrailerReducer,
 } from "./reducers/moviesReducers";
+import { getMovieSearchReducer } from "./reducers/searchReducers";
 import { watchlistReducer } from "./reducers/watchlistReducers";
 
 let reducers = combineReducers({
@@ -18,6 +19,7 @@ let reducers = combineReducers({
 	getMovieDetails: getMovieDetailsReducer,
 	getMovieTrailer: getMovieTrailerReducer,
 	watchlist: watchlistReducer,
+	moviesSearch: getMovieSearchReducer,
 });
 
 const middleware = [thunk];

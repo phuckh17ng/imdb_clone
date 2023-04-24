@@ -81,7 +81,7 @@ const MovieSlide = ({
 					/>
 				</div>
 			</div>
-			<div className="bg-zinc-800/70">
+			<div className="bg-zinc-800/70 w-[185px]">
 				<div className="m-auto w-[170px] pb-2">
 					<div className="flex items-center pt-3">
 						<div

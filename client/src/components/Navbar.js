@@ -1,15 +1,16 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Link, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { auth, db, logout } from "../firebaseConfig";
+import { getSearchMovies } from "../redux/actions/searchActions";
 import { bookmarkStyle } from "../styles/styles";
 
 const Navbar = () => {
-	// const navigate = useNavigate();
+	const navigate = useNavigate();
 	const [user, loading] = useAuthState(auth);
 	const [userData, setUserData] = useState();
-	// const watchlist = useSelector((state) => state.watchlist);
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => {
@@ -25,18 +26,38 @@ const Navbar = () => {
 		};
 		fetchUserData();
 	}, [user?.uid, loading, user]);
-	// useEffect(() => {
-	// 	logout();
-	// 	if (loading) return;
-	// 	if (user === null) {
-	// 		navigate("/");
-	// 	}
-	// }, [loading, user, navigate]);
 
 	const [userMenuState, setUserMenuState] = useState(false);
-	// console.log(user);
-	const location = useLocation();
+	const [searchOptionsState, setSearchOptionsState] = useState(false);
+	const options = {
+		all: "All",
+		title: "Title",
+		movie: "Movie",
+		series: "Series",
+		name: "Name",
+		episode: "Episode",
+	};
+	const [searchOption, setSearchOption] = useState("All");
+	const [searchValue, setSearchValue] = useState("");
 
+	const location = useLocation();
+	console.log(searchOption);
+
+	const dispatch = useDispatch();
+	const getMoviesSearch = useSelector((state) => state.moviesSearch);
+	const { moviesSearch } = getMoviesSearch;
+	// const { searchValue } = useParams();
+
+	console.log(searchOption);
+	const handleSearchSubmit = (e) => {
+		e.preventDefault();
+		navigate(`/search/${searchOption}/${searchValue}`);
+		dispatch(getSearchMovies(searchOption, searchValue));
+		setSearchValue("");
+	};
+
+	console.log(getMoviesSearch);
+	console.log(moviesSearch?.results);
 	const userMenu = (
 		<div
 			onMouseLeave={() => setUserMenuState(false)}
@@ -55,6 +76,49 @@ const Navbar = () => {
 			>
 				Logout
 			</Link>
+		</div>
+	);
+	const searchOptions = (
+		<div
+			onMouseLeave={() => setSearchOptionsState(false)}
+			className="font-normal w-[170px] bg-zinc-800 absolute top-10 left-0 z-50 flex flex-col justify-start items-start py-3 rounded"
+		>
+			<div
+				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
+				onClick={() => setSearchOption(options.all)}
+			>
+				All
+			</div>
+			<div
+				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
+				onClick={() => setSearchOption(options.title)}
+			>
+				Title
+			</div>
+			<div
+				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
+				onClick={() => setSearchOption(options.movie)}
+			>
+				Movie
+			</div>
+			<div
+				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
+				onClick={() => setSearchOption(options.series)}
+			>
+				Series
+			</div>
+			<div
+				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
+				onClick={() => setSearchOption(options.name)}
+			>
+				Name
+			</div>
+			<div
+				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
+				onClick={() => setSearchOption(options.episode)}
+			>
+				Episode
+			</div>
 		</div>
 	);
 
@@ -79,19 +143,33 @@ const Navbar = () => {
 							<label className="font-semibold">Menu</label>
 						</div>
 
-						<form className="flex items-center h-8 bg-white rounded pr-3 w-full">
-							<div className="flex items-center border-r border-r-zinc-400 h-full w-12 justify-evenly">
-								<div className="text-black font-semibold text-[13px]">All</div>
+						<form
+							className="flex items-center h-8 bg-white rounded pr-3 w-full"
+							onSubmit={handleSearchSubmit}
+						>
+							<div
+								className="flex items-center border-r border-r-zinc-400 h-full px-2 justify-between relative"
+								onClick={() => setSearchOptionsState(!searchOptionsState)}
+							>
+								<div className="text-black font-semibold text-[13px] mr-1">
+									{searchOption}
+								</div>
 								<img
 									src={require("../images/icons8-sort-down-30.png")}
 									alt="down-arrow"
 									className="w-[10px] h-[10px] mt-1"
 								/>
+								{searchOptionsState ? searchOptions : ""}
 							</div>
+
 							<div className="flex w-full">
 								<input
 									placeholder="Search IMDb"
 									className="text-black outline-none ml-2 w-full"
+									value={searchValue}
+									onChange={(e) => {
+										setSearchValue(e.target.value);
+									}}
 								/>
 								<img
 									src={require("../images/icons8-search-50.png")}

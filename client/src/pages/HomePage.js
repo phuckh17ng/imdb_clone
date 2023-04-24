@@ -8,7 +8,7 @@ import SliderWatchlistMovies from "../components/sliderWatchlistMovies/SliderWat
 const HomePage = () => {
 	return (
 		<div className="w-full bg-black">
-			{/* <SliderBannerMovies /> */}
+			<SliderBannerMovies />
 			<SliderTopMovies />
 			<SliderWatchlistMovies />
 			<SliderFanFavoriteMovies />

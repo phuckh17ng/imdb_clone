@@ -17,6 +17,10 @@ const triangleStyle = {
 	backgroundColor: "#f5c518",
 };
 
+const playButton = {
+	clipPath: "polygon(25% 0, 25% 100%, 100% 50%)",
+};
+
 const forwardStyle = {
 	clipPath: "polygon(75% 0%, 100% 50%, 75% 100%, 65% 100%, 90% 50%, 65% 0)",
 	backgroundColor: "white",
@@ -43,4 +47,5 @@ export {
 	forwardStyle,
 	starStyle,
 	movieBackgroundStyle,
+	playButton,
 };

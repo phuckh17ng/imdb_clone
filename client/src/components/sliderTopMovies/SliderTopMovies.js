@@ -17,7 +17,7 @@ const SliderTopMovies = () => {
 	const dispatch = useDispatch();
 	const getMovies = useSelector((state) => state.getMovies);
 	const { movies, loading, error } = getMovies;
-
+	console.log(getMovies);
 	useEffect(() => {
 		dispatch(listMovies());
 	}, [dispatch]);

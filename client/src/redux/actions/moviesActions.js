@@ -30,7 +30,7 @@ export const getMovieDetails = (id) => async (dispatch) => {
 		dispatch({ type: actionTypes.GET_MOVIE_DETAILS_REQUEST });
 
 		const { data } = await axios.get(
-			`https://imdb-api.com/en/API/Title/k_0u53j984/${id}`
+			`https://imdb-api.com/en/API/Title/key/${id}`
 		);
 
 		dispatch({
@@ -53,7 +53,7 @@ export const getMovieTrailer = (id) => async (dispatch) => {
 		dispatch({ type: actionTypes.GET_MOVIE_TRAILER_REQUEST });
 
 		const { data } = await axios.get(
-			`https://imdb-api.com/en/API/Trailer/k_0u53j984/${id}`
+			`https://imdb-api.com/en/API/Trailer/key/${id}`
 		);
 
 		dispatch({
