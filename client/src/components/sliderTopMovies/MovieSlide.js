@@ -43,6 +43,7 @@ const MovieSlide = ({
 	};
 
 	const [data, getData] = useState();
+	const [test, setTest] = useState(false);
 	useEffect(() => {
 		const fetchUserData = async () => {
 			const q = query(collection(db, "watchlist"), where("movieId", "==", id));
@@ -50,14 +51,13 @@ const MovieSlide = ({
 			docs.forEach((doc) => {
 				getData(doc.data());
 			});
+			data.isAdded ? setTest(true) : setTest(false);
+			//infinity loop
 		};
 		fetchUserData();
 	}, []);
 
-	useEffect(() => {
-		if (data?.isAdded) {
-		}
-	}, [data]);
+	setTest(data?.isAdded);
 	return (
 		<div className="text-white">
 			<div className="relative h-[275px] w-[185px] cursor-pointer transition-all duration-500 hover:brightness-75 ">
@@ -68,7 +68,7 @@ const MovieSlide = ({
 				<div
 					style={styles.bookmarkStyle}
 					className={
-						data?.isAdded
+						test
 							? `bg-[#f5c518] absolute top-0 left-0 w-[32px] h-[42px] flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:bg-yellow-600`
 							: `bg-zinc-800/50 absolute top-0 left-0 w-[32px] h-[42px] flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:bg-zinc-500/80`
 					}
@@ -97,7 +97,8 @@ const MovieSlide = ({
 						className=" bg-zinc-700/50 rounded h-[36px] flex items-center justify-center mt-4 cursor-pointer hover:bg-blue-400/10"
 						onClick={() => {
 							// addMovieToWatchlist(user?.uid, movie);
-							console.log(addMovieToWatchlist(user?.uid, movie));
+							// console.log(addMovieToWatchlist(user?.uid, movie));
+							setTest(true);
 						}}
 					>
 						<img
