@@ -1,12 +1,4 @@
-// import {
-// 	collection,
-// 	doc,
-// 	getDoc,
-// 	getDocs,
-// 	query,
-// 	where,
-// } from "firebase/firestore";
-import React from "react";
+import React, { useState } from "react";
 // import { useAuthState } from "react-firebase-hooks/auth";
 // import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -29,14 +21,15 @@ const WatchlistMovie = ({
 	isAdded,
 }) => {
 	// const [user] = useAuthState(auth);
-	// const [data, getData] = useState();
+	const [isDeleted, setIsDeleted] = useState(isAdded);
 
 	const handleRemove = () => {
-		// if (window.confirm("Are you sure you want to remove")) {
-		removeFromWatchlist(watchlistId);
-		// } else return false;
+		if (window.confirm("Are you sure you want to remove?")) {
+			removeFromWatchlist(watchlistId);
+			setIsDeleted(!isAdded);
+		}
 	};
-	return !isAdded ? (
+	return !isDeleted ? (
 		""
 	) : (
 		<div className="mx-auto px-3 text-white h-36 my-2 rounded flex py-2 items-center justify-between  transition-all translate-y-0 hover:-translate-y-1  hover:shadow-lg hover:bg-zinc-700/30 hover:shadow-yellow-600 ">

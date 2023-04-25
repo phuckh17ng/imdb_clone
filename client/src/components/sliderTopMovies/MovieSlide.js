@@ -2,22 +2,14 @@
 // import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import {
-	collection,
-	doc,
-	getDoc,
-	getDocs,
-	query,
-	updateDoc,
-	where,
-} from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useDispatch, useSelector } from "react-redux";
+// import { useDispatch, useSelector } from "react-redux";
 import { addMovieToWatchlist, auth, db } from "../../firebaseConfig";
-import { addToWatchlist } from "../../redux/actions/watchlistActions";
+// import { addToWatchlist } from "../../redux/actions/watchlistActions";
 import * as styles from "../../styles/styles";
-import WatchlistMovie from "../WatchlistMovie";
+// import WatchlistMovie from "../WatchlistMovie";
 import "./MovieSlide.css";
 
 const MovieSlide = ({
@@ -43,7 +35,6 @@ const MovieSlide = ({
 	};
 
 	const [data, getData] = useState();
-	const [test, setTest] = useState(false);
 	useEffect(() => {
 		const fetchUserData = async () => {
 			const q = query(collection(db, "watchlist"), where("movieId", "==", id));
@@ -51,24 +42,28 @@ const MovieSlide = ({
 			docs.forEach((doc) => {
 				getData(doc.data());
 			});
-			data.isAdded ? setTest(true) : setTest(false);
-			//infinity loop
 		};
 		fetchUserData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	setTest(data?.isAdded);
+	// const [test, setTest] = useState(data?.isAdded);
+
 	return (
-		<div className="text-white">
-			<div className="relative h-[275px] w-[185px] cursor-pointer transition-all duration-500 hover:brightness-75 ">
+		<div className="text-white px-2">
+			<div className="relative h-full w-full cursor-pointer transition-all duration-500 hover:brightness-75 ">
 				<Link to={`details/${id}`}>
-					<img src={image} alt={title} className="z-0 h-[275px] w-[185px]" />
+					<img
+						src={image}
+						alt={title}
+						className="z-0 w-full h-[275px] max-[1200px]:h-[295px] max-[1024px]:h-[340px] max-[900px]:h-[275px] max-md:h-[320px]"
+					/>
 				</Link>
 
 				<div
 					style={styles.bookmarkStyle}
 					className={
-						test
+						data?.isAdded
 							? `bg-[#f5c518] absolute top-0 left-0 w-[32px] h-[42px] flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:bg-yellow-600`
 							: `bg-zinc-800/50 absolute top-0 left-0 w-[32px] h-[42px] flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:bg-zinc-500/80`
 					}
@@ -81,8 +76,8 @@ const MovieSlide = ({
 					/>
 				</div>
 			</div>
-			<div className="bg-zinc-800/70 w-[185px]">
-				<div className="m-auto w-[170px] pb-2">
+			<div className="bg-zinc-800/70 w-full">
+				<div className="m-auto w-[90%] pb-2">
 					<div className="flex items-center pt-3">
 						<div
 							style={styles.starStyle}
@@ -96,9 +91,7 @@ const MovieSlide = ({
 					<div
 						className=" bg-zinc-700/50 rounded h-[36px] flex items-center justify-center mt-4 cursor-pointer hover:bg-blue-400/10"
 						onClick={() => {
-							// addMovieToWatchlist(user?.uid, movie);
-							// console.log(addMovieToWatchlist(user?.uid, movie));
-							setTest(true);
+							addMovieToWatchlist(user?.uid, movie);
 						}}
 					>
 						<img

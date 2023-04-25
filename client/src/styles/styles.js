@@ -37,7 +37,20 @@ const movieBackgroundStyle = {
 	backgroundBlendMode: "normal",
 	filter: "blur(120px)",
 };
-
+const pagingImages = [
+	{ url: "../images/paging/page-0.jpg", alt: "0" },
+	{ url: "../images/paging/page-1.jpg", alt: "1" },
+	{ url: "../images/paging/page-2.jpg", alt: "2" },
+	{ url: "../images/paging/page-3.jpg", alt: "3" },
+	{ url: "../images/paging/page-4.jpg", alt: "4" },
+	{ url: "../images/paging/page-5.jpg", alt: "5" },
+	{ url: "../images/paging/page-6.jpg", alt: "6" },
+	{ url: "../images/paging/page-7.jpg", alt: "7" },
+	{ url: "../images/paging/page-8.jpg", alt: "8" },
+	{ url: "../images/paging/page-9.jpg", alt: "9" },
+	{ url: "../images/paging/page-10.jpg", alt: "10" },
+	{ url: "../images/paging/page-11.jpg", alt: "11" },
+];
 const mainColor = { backgroundColor: "#f5c518" };
 
 export {
@@ -48,4 +61,5 @@ export {
 	starStyle,
 	movieBackgroundStyle,
 	playButton,
+	pagingImages,
 };

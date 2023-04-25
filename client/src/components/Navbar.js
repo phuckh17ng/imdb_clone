@@ -2,8 +2,8 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { auth, db, logout } from "../firebaseConfig";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { addMovieToWatchlist, auth, db, logout } from "../firebaseConfig";
 import { getSearchMovies } from "../redux/actions/searchActions";
 import { bookmarkStyle } from "../styles/styles";
 
@@ -130,11 +130,11 @@ const Navbar = () => {
 					<div className="flex items-center h-full">
 						<Link
 							to="/"
-							className="bg-[#f5c518] rounded flex items-center justify-center text-black font-black text-lg w-16 px-4 h-8 no-underline"
+							className="bg-[#f5c518] rounded flex items-center justify-center text-black font-black text-lg w-16 px-4 h-8 no-underline max-[960px]:mr-3"
 						>
 							IMDb
 						</Link>
-						<div className="flex items-center mx-5">
+						<div className="flex items-center mx-5 max-[960px]:hidden">
 							<div className="h-[13px] flex flex-col justify-between mr-2">
 								<div className="w-4 h-[1.5px] bg-white"></div>
 								<div className="w-4 h-[1.5px] bg-white"></div>
@@ -180,16 +180,13 @@ const Navbar = () => {
 						</form>
 
 						<div className="flex items-center">
-							<div className="font-semibold tracking-[-1.25px] w-24 h-9 flex items-center justify-center border-r-2 border-r-zinc-700 mr-2">
+							<div className="font-semibold tracking-[-1.25px] w-24 h-9 flex items-center justify-center border-r-2 border-r-zinc-700 mr-2 max-[960px]:hidden">
 								IMDb<span className=" text-[#5699ef]">Pro</span>
 							</div>
 							<div className="flex items-center">
 								<Link
 									to="/watchlist"
-									className="flex items-center mx-3"
-									// onClick={() =>
-									// 	addMovieToWatchlist(user?.uid, watchlist?.watchlistItems)
-									// }
+									className="flex items-center mx-3 max-sm:hidden"
 								>
 									<div
 										style={bookmarkStyle}
@@ -203,7 +200,7 @@ const Navbar = () => {
 									</div>
 									<label className="font-semibold">Watchlist</label>
 								</Link>
-								<div className="font-semibold w-16 text-center text-white">
+								<div className="font-semibold w-16 text-center text-white max-[960px]:w-12">
 									{user ? (
 										user.photoURL ? (
 											<div
@@ -236,7 +233,7 @@ const Navbar = () => {
 										</Link>
 									)}
 								</div>
-								<div className="flex items-center justify-evenly ml-3">
+								<div className="flex items-center justify-evenly ml-3 max-[960px]:hidden">
 									<label className="font-semibold mr-1">EN</label>
 									<img
 										src={require("../images/icons8-sort-down-30 (1).png")}

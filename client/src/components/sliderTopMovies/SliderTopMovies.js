@@ -13,6 +13,15 @@ import * as style from "../../styles/styles";
 import MovieSlide from "./MovieSlide";
 import "./SliderTopMovie.css";
 
+function SampleNextArrow(props) {
+	const { className, onClick } = props;
+	return <div className={`${className} mr-4`} onClick={onClick}></div>;
+}
+
+function SamplePrevArrow(props) {
+	const { className, onClick } = props;
+	return <div className={`${className} ml-5 z-50`} onClick={onClick} />;
+}
 const SliderTopMovies = () => {
 	const dispatch = useDispatch();
 	const getMovies = useSelector((state) => state.getMovies);
@@ -31,10 +40,42 @@ const SliderTopMovies = () => {
 		slidesToShow: 6,
 		slidesToScroll: 5,
 		lazyLoad: true,
+		nextArrow: <SampleNextArrow />,
+		prevArrow: <SamplePrevArrow />,
+		responsive: [
+			{
+				breakpoint: 1200,
+				settings: {
+					slidesToShow: 5,
+					slidesToScroll: 4,
+				},
+			},
+			{
+				breakpoint: 1024,
+				settings: {
+					slidesToShow: 4,
+					slidesToScroll: 4,
+				},
+			},
+			{
+				breakpoint: 768,
+				settings: {
+					slidesToShow: 3,
+					slidesToScroll: 3,
+				},
+			},
+			{
+				breakpoint: 640,
+				settings: {
+					slidesToShow: 2,
+					slidesToScroll: 2,
+				},
+			},
+		],
 	};
 
 	return (
-		<div className="bg-black m-auto max-w-[1280px] px-3 pt-12">
+		<div className="bg-black m-auto max-w-[1280px] px-3 pt-12 ">
 			<div className="flex items-center">
 				<div className="w-[3px] h-[29px] bg-[#f5c518] rounded mr-2"></div>
 				<label className="text-[24px] text-white font-semibold">

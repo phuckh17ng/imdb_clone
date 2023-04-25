@@ -1,8 +1,3 @@
-// import { initializeApp } from "firebase/app";
-// import { getAuth } from "firebase/auth";
-// import { getFirestore } from "firebase/firestore";
-// import { getStorage } from "firebase/storage";
-
 import { initializeApp } from "firebase/app";
 import {
 	GoogleAuthProvider,
@@ -13,16 +8,11 @@ import {
 	signInWithPopup,
 	signOut,
 } from "firebase/auth";
-import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import {
 	addDoc,
-	arrayRemove,
-	arrayUnion,
 	collection,
-	deleteDoc,
 	doc,
-	getDoc,
 	getDocs,
 	getFirestore,
 	query,
@@ -30,8 +20,7 @@ import {
 	where,
 } from "firebase/firestore";
 
-// import { useNavigate } from "react-router-dom";
-// const navigate = useNavigate;
+
 const firebaseConfig = {
 	apiKey: "AIzaSyDIe4ydGxAxw_5egv7fRtDfJdUm4zO47ig",
 	authDomain: "imdb-testing1.firebaseapp.com",
