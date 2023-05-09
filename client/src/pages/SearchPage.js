@@ -133,7 +133,7 @@ const SearchPage = () => {
 														: require("../images/blank-people.png")
 												}
 												alt={movie.id}
-												className="hover:brightness-110 object-cover min-w-[104px] h-full rounded-full"
+												className="hover:brightness-110 object-cover min-w-[104px] w-[104px] h-full rounded-full"
 												to={`/details/${movie.id}`}
 											/>
 										</Link>

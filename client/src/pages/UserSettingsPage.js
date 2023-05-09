@@ -63,6 +63,19 @@ const UserSettingsPage = () => {
 						<div className="px-3 w-full">
 							<div className="my-2">
 								<span className="text-lg text-zinc-900 mr-2 font-light">
+									Email:
+								</span>
+								<span className="text-zinc-800/70 font-light">
+									{userData?.email}
+								</span>{" "}
+								{/* <img
+									src={require("../images/icons8-edit-24 (1).png")}
+									alt="edit"
+									className="w-[20px] h-[20px] inline ml-3 mb-1"
+								/> */}
+							</div>
+							<div className="my-2">
+								<span className="text-lg text-zinc-900 mr-2 font-light">
 									User name:
 								</span>
 								<input
@@ -92,19 +105,6 @@ const UserSettingsPage = () => {
 											: "hidden"
 									}
 									onClick={handleChangeName}
-								/>
-							</div>
-							<div className="my-2">
-								<span className="text-lg text-zinc-900 mr-2 font-light">
-									Email:
-								</span>
-								<span className="text-zinc-800/70 font-light">
-									{userData?.email}
-								</span>{" "}
-								<img
-									src={require("../images/icons8-edit-24 (1).png")}
-									alt="edit"
-									className="w-[20px] h-[20px] inline ml-3 mb-1"
 								/>
 							</div>
 							<div className="my-2">Change password</div>

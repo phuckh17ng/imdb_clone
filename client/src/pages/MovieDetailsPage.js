@@ -1,7 +1,10 @@
-import React, { useEffect } from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import SquareLoader from "react-spinners/SquareLoader";
+import { addMovieToWatchlist, auth, db } from "../firebaseConfig";
 import {
 	getMovieDetails,
 	getMovieTrailer,
@@ -9,13 +12,10 @@ import {
 import { addToWatchlist } from "../redux/actions/watchlistActions";
 import * as styles from "../styles/styles";
 
-// import { useAuthState } from "react-firebase-hooks/auth";
-// import { auth } from "../firebaseConfig";
-
 const MovieDetailsPage = () => {
 	// const [mydata, setMyData] = useState({});
 	// const [loading, setLoading] = useState(false);
-	// const [user] = useAuthState(auth);
+	const [user] = useAuthState(auth);
 	const movieDispatcher = useDispatch();
 	const trailerDispatcher = useDispatch();
 	const watchlistDisatcher = useDispatch();
@@ -32,8 +32,18 @@ const MovieDetailsPage = () => {
 
 	console.log(id);
 	console.log(movie);
+	const movieAdded = {
+		id: movie?.id,
+		image: movie?.image,
+		title: movie?.title,
+		fullTitle: movie?.fullTitle,
+		year: movie?.year,
+		imDbRating: movie?.imDbRating,
+		imDbRatingCount: movie?.imDbRatingVotes,
+		description: movie?.stars,
+	};
 	useEffect(() => {
-		if (movie && id !== movie.id) {
+		if (movie && id !== movie?.id) {
 			movieDispatcher(getMovieDetails(id));
 		}
 	}, [movieDispatcher, movie, id]);
@@ -43,11 +53,20 @@ const MovieDetailsPage = () => {
 			trailerDispatcher(getMovieTrailer(id));
 		}
 	}, [trailerDispatcher, trailer, id]);
-
-	const handleAddToWatchlist = () => {
-		watchlistDisatcher(addToWatchlist(movie?.id));
-		// history(`/${user?.uid}/watchlist`);
-	};
+	const [data, getData] = useState();
+	useEffect(() => {
+		const fetchUserData = async () => {
+			const q = query(
+				collection(db, "watchlist"),
+				where("watchlistId", "==", user?.uid + id)
+			);
+			const docs = await getDocs(q);
+			docs.forEach((doc) => {
+				getData(doc.data());
+			});
+		};
+		fetchUserData();
+	}, [id, user?.uid]);
 
 	return (
 		<div className="w-full bg-zinc-900 max-[1024px]:pb-40">
@@ -193,7 +212,7 @@ const MovieDetailsPage = () => {
 								</div>
 							</div>
 
-							<div className="ml-2 h-full w-full max-[1024px]:!h-10 max-[1024px]:!ml-0 max-w-[208px] max-[1280px]:max-w-[170px] max-[1024px]:w-full max-[1024px]:max-w-none max-[1024px]:flex justify-between">
+							<div className="ml-1 h-full w-full max-[1024px]:!h-10 max-[1024px]:!ml-0 max-w-[208px] max-[1280px]:max-w-[170px] max-[1024px]:w-full max-[1024px]:max-w-none max-[1024px]:flex justify-between">
 								<div className=" h-[49.5%] max-[1024px]:!h-10 bg-zinc-700/50 max-[1024px]:mr-1 flex flex-col max-[1024px]:flex-row items-center justify-center rounded-r hover:brightness-125 max-[1024px]:w-1/2 max-[1024px]:rounded-r-none max-[1024px]:!rounded-b">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
@@ -284,7 +303,10 @@ const MovieDetailsPage = () => {
 
 							<div className="flex mx-3 max-[1024px]:!mx-0">
 								<div
-									onClick={handleAddToWatchlist}
+									onClick={() => {
+										addMovieToWatchlist(user?.uid, movieAdded);
+										// setTest(!data?.isAdded);
+									}}
 									className="h-12 w-[308px] cursor-pointer bg-zinc-700/50 flex items-center rounded-l hover:brightness-125"
 								>
 									<img

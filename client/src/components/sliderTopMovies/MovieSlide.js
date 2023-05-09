@@ -48,7 +48,7 @@ const MovieSlide = ({
 		};
 		fetchUserData();
 	}, [id, user?.uid]);
-	// const [test, setTest] = useState(data?.isAdded);
+	const [test, setTest] = useState(data?.isAdded);
 	console.log(user?.uid);
 	console.log(data?.uid);
 	// console.log(test);

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 // import { useAuthState } from "react-firebase-hooks/auth";
 // import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { removeFromWatchlist } from "../firebaseConfig"
-import "./WatchlistMovie.css"
+import { removeFromWatchlist } from "../firebaseConfig";
+import "./WatchlistMovie.css";
 // import {
 // 	getMovieDetails,
 // 	getMovieTrailer,
@@ -23,13 +23,13 @@ const WatchlistMovie = ({
 }) => {
 	// const [user] = useAuthState(auth);
 	const [isDeleted, setIsDeleted] = useState(isAdded);
-
 	const handleRemove = () => {
 		if (window.confirm("Are you sure you want to remove?")) {
 			removeFromWatchlist(watchlistId);
 			setIsDeleted(!isAdded);
 		}
 	};
+
 	return !isDeleted ? (
 		""
 	) : (
@@ -102,7 +102,7 @@ const WatchlistMovie = ({
 					{description}
 				</div> */}
 
-				<div className="w-fit flex justify-end min-w-[300px] items-center max-md:hidden">
+				<div className="w-fit flex justify-end min-w-[300px] items-center max-md:hidden relative">
 					<div className="flex items-center mx-3">
 						<span
 							style={starStyle}
