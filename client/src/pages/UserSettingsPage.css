@@ -1,0 +1,16 @@
+.edit {
+	display: none;
+}
+.edit--btn {
+	display: none;
+}
+.edit--btn > img {
+	display: none;
+}
+.user--img:hover > .edit {
+	display: flex;
+}
+
+.user--img:hover > .edit > .edit--btn > img {
+	display: initial;
+}

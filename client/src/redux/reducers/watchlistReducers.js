@@ -2,33 +2,38 @@ import * as actionTypes from "../constants/watchlistConstants";
 
 export const watchlistReducer = (state = { watchlistItems: [] }, action) => {
 	switch (action.type) {
-		case actionTypes.ADD_TO_WATCHLIST:
-			const movie = action.payload;
-			const existMovies = state.watchlistItems.find((x) => x?.id === movie?.id);
-
-			if (existMovies) {
-				return {
-					...state,
-					watchlistItems: state.watchlistItems.map((x) =>
-						x.id === existMovies?.id ? movie : x
-					),
-				};
-			} else {
-				return {
-					...state,
-					watchlistItems: [...state.watchlistItems, movie],
-				};
-			}
-		case actionTypes.REMOVE_FROM_WATCHLIST:
+		case actionTypes.GET_WATCHLIST_REQUEST:
 			return {
-				...state,
-				watchlistItems: state.watchlistItems.filter(
-					(x) => x.id !== action.payload
-				),
+				loading: true,
+				watchlistItems: [],
 			};
-		case actionTypes.CLEAR_WATCHLIST:
-			return { ...state, watchlistItems: [] };
+		case actionTypes.GET_WATCHLIST_SUCCESS:
+			return {
+				watchlistItems: action.payload,
+				loading: false,
+			};
+		case actionTypes.GET_WATCHLIST_FAIL:
+			return {
+				loading: false,
+				error: action.payload,
+			};
 
+		case actionTypes.ADD_MOVIE_TO_WATCHLIST:
+			return {
+				loading: true,
+				isAdded: false,
+			};
+		case actionTypes.ADD_MOVIE_TO_WATCHLIST_SUCCESS:
+			return {
+				loading: false,
+				isAdded: true,
+			};
+		case actionTypes.ADD_MOVIE_TO_WATCHLIST_FAIL:
+			return {
+				loading: false,
+				isAdded: false,
+				error: action.payload,
+			};
 		default:
 			return state;
 	}

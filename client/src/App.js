@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 
 import HomePage from "./pages/HomePage";
+import IMDbForgotPassword from "./pages/IMDbForgotPassword";
 import IMDbSignInPage from "./pages/IMDbSignInPage";
 import MovieDetailsPage from "./pages/MovieDetailsPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -24,6 +25,11 @@ function App() {
 					<Route exact path="/watchlist" element={<WatchlistPage />} />
 					<Route exact path="signin" element={<SignInPage />} />
 					<Route exact path="signin/imdb" element={<IMDbSignInPage />} />
+					<Route
+						exact
+						path="signin/imdb/resetpassword"
+						element={<IMDbForgotPassword />}
+					/>
 					<Route exact path="signin/register" element={<RegisterPage />} />
 					<Route
 						exact

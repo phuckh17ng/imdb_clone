@@ -10,6 +10,8 @@ import { addMovieToWatchlist, auth, db } from "../../firebaseConfig";
 // import { addToWatchlist } from "../../redux/actions/watchlistActions";
 import * as styles from "../../styles/styles";
 // import WatchlistMovie from "../WatchlistMovie";
+import { useDispatch, useSelector } from "react-redux";
+import { addMovieToWatchlist as addToWatchlist } from "../../redux/actions/watchlistActions";
 import "./MovieSlide.css";
 
 const MovieSlide = ({
@@ -33,8 +35,17 @@ const MovieSlide = ({
 		imDbRatingCount: imDbRatingCount,
 		description: description,
 	};
-
+	const dispatch = useDispatch();
+	const watchlistMovieState = useSelector((state) => state.watchlist);
+	const { loading, isAdded } = watchlistMovieState;
+	console.log(isAdded);
+	// const { movies, loading, error } = getMovies;
 	const [data, getData] = useState();
+
+	const handleAddToWatchlist = () => {
+		dispatch(addToWatchlist(user?.uid, movie));
+	};
+
 	useEffect(() => {
 		const fetchUserData = async () => {
 			const q = query(
@@ -48,9 +59,7 @@ const MovieSlide = ({
 		};
 		fetchUserData();
 	}, [id, user?.uid]);
-	const [test, setTest] = useState(data?.isAdded);
 	console.log(user?.uid);
-	console.log(data?.uid);
 	// console.log(test);
 
 	return (
@@ -67,7 +76,7 @@ const MovieSlide = ({
 				<div
 					style={styles.bookmarkStyle}
 					className={
-						(user?.uid === data?.uid) & data?.isAdded
+						(user?.uid === data?.uid) & data?.isAdded || isAdded
 							? `bg-[#f5c518] absolute top-0 left-0 w-[32px] h-[42px] flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:bg-yellow-600`
 							: `bg-zinc-800/50 absolute top-0 left-0 w-[32px] h-[42px] flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:bg-zinc-500/80`
 					}
@@ -92,12 +101,11 @@ const MovieSlide = ({
 					<div className="h-[50px] cursor-pointer hover:decoration-solid hover:underline ">
 						{title}
 					</div>
-					<div
+					<Link
+						to={user ? "/" : "signin"}
 						className=" bg-zinc-700/50 rounded h-[36px] flex items-center justify-center mt-4 cursor-pointer hover:bg-blue-400/10"
-						onClick={() => {
-							addMovieToWatchlist(user?.uid, movie);
-							// setTest(!data?.isAdded);
-						}}
+						onClick={handleAddToWatchlist}
+						// addMovieToWatchlist(user?.uid, movie);
 					>
 						<img
 							src={require("../../images/icons8-plus-24.png")}
@@ -105,7 +113,7 @@ const MovieSlide = ({
 							className="w-[17px] h-[17px]"
 						/>
 						<div className="text-[#5699ef] font-semibold ml-2">Watchlist</div>
-					</div>
+					</Link>
 					<div className=" text-center mt-2 hover:text-[#f5c518] h-[36px] hover:border-slate-400 border-solid rounded hover:bg-zinc-700/50 flex items-center justify-center w-[70px] m-auto cursor-pointer">
 						Trailer
 					</div>

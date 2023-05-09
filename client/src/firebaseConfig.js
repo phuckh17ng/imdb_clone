@@ -19,7 +19,13 @@ import {
 	updateDoc,
 	where,
 } from "firebase/firestore";
-
+import {
+	getDownloadURL,
+	getStorage,
+	listAll,
+	ref,
+	uploadBytes,
+} from "firebase/storage";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyDIe4ydGxAxw_5egv7fRtDfJdUm4zO47ig",
@@ -88,6 +94,7 @@ const registerWithEmailAndPassword = async (name, email, password) => {
 		alert(err.message);
 	}
 };
+
 const sendPasswordReset = async (email) => {
 	try {
 		await sendPasswordResetEmail(auth, email);
@@ -155,6 +162,28 @@ const updateUserName = async (uid, name) => {
 	});
 };
 
+const updateUserImage = async (uid) => {
+	const storage = getStorage();
+	const listRef = ref(storage, `images/${uid}`);
+
+	// Find all the prefixes and items.
+	await listAll(listRef)
+		.then((res) => {
+			res.prefixes.forEach((folderRef) => {
+				// All the prefixes under listRef.
+				// You may call listAll() recursively on them.
+			});
+			res.items.forEach((itemRef) => {
+				// All the items under listRef.
+				getDownloadURL(itemRef);
+				console.log(getDownloadURL(itemRef));
+			});
+		})
+		.catch((error) => {
+			// Uh-oh, an error occurred!
+		});
+};
+
 const logout = () => {
 	signOut(auth);
 };
@@ -170,4 +199,5 @@ export {
 	addMovieToWatchlist,
 	updateUserName,
 	removeFromWatchlist,
+	updateUserImage,
 };

@@ -1,17 +1,24 @@
 import React from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { useLocation } from "react-router-dom";
+import { auth } from "../firebaseConfig";
 
 const Footer = () => {
 	const location = useLocation();
+	const [user] = useAuthState(auth);
 	return (
 		<div className="bg-black text-white h-full pb-3">
 			{location.pathname === "/signin/imdb" ||
-			location.pathname === "/signin/register" ? null : (
+			location.pathname === "/signin/register" ||
+			location.pathname === "/signin/imdb/resetpassword" ? null : (
 				<div className="w-full max-w-[1280px] mx-auto px-3 pt-16 h-full">
-					<button className="bg-[#f5c518] rounded hover:brightness-90 h-9 flex items-center justify-center text-black text-sm font-semibold pb-1 px-6 mx-auto">
-						Sign in for more access
-					</button>
-
+					{!user ? (
+						<button className="bg-[#f5c518] rounded hover:brightness-90 h-9 flex items-center justify-center text-black text-sm font-semibold pb-1 px-6 mx-auto">
+							Sign in for more access
+						</button>
+					) : (
+						""
+					)}
 					<div className="max-sm:flex w-full max-sm:justify-around">
 						<ul className="flex justify-center mt-6 max-sm:flex-col">
 							<li className="font-semibold px-3 hover:underline text-center max-sm:!text-start">

@@ -1,4 +1,5 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,7 +49,7 @@ const Navbar = () => {
 	const { moviesSearch } = getMoviesSearch;
 	// const { searchValue } = useParams();
 
-	console.log(searchOption);
+	// console.log(searchOption);
 	const handleSearchSubmit = (e) => {
 		e.preventDefault();
 		navigate(`/search/${searchOption}/${searchValue}`);
@@ -56,8 +57,33 @@ const Navbar = () => {
 		setSearchValue("");
 	};
 
-	console.log(getMoviesSearch);
-	console.log(moviesSearch?.results);
+	const [userImageURL, setUserImageURL] = useState(null);
+	useEffect(() => {
+		const storage = getStorage();
+		const storageRef = ref(storage, `userImages/${userData?.uid}`);
+
+		getDownloadURL(storageRef)
+			.then((url) => {
+				const xhr = new XMLHttpRequest();
+				xhr.responseType = "blob";
+				xhr.onload = (event) => {
+					const blob = xhr.response;
+				};
+				xhr.open("GET", url);
+				xhr.send();
+				setUserImageURL(url);
+				// Or inserted into an <img> element
+				// const img = document.getElementById("myimg");
+				// img.setAttribute("src", url);
+			})
+			.catch((error) => {
+				// Handle any errors
+			});
+	}, [userData?.uid]);
+
+	// console.log(getMoviesSearch);
+	// console.log(userImageURL);
+	// console.log(moviesSearch?.results);
 	const userMenu = (
 		<div
 			onMouseLeave={() => setUserMenuState(false)}
@@ -131,7 +157,8 @@ const Navbar = () => {
 	return (
 		<div className="bg-black z-50">
 			{location.pathname === "/signin/imdb" ||
-			location.pathname === "/signin/register" ? null : (
+			location.pathname === "/signin/register" ||
+			location.pathname === "/signin/imdb/resetpassword" ? null : (
 				<div className=" bg-black h-14 text-white w-full max-w-[1280px] m-auto px-3 max-[1280px]:max-w-[1024px]">
 					<div className="flex items-center h-full">
 						<Link
@@ -206,15 +233,17 @@ const Navbar = () => {
 									</div>
 									<label className="font-semibold">Watchlist</label>
 								</Link>
-								<div className="font-semibold w-16 text-center text-white max-[960px]:w-12">
+								<div className="font-semibold w-full text-center text-white max-sm:text-end">
 									{user ? (
-										user.photoURL ? (
+										user.photoURL || userImageURL ? (
 											<div
-												className="p-[1.5px] w-fit h-fit rounded-full relative bg-[#5699ef] flex items-center justify-center max-sm:mx-0 max-sm:ml-3 max-sm:mr-0 sm:mx-auto"
+												className="p-[1.5px] w-9 rounded-full relative bg-[#5699ef] flex items-center justify-center max-sm:mx-0 max-sm:ml-3 max-sm:mr-0 sm:mx-auto"
 												onClick={() => setUserMenuState(!userMenuState)}
 											>
 												<img
-													src={user.photoURL}
+													src={
+														userImageURL !== null ? userImageURL : user.photoURL
+													}
 													alt="avatar"
 													className="w-8 h-8 rounded-full hover:brightness-75"
 												/>
@@ -234,7 +263,10 @@ const Navbar = () => {
 											</div>
 										)
 									) : (
-										<Link to="/signin" className="text-center pr-1">
+										<Link
+											to="/signin"
+											className="text-center pr-1 max-sm:pr-0 max-sm:!text-end w-16 inline-block"
+										>
 											Sign in
 										</Link>
 									)}
