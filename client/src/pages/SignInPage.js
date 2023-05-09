@@ -20,7 +20,7 @@ const SignInPage = () => {
 		<div className="w-full h-[80vh] bg-zinc-300">
 			<div className="w-full max-w-[1000px] bg-white mx-auto px-3 h-full flex">
 				<div className="w-full max-w-[800px] mx-auto flex justify-between">
-					<div className="w-2/5 my-auto">
+					<div className="w-2/5 my-auto max-sm:mx-auto max-sm:w-full">
 						<div className="text-2xl font-bold text-zinc-800 w-full text-center mb-6">
 							Sign in
 						</div>
@@ -102,7 +102,7 @@ const SignInPage = () => {
 							.
 						</div>
 					</div>
-					<div className="w-1/2 border-l pl-6 h-fit my-auto">
+					<div className="w-1/2 border-l pl-6 h-fit my-auto max-sm:hidden">
 						<div className="text-2xl font-bold text-zinc-800">
 							Benefits of your free IMDb account
 						</div>

@@ -26,9 +26,12 @@ const IMDbSignInPage = () => {
 	return (
 		<div className="m-auto h-[100vh] flex items-center">
 			<div className="w-[400px] m-auto flex justify-center items-center flex-col border py-10 rounded">
-				<span className="bg-[#f5c518] rounded text-zinc-800 font-black text-4xl px-2 pt-1 pb-[6px]">
+				<Link
+					to="/"
+					className="bg-[#f5c518] rounded text-zinc-800 font-black text-4xl px-2 pt-1 pb-[6px]"
+				>
 					IMDb
-				</span>
+				</Link>
 				<div className="text-3xl pt-3 pb-12">Sign in</div>
 				<form onSubmit={handleLogin}>
 					<div class="mb-6">
@@ -55,9 +58,12 @@ const IMDbSignInPage = () => {
 						>
 							<div className="flex items-center justify-between w-full">
 								<span>Password</span>
-								<span className="text-sm text-blue-500 underline cursor-pointer">
+								<Link
+									className="text-sm text-blue-500 underline cursor-pointer"
+									to="/signin/imdb/resetpassword"
+								>
 									Forgot your password?
-								</span>
+								</Link>
 							</div>
 						</div>
 						<input

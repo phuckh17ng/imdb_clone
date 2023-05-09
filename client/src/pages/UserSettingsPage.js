@@ -4,7 +4,15 @@ import { useAuthState } from "react-firebase-hooks/auth";
 // import { useNavigate } from "react-router-dom";
 // import { doc } from "firebase/firestore";
 // import { useSelector } from "react-redux";
-import { auth, db, updateUserName } from "../firebaseConfig";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import {
+	auth,
+	db,
+	sendPasswordReset,
+	updateUserImage,
+	updateUserName,
+} from "../firebaseConfig";
+import "./UserSettingsPage.css";
 
 const UserSettingsPage = () => {
 	const [user, loading] = useAuthState(auth);
@@ -35,27 +43,79 @@ const UserSettingsPage = () => {
 		fetchUserData();
 	}, [user?.uid, loading, user]);
 
-	// useEffect(() => {
-	// 	const docRef = doc(db, "users", "pYgZLSKSXXbxFxDdRGQC");
-	// 	getDoc(docRef).then((doc) => {
-	// 		console.log(doc.data());
-	// 		getData(() => doc.data());
-	// 	});
-	// }, []);
-
 	console.log(userData);
 	console.log(user);
+	const storage = getStorage();
+	const storageRef = ref(storage, `userImages/${userData?.uid}`);
+	const [selectedImage, setSelectedImage] = useState(null);
+	if (selectedImage !== null && selectedImage !== undefined) {
+		uploadBytes(storageRef, selectedImage).then((snapshot) => {
+			console.log("Uploaded a blob or file!");
+			console.log(snapshot);
+		});
+	}
+	const [loadingUserImage, setLoadingUserImage] = useState(true);
+	const [userImageURL, setUserImageURL] = useState(null);
+	getDownloadURL(storageRef)
+		.then((url) => {
+			const xhr = new XMLHttpRequest();
+			xhr.responseType = "blob";
+			xhr.onload = (event) => {
+				const blob = xhr.response;
+			};
+			xhr.open("GET", url);
+			xhr.send();
+			setUserImageURL(url);
+			setLoadingUserImage(false);
+			// Or inserted into an <img> element
+			// const img = document.getElementById("myimg");
+			// img.setAttribute("src", url);
+		})
+		.catch((error) => {
+			// Handle any errors
+		});
+	// Find all the prefixes and items.
+	console.log(updateUserImage);
+	console.log(loadingUserImage);
+	console.log(userImageURL);
+
 	return (
 		<div className="h-[400px] bg-zinc-100 text-black px-3 py-12">
 			<div className="w-2/3 h-full bg-white m-auto flex items-center justify-between rounded-xl max-lg:w-4/5 max-md:w-full">
 				<div className="w-full mx-auto flex items-center justify-start h-full">
 					<div className="w-1/3 flex items-center justify-center border-r-[1px] border-zinc-200 h-3/4 px-3 min-w-[120px]">
-						<div className="border-zinc-800 border rounded-full h-fit bg-zinc-100/50 p-3">
+						<div className="user--img border-zinc-800 border rounded-full h-fit bg-zinc-100/50 p-2 hover:brightness-[.85] relative flex justify-center items-center">
 							<img
-								src={userData?.profileImage}
+								src={
+									userImageURL !== null ? userImageURL : userData?.profileImage
+								}
 								alt="profile"
-								className="rounded-full"
+								className="rounded-full w-[120px] max-md:min-w-0"
 							/>
+
+							<div className="edit w-full h-full absolute flex justify-center items-center">
+								<label
+									for="files"
+									class="btn edit--btn w-full h-full flex justify-center items-center rounded-full"
+								>
+									<img
+										src={require("../images/icons8-edit-24 (1).png")}
+										alt="edit"
+										className="w-[20px] h-[20px] ml-2"
+									/>
+								</label>
+
+								<input
+									id="files"
+									style={{ visibility: "hidden" }}
+									type="file"
+									className="absolute"
+									onChange={(event) => {
+										console.log(event.target.files[0]);
+										setSelectedImage(event.target.files[0]);
+									}}
+								/>
+							</div>
 						</div>
 					</div>
 
@@ -81,8 +141,8 @@ const UserSettingsPage = () => {
 								<input
 									className={
 										disable
-											? ` bg-white font-light disabled:text-zinc-800/70`
-											: "text-black font-normal bg-white focus:border-black focus:border placeholder:text-black "
+											? ` bg-white font-light disabled:text-zinc-800/70 pl-1`
+											: "text-black pl-1 font-normal bg-white focus:border-black focus:border placeholder:text-black "
 									}
 									placeholder={userData?.name}
 									disabled={disable}
@@ -92,7 +152,9 @@ const UserSettingsPage = () => {
 									src={require("../images/icons8-edit-24 (1).png")}
 									alt="edit"
 									className={
-										disable ? `w-[20px] h-[20px] inline ml-3 mb-1` : "hidden"
+										disable
+											? `w-[20px] h-[20px] inline ml-3 mb-1 cursor-pointer`
+											: "hidden"
 									}
 									onClick={() => setDisable(!disable)}
 								/>
@@ -101,13 +163,21 @@ const UserSettingsPage = () => {
 									alt="edit"
 									className={
 										disable === false
-											? `w-[20px] h-[20px] inline ml-3 mb-1`
+											? `w-[20px] h-[20px] inline ml-3 mb-1 cursor-pointer`
 											: "hidden"
 									}
 									onClick={handleChangeName}
 								/>
 							</div>
-							<div className="my-2">Change password</div>
+							<div
+								className="my-2 cursor-pointer hover:underline"
+								onClick={() => {
+									sendPasswordReset(userData?.email);
+									alert("Please login your email to change your password");
+								}}
+							>
+								Change password
+							</div>
 							<div className="font-semibold flex ">
 								<span className="font-normal ">Your&nbsp;</span>
 								<span className="tracking-[-1.25px]">IMDb</span>
