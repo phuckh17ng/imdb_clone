@@ -1,5 +1,5 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -9,7 +9,7 @@ import {
 	getMovieDetails,
 	getMovieTrailer,
 } from "../redux/actions/moviesActions";
-import { addToWatchlist } from "../redux/actions/watchlistActions";
+// import { addToWatchlist } from "../redux/actions/watchlistActions";
 import * as styles from "../styles/styles";
 
 const MovieDetailsPage = () => {
@@ -18,7 +18,7 @@ const MovieDetailsPage = () => {
 	const [user] = useAuthState(auth);
 	const movieDispatcher = useDispatch();
 	const trailerDispatcher = useDispatch();
-	const watchlistDisatcher = useDispatch();
+	// const watchlistDisatcher = useDispatch();
 	const movieDetails = useSelector((state) => state.getMovieDetails);
 	const movieTrailer = useSelector((state) => state.getMovieTrailer);
 	const watchlist = useSelector((state) => state.watchlist);
@@ -54,19 +54,27 @@ const MovieDetailsPage = () => {
 		}
 	}, [trailerDispatcher, trailer, id]);
 	const [data, getData] = useState();
-	useEffect(() => {
-		const fetchUserData = async () => {
-			const q = query(
-				collection(db, "watchlist"),
-				where("watchlistId", "==", user?.uid + id)
-			);
-			const docs = await getDocs(q);
-			docs.forEach((doc) => {
-				getData(doc.data());
-			});
-		};
-		fetchUserData();
+	const fetchUserData = useCallback(async () => {
+		const q = query(
+			collection(db, "watchlist"),
+			where("watchlistId", "==", user?.uid + id)
+		);
+		const docs = await getDocs(q);
+		docs.forEach((doc) => {
+			getData(doc.data());
+		});
 	}, [id, user?.uid]);
+
+	useEffect(() => {
+		fetchUserData();
+	}, [fetchUserData]);
+
+	const handleAddToWatchlist = () => {
+		addMovieToWatchlist(user?.uid, movieAdded).then(() => {
+			fetchUserData();
+		});
+		// fetchUserData();
+	};
 
 	return (
 		<div className="w-full bg-zinc-900 max-[1024px]:pb-40">
@@ -182,13 +190,21 @@ const MovieDetailsPage = () => {
 
 									<div
 										style={styles.bookmarkStyle}
-										className="absolute top-0 left-0 w-[32px] h-[42px] bg-zinc-800/70 flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:brightness-200 hover:bg-zinc-800"
+										className={
+											(user?.uid === data?.uid) & data?.isAdded
+												? `bg-[#f5c518] absolute top-0 left-0 w-[32px] h-[42px] flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:bg-yellow-600`
+												: `bg-zinc-800/50 absolute top-0 left-0 w-[32px] h-[42px] flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:bg-zinc-500/80`
+										}
 									>
 										<img
-											src={require("../images/icons8-plus-20.png")}
+											src={
+												(user?.uid === data?.uid) & data?.isAdded
+													? require("../images/icons8-done-30.png")
+													: require("../images/icons8-plus-20.png")
+											}
 											alt="bookmark"
 											style={{ opacity: "1!important" }}
-											className="z-10"
+											className="z-10 w-[20px] h-[20px]"
 										/>
 									</div>
 								</div>
@@ -303,10 +319,7 @@ const MovieDetailsPage = () => {
 
 							<div className="flex mx-3 max-[1024px]:!mx-0">
 								<div
-									onClick={() => {
-										addMovieToWatchlist(user?.uid, movieAdded);
-										// setTest(!data?.isAdded);
-									}}
+									onClick={handleAddToWatchlist}
 									className="h-12 w-[308px] cursor-pointer bg-zinc-700/50 flex items-center rounded-l hover:brightness-125"
 								>
 									<img

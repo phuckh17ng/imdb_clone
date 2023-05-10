@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { auth, signInWithGoogle } from "../firebaseConfig";
+import { auth, signInWithFacebook, signInWithGoogle } from "../firebaseConfig";
 
 const SignInPage = () => {
 	const [user, loading, error] = useAuthState(auth);
@@ -63,7 +63,10 @@ const SignInPage = () => {
 								/>
 								<span>Sign in with Apple</span>
 							</div>
-							<div className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 cursor-pointer flex items-center my-3 mx-auto">
+							<div
+								className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 cursor-pointer flex items-center my-3 mx-auto"
+								onClick={signInWithFacebook}
+							>
 								<img
 									src={require("../images/icons8-facebook-30 (1).png")}
 									alt="facebook"

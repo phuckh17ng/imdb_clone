@@ -5,6 +5,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 // import { doc } from "firebase/firestore";
 // import { useSelector } from "react-redux";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
 	auth,
 	db,
@@ -18,13 +20,57 @@ const UserSettingsPage = () => {
 	const [user, loading] = useAuthState(auth);
 	const [userData, setUserData] = useState();
 	const [disable, setDisable] = useState(true);
-	const [name, setName] = useState();
+	const [name, setName] = useState("");
 	const handleChangeName = (e) => {
 		e.preventDefault();
 		updateUserName(user?.uid, name);
 		setDisable(!disable);
+		console.log(name);
+		if (name !== "") {
+			console.log(1);
+			toast("User name has been changed!", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: "light",
+			});
+		}
 	};
 
+	const handleChangePassword = () => {
+		sendPasswordReset(userData?.email);
+		toast("An email has been sent!", {
+			position: "top-right",
+			autoClose: 5000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+			theme: "light",
+		});
+	};
+
+	const handleChangeUserImage = (event) => {
+		console.log(event.target.files[0]);
+		setSelectedImage(event.target.files[0]);
+		window.location.reload();
+		// toast("User image has been changed!", {
+		// 	position: "top-right",
+		// 	autoClose: 5000,
+		// 	hideProgressBar: false,
+		// 	closeOnClick: true,
+		// 	pauseOnHover: true,
+		// 	draggable: true,
+		// 	progress: undefined,
+		// 	theme: "light",
+		// });
+		// setTimeout(() => {}, 2000);
+	};
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => {
 		const fetchUserData = async () => {
@@ -58,13 +104,13 @@ const UserSettingsPage = () => {
 	const [userImageURL, setUserImageURL] = useState(null);
 	getDownloadURL(storageRef)
 		.then((url) => {
-			const xhr = new XMLHttpRequest();
-			xhr.responseType = "blob";
-			xhr.onload = (event) => {
-				const blob = xhr.response;
-			};
-			xhr.open("GET", url);
-			xhr.send();
+			// const xhr = new XMLHttpRequest();
+			// xhr.responseType = "blob";
+			// xhr.onload = (event) => {
+			// 	// const blob = xhr.response;
+			// };
+			// xhr.open("GET", url);
+			// xhr.send();
 			setUserImageURL(url);
 			setLoadingUserImage(false);
 			// Or inserted into an <img> element
@@ -110,10 +156,7 @@ const UserSettingsPage = () => {
 									style={{ visibility: "hidden" }}
 									type="file"
 									className="absolute"
-									onChange={(event) => {
-										console.log(event.target.files[0]);
-										setSelectedImage(event.target.files[0]);
-									}}
+									onChange={handleChangeUserImage}
 								/>
 							</div>
 						</div>
@@ -127,12 +170,7 @@ const UserSettingsPage = () => {
 								</span>
 								<span className="text-zinc-800/70 font-light">
 									{userData?.email}
-								</span>{" "}
-								{/* <img
-									src={require("../images/icons8-edit-24 (1).png")}
-									alt="edit"
-									className="w-[20px] h-[20px] inline ml-3 mb-1"
-								/> */}
+								</span>
 							</div>
 							<div className="my-2">
 								<span className="text-lg text-zinc-900 mr-2 font-light">
@@ -146,7 +184,9 @@ const UserSettingsPage = () => {
 									}
 									placeholder={userData?.name}
 									disabled={disable}
-									onChange={(e) => setName(e.target.value)}
+									onChange={(e) => {
+										setName(e.target.value);
+									}}
 								/>
 								<img
 									src={require("../images/icons8-edit-24 (1).png")}
@@ -171,13 +211,22 @@ const UserSettingsPage = () => {
 							</div>
 							<div
 								className="my-2 cursor-pointer hover:underline"
-								onClick={() => {
-									sendPasswordReset(userData?.email);
-									alert("Please login your email to change your password");
-								}}
+								onClick={handleChangePassword}
 							>
 								Change password
 							</div>
+							<ToastContainer
+								position="top-right"
+								autoClose={5000}
+								hideProgressBar={false}
+								newestOnTop={false}
+								closeOnClick
+								rtl={false}
+								pauseOnFocusLoss
+								draggable
+								pauseOnHover
+								theme="light"
+							/>
 							<div className="font-semibold flex ">
 								<span className="font-normal ">Your&nbsp;</span>
 								<span className="tracking-[-1.25px]">IMDb</span>

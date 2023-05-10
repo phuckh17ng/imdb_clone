@@ -1,48 +1,84 @@
-import React, { useEffect, useState } from "react";
+// import axios from "axios";
+// import "~slick-carousel/slick/slick-theme.css";
+// import "~slick-carousel/slick/slick.css";
+// import { collection, getDocs, query, where } from "firebase/firestore";
+import React, { useEffect } from "react";
+// import { useAuthState } from "react-firebase-hooks/auth";
+import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-slick";
+import PropagateLoader from "react-spinners/PropagateLoader";
+// import { auth, db } from "../../firebaseConfig";
+import { getMovies as listMovies } from "../../redux/actions/moviesActions";
 import * as style from "../../styles/styles";
 import MovieSlide from "./MovieSlide";
 
-const SliderFanFavoriteMovies = () => {
-	const [mydata, setMyData] = useState({});
-	const [loading, setLoading] = useState(false);
-	useEffect(() => {
-		var requestOptions = {
-			method: "GET",
-			redirect: "follow",
-		};
-		fetch(
-			"https://imdb-api.com/en/API/IMDbList/123/ls004285275",
-			requestOptions
-		)
-			.then((response) => response.text())
-			.then((result) => {
-				console.log(result);
-				const data = JSON.parse(result);
-				setMyData(data);
-				setLoading(true);
-			})
-			.catch((error) => console.log("error", error));
-		return () => {};
-	}, []);
+function SampleNextArrow(props) {
+	const { className, onClick } = props;
+	return <div className={`${className} mr-4`} onClick={onClick}></div>;
+}
 
-	console.log(mydata.items);
+function SamplePrevArrow(props) {
+	const { className, onClick } = props;
+	return <div className={`${className} ml-5 z-50`} onClick={onClick} />;
+}
+const SliderFanFavoriteMovies = () => {
+	const dispatch = useDispatch();
+	const getMovies = useSelector((state) => state.getMovies);
+	const { movies, loading, error } = getMovies;
+	console.log(getMovies);
+	useEffect(() => {
+		dispatch(listMovies());
+	}, [dispatch]);
+	console.log(movies.items);
 	console.log(loading);
+
 	const settings = {
 		dots: false,
-		infinite: true,
+		infinite: false,
 		speed: 500,
 		slidesToShow: 6,
 		slidesToScroll: 5,
 		lazyLoad: true,
+		nextArrow: <SampleNextArrow />,
+		prevArrow: <SamplePrevArrow />,
+		responsive: [
+			{
+				breakpoint: 1200,
+				settings: {
+					slidesToShow: 5,
+					slidesToScroll: 4,
+				},
+			},
+			{
+				breakpoint: 1024,
+				settings: {
+					slidesToShow: 4,
+					slidesToScroll: 4,
+				},
+			},
+			{
+				breakpoint: 768,
+				settings: {
+					slidesToShow: 3,
+					slidesToScroll: 3,
+				},
+			},
+			{
+				breakpoint: 640,
+				settings: {
+					slidesToShow: 2,
+					slidesToScroll: 2,
+				},
+			},
+		],
 	};
 
 	return (
-		<div className="bg-black m-auto max-w-[1280px] px-3 pt-12">
+		<div className="bg-black m-auto max-w-[1280px] px-3 pt-12 ">
 			<div className="flex items-center">
 				<div className="w-[3px] h-[29px] bg-[#f5c518] rounded mr-2"></div>
 				<label className="text-[24px] text-white font-semibold">
-					Fan favorites
+					Favourite Movies
 				</label>
 				<div
 					style={style.forwardStyle}
@@ -52,30 +88,44 @@ const SliderFanFavoriteMovies = () => {
 			<div className="text-zinc-400 pt-3 pb-4">
 				This week's top TV and movies
 			</div>
-			<Slider {...settings}>
-				{loading === true ? (
-					mydata.items.map((item, index) => {
-						if (index > 10 && index < 30) {
-							return (
-								<MovieSlide
-									key={item.id}
-									id={item.id}
-									title={item.title}
-									fullTitle={item.title}
-									imDbRating={item.imDbRating}
-									imDbRatingCount={item.imDbRatingCount}
-									image={item.image}
-									year={item.year}
-									description={item.description}
-								/>
-							);
-						}
-						return "";
-					})
+			<div>
+				{loading ? (
+					<div className="w-full h-12 flex items-center justify-center">
+						<PropagateLoader
+							loading={loading}
+							// cssOverride={override}
+							aria-label="Loading Spinner"
+							data-testid="loader"
+							size="15"
+							color="#f5c518"
+							className="m-auto"
+						/>
+					</div>
+				) : error ? (
+					<h2>{error}</h2>
 				) : (
-					<p className="text-white">Loading...</p>
+					<Slider {...settings}>
+						{movies.items?.map((movie, index) => {
+							if (index < 30 && index > 10) {
+								return (
+									<MovieSlide
+										key={movie.id}
+										id={movie.id}
+										title={movie.title}
+										fullTitle={movie.title}
+										imDbRating={movie.imDbRating}
+										imDbRatingCount={movie.imDbRatingCount}
+										image={movie.image}
+										year={movie.year}
+										description={movie.description}
+									/>
+								);
+							}
+							return "";
+						})}
+					</Slider>
 				)}
-			</Slider>
+			</div>
 		</div>
 	);
 };

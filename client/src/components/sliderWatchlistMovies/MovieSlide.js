@@ -29,10 +29,10 @@ const MovieSlide = ({
 					className={`bg-[#f5c518] absolute top-0 left-0 w-[32px] h-[42px] flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:bg-yellow-600`}
 				>
 					<img
-						src={require("../../images/icons8-plus-20.png")}
+						src={require("../../images/icons8-done-30.png")}
 						alt="bookmark"
 						style={{ opacity: "1!important" }}
-						className="z-10"
+						className="z-10 w-[20px] h-[20px]"
 					/>
 				</div>
 			</div>

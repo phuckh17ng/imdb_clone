@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import {
+	FacebookAuthProvider,
 	GoogleAuthProvider,
 	createUserWithEmailAndPassword,
 	getAuth,
@@ -24,7 +25,7 @@ import {
 	getStorage,
 	listAll,
 	ref,
-	uploadBytes,
+	
 } from "firebase/storage";
 
 const firebaseConfig = {
@@ -41,6 +42,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
+const facebookProvider = new FacebookAuthProvider();
 
 const signInWithGoogle = async () => {
 	try {
@@ -55,6 +57,28 @@ const signInWithGoogle = async () => {
 				authProvider: "google",
 				email: user.email,
 				profileImage: user.photoURL,
+				watchlist: null,
+			});
+		}
+	} catch (err) {
+		console.error(err);
+		console.log(err.message);
+	}
+};
+
+const signInWithFacebook = async () => {
+	try {
+		const res = await signInWithPopup(auth, facebookProvider);
+		const user = res.user;
+		const q = query(collection(db, "users"), where("uid", "==", user.uid));
+		const docs = await getDocs(q);
+		if (docs.docs.length === 0) {
+			await addDoc(collection(db, "users"), {
+				uid: user.uid,
+				name: user.displayName,
+				authProvider: "facebook",
+				// email: user.email,
+				// profileImage: user.photoURL,
 				watchlist: null,
 			});
 		}
@@ -133,8 +157,6 @@ const addMovieToWatchlist = async (uid, movie) => {
 			});
 		});
 	}
-
-	console.log(docs);
 };
 
 const removeFromWatchlist = async (watchlistId) => {
@@ -200,4 +222,5 @@ export {
 	updateUserName,
 	removeFromWatchlist,
 	updateUserImage,
+	signInWithFacebook,
 };

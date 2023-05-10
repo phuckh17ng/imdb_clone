@@ -8,8 +8,10 @@ import "./WatchlistMovie.css";
 // 	getMovieDetails,
 // 	getMovieTrailer,
 // } from "../redux/actions/moviesActions";
+// import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { starStyle } from "../styles/styles";
-
 const WatchlistMovie = ({
 	movieId,
 	image,
@@ -24,12 +26,19 @@ const WatchlistMovie = ({
 	// const [user] = useAuthState(auth);
 	const [isDeleted, setIsDeleted] = useState(isAdded);
 	const handleRemove = () => {
-		if (window.confirm("Are you sure you want to remove?")) {
-			removeFromWatchlist(watchlistId);
-			setIsDeleted(!isAdded);
-		}
+		removeFromWatchlist(watchlistId);
+		setIsDeleted(!isAdded);
+		toast("Movie has been deleted!", {
+			position: "top-right",
+			autoClose: 5000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+			theme: "dark",
+		});
 	};
-
 	return !isDeleted ? (
 		""
 	) : (

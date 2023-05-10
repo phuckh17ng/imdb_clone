@@ -12,17 +12,14 @@ import {
 	getMovieTrailerReducer,
 } from "./reducers/moviesReducers";
 import { getMovieSearchReducer } from "./reducers/searchReducers";
-import {
-	addToWatchlistReducer,
-	watchlistReducer,
-} from "./reducers/watchlistReducers";
+import { addToWatchlistReducer } from "./reducers/watchlistReducers";
 
 let reducers = combineReducers({
 	getMovies: getMoviesReducer,
 	getMovieDetails: getMovieDetailsReducer,
 	getMovieTrailer: getMovieTrailerReducer,
-	watchlist: watchlistReducer,
-	addToWatchlist: addToWatchlistReducer,
+	watchlist: addToWatchlistReducer,
+	// addToWatchlist: addToWatchlistReducer,
 	moviesSearch: getMovieSearchReducer,
 });
 const middleware = [thunk];

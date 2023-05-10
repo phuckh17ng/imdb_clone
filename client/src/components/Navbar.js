@@ -2,9 +2,9 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { addMovieToWatchlist, auth, db, logout } from "../firebaseConfig";
+import { auth, db, logout } from "../firebaseConfig";
 import { getSearchMovies } from "../redux/actions/searchActions";
 import { bookmarkStyle } from "../styles/styles";
 
@@ -39,14 +39,14 @@ const Navbar = () => {
 		episode: "Episode",
 	};
 	const [searchOption, setSearchOption] = useState("All");
-	const [searchValue, setSearchValue] = useState("");
+	const [searchValue, setSearchValue] = useState();
 
 	const location = useLocation();
 	console.log(searchOption);
 
 	const dispatch = useDispatch();
-	const getMoviesSearch = useSelector((state) => state.moviesSearch);
-	const { moviesSearch } = getMoviesSearch;
+	// const getMoviesSearch = useSelector((state) => state.moviesSearch);
+	// const { moviesSearch } = getMoviesSearch;
 	// const { searchValue } = useParams();
 
 	// console.log(searchOption);
@@ -64,13 +64,13 @@ const Navbar = () => {
 
 		getDownloadURL(storageRef)
 			.then((url) => {
-				const xhr = new XMLHttpRequest();
-				xhr.responseType = "blob";
-				xhr.onload = (event) => {
-					const blob = xhr.response;
-				};
-				xhr.open("GET", url);
-				xhr.send();
+				// const xhr = new XMLHttpRequest();
+				// xhr.responseType = "blob";
+				// xhr.onload = (event) => {
+				// 	const blob = xhr.response;
+				// };
+				// xhr.open("GET", url);
+				// xhr.send();
 				setUserImageURL(url);
 				// Or inserted into an <img> element
 				// const img = document.getElementById("myimg");
@@ -207,7 +207,8 @@ const Navbar = () => {
 								<img
 									src={require("../images/icons8-search-50.png")}
 									alt="search-icon"
-									className="w-5 h-5"
+									className="w-5 h-5 cursor-pointer"
+									onClick={handleSearchSubmit}
 								/>
 							</div>
 						</form>
