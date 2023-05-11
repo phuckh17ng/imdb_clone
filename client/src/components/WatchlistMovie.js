@@ -72,7 +72,10 @@ const WatchlistMovie = ({
 							{description}
 						</div>
 					</div>
-					<div className="md:hidden flex min-w-[135px] items-end justify-center flex-col h-full">
+					{/* \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ */}
+					{/* mobile responsive */}
+					{/* \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ */}
+					<div className="md:hidden flex min-w-[135px] max-[460px]:min-w-0 items-end justify-center flex-col h-full">
 						<div className="flex items-center pr-4">
 							<span className="font-thin max-md:flex-col flex">
 								<span className="flex items-start justify-end">

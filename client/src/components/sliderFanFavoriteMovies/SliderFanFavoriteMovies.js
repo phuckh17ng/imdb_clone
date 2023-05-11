@@ -106,7 +106,7 @@ const SliderFanFavoriteMovies = () => {
 				) : (
 					<Slider {...settings}>
 						{movies.items?.map((movie, index) => {
-							if (index < 30 && index > 10) {
+							if (index < 40 && index > 20) {
 								return (
 									<MovieSlide
 										key={movie.id}

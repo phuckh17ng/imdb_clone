@@ -20,13 +20,7 @@ import {
 	updateDoc,
 	where,
 } from "firebase/firestore";
-import {
-	getDownloadURL,
-	getStorage,
-	listAll,
-	ref,
-	
-} from "firebase/storage";
+import { getDownloadURL, getStorage, listAll, ref } from "firebase/storage";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyDIe4ydGxAxw_5egv7fRtDfJdUm4zO47ig",

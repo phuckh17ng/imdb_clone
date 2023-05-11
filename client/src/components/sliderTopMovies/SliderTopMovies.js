@@ -107,7 +107,7 @@ const SliderTopMovies = () => {
 				) : (
 					<Slider {...settings}>
 						{movies.items?.map((movie, index) => {
-							if (index < 10) {
+							if (index > 7 && index < 17) {
 								return (
 									<MovieSlide
 										key={movie.id}

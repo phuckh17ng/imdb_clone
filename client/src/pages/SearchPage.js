@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import React from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import SquareLoader from "react-spinners/SquareLoader";
-import { getSearchMovies } from "../redux/actions/searchActions";
+// import { getSearchMovies } from "../redux/actions/searchActions";
 
 const SearchPage = () => {
 	// const dispatch = useDispatch();
@@ -25,9 +25,9 @@ const SearchPage = () => {
 		</div>
 	) : (
 		<div className="w-full bg-black h-full py-6 px-3">
-			<div className="w-full max-w-[1250px] px-9 m-auto text-white bg-zinc-800/50 rounded-3xl py-6 flex flex-col justify-between">
+			<div className="w-full max-w-[1250px] px-9 max-sm:px-3 m-auto text-white bg-zinc-800/50 rounded-3xl py-6 flex flex-col justify-between">
 				<div className="flex justify-between">
-					<div className="w-3/5 pr-3 max-md:w-full">
+					<div className="w-3/5 pr-3 max-md:w-full max-sm:pr-0">
 						<div className="text-white text-3xl border-l-[3.5px] border-[#f5c518] pl-3 mb-3 mr-6">
 							Titles
 						</div>
@@ -39,7 +39,7 @@ const SearchPage = () => {
 										key={movie?.id}
 										to={`/details/${movie.id}`}
 									>
-										<Link className="flex items-center justify-center">
+										<div className="flex items-center justify-center">
 											<img
 												src={
 													movie?.image
@@ -47,18 +47,12 @@ const SearchPage = () => {
 														: require("../images/icons8-no-image-70.png")
 												}
 												alt={movie.id}
-												className="h-[106px] w-[70px] min-w-[70px] object-center hover:brightness-150"
-												to={`/details/${movie.id}`}
+												className="h-[106px] w-[70px] min-w-[70px] object-center"
 											/>
-										</Link>
+										</div>
 
 										<div className="px-3 h-full pt-3">
-											<Link
-												to={`/details/${movie.id}`}
-												className="text-blue-500 hover:brightness-150"
-											>
-												{movie.title}
-											</Link>
+											<div className="text-blue-500">{movie.title}</div>
 											<div className="text-sm font-thin">
 												{movie.description}
 											</div>
@@ -66,6 +60,7 @@ const SearchPage = () => {
 									</Link>
 								);
 							}
+							return "";
 						})}
 					</div>
 					<div className="w-1/3 max-md:hidden">
@@ -152,6 +147,7 @@ const SearchPage = () => {
 									</Link>
 								);
 							}
+							return "";
 						})}
 					</div>
 				</div>

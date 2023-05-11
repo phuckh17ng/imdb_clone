@@ -12,8 +12,9 @@ import * as styles from "../../styles/styles";
 // import WatchlistMovie from "../WatchlistMovie";
 // import { useDispatch, useSelector } from "react-redux";
 // import { addMovieToWatchlist as addToWatchlist } from "../../redux/actions/watchlistActions";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./MovieSlide.css";
-
 const MovieSlide = ({
 	id,
 	image,
@@ -57,10 +58,25 @@ const MovieSlide = ({
 		fetchUserData();
 	}, [fetchUserData]);
 
-	const handleAddToWatchlist = () => {
-		addMovieToWatchlist(user?.uid, movie).then(() => {
-			fetchUserData();
-		});
+	const handleAddToWatchlist = (e) => {
+		e.preventDefault();
+		if (user) {
+			addMovieToWatchlist(user?.uid, movie).then(() => {
+				fetchUserData();
+			});
+		} else {
+			toast("Signin for more access!", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: "dark",
+			});
+			toast.clearWaitingQueue();
+		}
 		// fetchUserData();
 	};
 
@@ -108,7 +124,7 @@ const MovieSlide = ({
 						{title}
 					</div>
 					<Link
-						to={user ? "/" : "signin"}
+						// to={user ? "/" : "signin"}
 						className=" bg-zinc-700/50 rounded h-[36px] flex items-center justify-center mt-4 cursor-pointer hover:bg-blue-400/10"
 						onClick={handleAddToWatchlist}
 					>

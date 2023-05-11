@@ -10,6 +10,8 @@ import {
 	getMovieTrailer,
 } from "../redux/actions/moviesActions";
 // import { addToWatchlist } from "../redux/actions/watchlistActions";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import * as styles from "../styles/styles";
 
 const MovieDetailsPage = () => {
@@ -69,15 +71,43 @@ const MovieDetailsPage = () => {
 		fetchUserData();
 	}, [fetchUserData]);
 
-	const handleAddToWatchlist = () => {
-		addMovieToWatchlist(user?.uid, movieAdded).then(() => {
-			fetchUserData();
-		});
-		// fetchUserData();
+	const handleAddToWatchlist = (e) => {
+		e.preventDefault();
+		if (user) {
+			addMovieToWatchlist(user?.uid, movieAdded).then(() => {
+				fetchUserData();
+			});
+		} else {
+			toast("Signin for more access!", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: "dark",
+			});
+			toast.clearWaitingQueue();
+		}
 	};
 
 	return (
 		<div className="w-full bg-zinc-900 max-[1024px]:pb-40">
+			{" "}
+			<ToastContainer
+				position="top-right"
+				autoClose={5000}
+				limit={1}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+				theme="light"
+			/>
 			{loading ? (
 				<div className="w-full h-[100vh] flex items-center justify-center bg-zinc-900">
 					<SquareLoader
@@ -323,7 +353,11 @@ const MovieDetailsPage = () => {
 									className="h-12 w-[308px] cursor-pointer bg-zinc-700/50 flex items-center rounded-l hover:brightness-125"
 								>
 									<img
-										src={require("../images/icons8-plus-20.png")}
+										src={
+											(user?.uid === data?.uid) & data?.isAdded
+												? require("../images/icons8-checked-30.png")
+												: require("../images/icons8-plus-20.png")
+										}
 										alt="watchlist"
 										className="w-[18px] h-[18px] mx-2"
 									/>

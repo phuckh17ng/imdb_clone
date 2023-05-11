@@ -126,10 +126,10 @@ const UserSettingsPage = () => {
 	console.log(userImageURL);
 
 	return (
-		<div className="h-[400px] bg-zinc-100 text-black px-3 py-12">
-			<div className="w-2/3 h-full bg-white m-auto flex items-center justify-between rounded-xl max-lg:w-4/5 max-md:w-full">
-				<div className="w-full mx-auto flex items-center justify-start h-full">
-					<div className="w-1/3 flex items-center justify-center border-r-[1px] border-zinc-200 h-3/4 px-3 min-w-[120px]">
+		<div className="h-[400px] bg-zinc-100 text-black px-3 py-12 max-sm:h-full">
+			<div className="w-2/3 h-full max-sm:pb-6 bg-white m-auto flex items-center justify-between rounded-xl max-lg:w-4/5 max-md:w-full">
+				<div className="w-full h-full mx-auto flex items-center justify-start max-sm:flex-col">
+					<div className="w-1/3 max-sm:h-fit max-sm:w-2/3 flex items-center justify-center border-r-[1px] max-sm:border-r-0 border-zinc-200 h-3/4 px-3 min-w-[120px] max-sm:border-b-[1px] py-3">
 						<div className="user--img border-zinc-800 border rounded-full h-fit bg-zinc-100/50 p-2 hover:brightness-[.85] relative flex justify-center items-center">
 							<img
 								src={
@@ -162,13 +162,13 @@ const UserSettingsPage = () => {
 						</div>
 					</div>
 
-					<div className="w-3/5 mx-auto flex justify-around">
-						<div className="px-3 w-full">
+					<div className="w-3/5 mx-auto flex justify-around max-sm:w-full max-sm:mt-3">
+						<div className="px-3 w-full max-sm:!px-6">
 							<div className="my-2">
 								<span className="text-lg text-zinc-900 mr-2 font-light">
 									Email:
 								</span>
-								<span className="text-zinc-800/70 font-light">
+								<span className="text-zinc-800/70 font-light inline-block">
 									{userData?.email}
 								</span>
 							</div>

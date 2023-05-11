@@ -8,32 +8,32 @@ export const getSearchMovies =
 			let data = {};
 			if (searchOption === "All") {
 				data = await axios.get(
-					`https://imdb-api.com/en/API/SearchAll/k_7svrxe8z/${searchValue}`
+					`https://imdb-api.com/en/API/SearchAll/key/${searchValue}`
 				);
 			}
 			if (searchOption === "Title") {
 				data = await axios.get(
-					`https://imdb-api.com/en/API/SearchTitle/k_7svrxe8z/${searchValue}`
+					`https://imdb-api.com/en/API/SearchTitle/key/${searchValue}`
 				);
 			}
 			if (searchOption === "Movie") {
 				data = await axios.get(
-					`https://imdb-api.com/en/API/SearchMovie/k_7svrxe8z/${searchValue}`
+					`https://imdb-api.com/en/API/SearchMovie/key/${searchValue}`
 				);
 			}
 			if (searchOption === "Series") {
 				data = await axios.get(
-					`https://imdb-api.com/en/API/SearchSeries/k_7svrxe8z/${searchValue}`
+					`https://imdb-api.com/en/API/SearchSeries/key/${searchValue}`
 				);
 			}
 			if (searchOption === "Episode") {
 				data = await axios.get(
-					`https://imdb-api.com/en/API/SearchEpisode/k_7svrxe8z/${searchValue}`
+					`https://imdb-api.com/en/API/SearchEpisode/key/${searchValue}`
 				);
 			}
 			if (searchOption === "Name") {
 				data = await axios.get(
-					`https://imdb-api.com/en/API/SearchName/k_7svrxe8z/${searchValue}`
+					`https://imdb-api.com/en/API/SearchName/key/${searchValue}`
 				);
 			}
 

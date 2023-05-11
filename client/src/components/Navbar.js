@@ -190,7 +190,7 @@ const Navbar = () => {
 								<img
 									src={require("../images/icons8-sort-down-30.png")}
 									alt="down-arrow"
-									className="w-[10px] h-[10px] mt-1"
+									className="w-[10px] h-[10px] mt-1 max-md:mr-1"
 								/>
 								{searchOptionsState ? searchOptions : ""}
 							</div>
