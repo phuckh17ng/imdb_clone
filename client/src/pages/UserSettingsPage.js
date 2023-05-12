@@ -1,5 +1,5 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 // import { useNavigate } from "react-router-dom";
 // import { doc } from "firebase/firestore";
@@ -7,20 +7,32 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-	auth,
-	db,
-	sendPasswordReset,
-	updateUserImage,
-	updateUserName,
-} from "../firebaseConfig";
+import { auth, db, sendPasswordReset, updateUserName } from "../firebaseConfig";
 import "./UserSettingsPage.css";
 
 const UserSettingsPage = () => {
 	const [user, loading] = useAuthState(auth);
 	const [userData, setUserData] = useState();
-	const [disable, setDisable] = useState(true);
+
+	useEffect(() => {
+		const fetchUserData = async () => {
+			if (loading) return;
+			if (user !== null) {
+				const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+				console.log(q);
+				const docs = await getDocs(q);
+				console.log(docs);
+				docs.forEach((docc) => {
+					setUserData(docc.data());
+					console.log(docc.ref.id);
+				});
+			}
+		};
+		fetchUserData();
+	}, [user?.uid, loading, user]);
+
 	const [name, setName] = useState("");
+	const [disable, setDisable] = useState(true);
 	const handleChangeName = (e) => {
 		e.preventDefault();
 		updateUserName(user?.uid, name);
@@ -55,75 +67,39 @@ const UserSettingsPage = () => {
 		});
 	};
 
-	const handleChangeUserImage = (event) => {
-		console.log(event.target.files[0]);
-		setSelectedImage(event.target.files[0]);
-		window.location.reload();
-		// toast("User image has been changed!", {
-		// 	position: "top-right",
-		// 	autoClose: 5000,
-		// 	hideProgressBar: false,
-		// 	closeOnClick: true,
-		// 	pauseOnHover: true,
-		// 	draggable: true,
-		// 	progress: undefined,
-		// 	theme: "light",
-		// });
-		// setTimeout(() => {}, 2000);
-	};
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	useEffect(() => {
-		const fetchUserData = async () => {
-			if (loading) return;
-			if (user !== null) {
-				const q = query(collection(db, "users"), where("uid", "==", user?.uid));
-				console.log(q);
-				const docs = await getDocs(q);
-				console.log(docs);
-				docs.forEach((docc) => {
-					setUserData(docc.data());
-					console.log(docc.ref.id);
-				});
-			}
-		};
-		fetchUserData();
-	}, [user?.uid, loading, user]);
-
-	console.log(userData);
-	console.log(user);
 	const storage = getStorage();
 	const storageRef = ref(storage, `userImages/${userData?.uid}`);
-	const [selectedImage, setSelectedImage] = useState(null);
-	if (selectedImage !== null && selectedImage !== undefined) {
-		uploadBytes(storageRef, selectedImage).then((snapshot) => {
-			console.log("Uploaded a blob or file!");
-			console.log(snapshot);
-		});
-	}
-	const [loadingUserImage, setLoadingUserImage] = useState(true);
 	const [userImageURL, setUserImageURL] = useState(null);
-	getDownloadURL(storageRef)
-		.then((url) => {
-			// const xhr = new XMLHttpRequest();
-			// xhr.responseType = "blob";
-			// xhr.onload = (event) => {
-			// 	// const blob = xhr.response;
-			// };
-			// xhr.open("GET", url);
-			// xhr.send();
-			setUserImageURL(url);
-			setLoadingUserImage(false);
-			// Or inserted into an <img> element
-			// const img = document.getElementById("myimg");
-			// img.setAttribute("src", url);
-		})
-		.catch((error) => {
-			// Handle any errors
-		});
-	// Find all the prefixes and items.
-	console.log(updateUserImage);
-	console.log(loadingUserImage);
+	const [selectedImage, setSelectedImage] = useState(null);
+
 	console.log(userImageURL);
+	console.log(selectedImage);
+
+	const handleChangeUserImage = useCallback(() => {
+		if (selectedImage !== null && selectedImage !== undefined) {
+			uploadBytes(storageRef, selectedImage).then(() => {
+				// toast("User image has been changed!", {
+				// 	position: "top-right",
+				// 	autoClose: 5000,
+				// 	hideProgressBar: false,
+				// 	closeOnClick: true,
+				// 	pauseOnHover: true,
+				// 	draggable: true,
+				// 	progress: undefined,
+				// 	theme: "light",
+				// });
+				// toast.clearWaitingQueue();
+			});
+			window.location.reload();
+		}
+	}, [selectedImage, storageRef]);
+	useEffect(() => {
+		handleChangeUserImage();
+		getDownloadURL(storageRef).then((url) => {
+			setUserImageURL(url);
+		});
+	}, [storageRef, handleChangeUserImage]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 
 	return (
 		<div className="h-[400px] bg-zinc-100 text-black px-3 py-12 max-sm:h-full">
@@ -156,12 +132,15 @@ const UserSettingsPage = () => {
 									style={{ visibility: "hidden" }}
 									type="file"
 									className="absolute"
-									onChange={handleChangeUserImage}
+									onChange={(e) => {
+										// debugger;
+										setSelectedImage(e.target.files[0]);
+										// handleChangeUserImage();
+									}}
 								/>
 							</div>
 						</div>
 					</div>
-
 					<div className="w-3/5 mx-auto flex justify-around max-sm:w-full max-sm:mt-3">
 						<div className="px-3 w-full max-sm:!px-6">
 							<div className="my-2">
@@ -215,18 +194,7 @@ const UserSettingsPage = () => {
 							>
 								Change password
 							</div>
-							<ToastContainer
-								position="top-right"
-								autoClose={5000}
-								hideProgressBar={false}
-								newestOnTop={false}
-								closeOnClick
-								rtl={false}
-								pauseOnFocusLoss
-								draggable
-								pauseOnHover
-								theme="light"
-							/>
+
 							<div className="font-semibold flex ">
 								<span className="font-normal ">Your&nbsp;</span>
 								<span className="tracking-[-1.25px]">IMDb</span>
@@ -235,6 +203,18 @@ const UserSettingsPage = () => {
 						</div>
 						<div></div>
 					</div>
+					<ToastContainer
+						position="top-right"
+						autoClose={5000}
+						hideProgressBar={false}
+						newestOnTop={false}
+						closeOnClick
+						rtl={false}
+						pauseOnFocusLoss
+						draggable
+						pauseOnHover
+						theme="light"
+					/>
 				</div>
 			</div>
 		</div>

@@ -58,32 +58,25 @@ const Navbar = () => {
 	};
 
 	const [userImageURL, setUserImageURL] = useState(null);
+	const storage = getStorage();
+	const storageRef = ref(storage, `userImages/${userData?.uid}`);
 	useEffect(() => {
-		const storage = getStorage();
-		const storageRef = ref(storage, `userImages/${userData?.uid}`);
-
+		console.log(storageRef);
 		getDownloadURL(storageRef)
 			.then((url) => {
-				// const xhr = new XMLHttpRequest();
-				// xhr.responseType = "blob";
-				// xhr.onload = (event) => {
-				// 	const blob = xhr.response;
-				// };
-				// xhr.open("GET", url);
-				// xhr.send();
 				setUserImageURL(url);
-				// Or inserted into an <img> element
-				// const img = document.getElementById("myimg");
-				// img.setAttribute("src", url);
 			})
 			.catch((error) => {
 				// Handle any errors
+				console.log(error);
+				setUserImageURL(null);
 			});
-	}, [userData?.uid]);
+	}, [storageRef]);
+	console.log(userImageURL);
 
 	// console.log(getMoviesSearch);
 	// console.log(userImageURL);
-	// console.log(moviesSearch?.results);
+	// console.log(moviesSearch?.results)
 	const userMenu = (
 		<div
 			onMouseLeave={() => setUserMenuState(false)}
@@ -103,7 +96,9 @@ const Navbar = () => {
 			</Link>
 			<Link
 				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
-				onClick={logout}
+				onClick={() => {
+					logout();
+				}}
 				to="/"
 			>
 				Logout

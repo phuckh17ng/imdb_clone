@@ -65,7 +65,7 @@ const MovieSlide = ({
 				fetchUserData();
 			});
 		} else {
-			toast("Signin for more access!", {
+			toast("Sign in for more access!", {
 				position: "top-right",
 				autoClose: 5000,
 				hideProgressBar: false,
