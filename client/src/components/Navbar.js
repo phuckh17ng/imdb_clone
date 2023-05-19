@@ -1,32 +1,23 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { getDownloadURL, getStorage, ref } from "firebase/storage";
+import { getStorage, ref } from "firebase/storage";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useDispatch } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { auth, db, logout } from "../firebaseConfig";
+import { useDispatch, useSelector } from "react-redux";
+import {
+	Link,
+	useLoaderData,
+	useLocation,
+	useNavigate,
+} from "react-router-dom";
+import { auth, logout } from "../firebaseConfig";
 import { getSearchMovies } from "../redux/actions/searchActions";
 import { bookmarkStyle } from "../styles/styles";
 
 const Navbar = () => {
 	const navigate = useNavigate();
-	const [user, loading] = useAuthState(auth);
-	const [userData, setUserData] = useState();
-
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	useEffect(() => {
-		const fetchUserData = async () => {
-			if (loading) return;
-			if (user !== null) {
-				const q = query(collection(db, "users"), where("uid", "==", user?.uid));
-				const docs = await getDocs(q);
-				docs.forEach((doc) => {
-					setUserData(doc.data());
-				});
-			}
-		};
-		fetchUserData();
-	}, [user?.uid, loading, user]);
+	const [user, userAuthLoading] = useAuthState(auth);
+	const userDataReq = useSelector((state) => state.userData);
+	const { userData, loading } = userDataReq;
 
 	const [userMenuState, setUserMenuState] = useState(false);
 	const [searchOptionsState, setSearchOptionsState] = useState(false);
@@ -40,16 +31,9 @@ const Navbar = () => {
 	};
 	const [searchOption, setSearchOption] = useState("All");
 	const [searchValue, setSearchValue] = useState();
-
+	console.log(userDataReq);
 	const location = useLocation();
-	console.log(searchOption);
-
 	const dispatch = useDispatch();
-	// const getMoviesSearch = useSelector((state) => state.moviesSearch);
-	// const { moviesSearch } = getMoviesSearch;
-	// const { searchValue } = useParams();
-
-	// console.log(searchOption);
 	const handleSearchSubmit = (e) => {
 		e.preventDefault();
 		navigate(`/search/${searchOption}/${searchValue}`);
@@ -57,26 +41,6 @@ const Navbar = () => {
 		setSearchValue("");
 	};
 
-	const [userImageURL, setUserImageURL] = useState(null);
-	const storage = getStorage();
-	const storageRef = ref(storage, `userImages/${userData?.uid}`);
-	useEffect(() => {
-		console.log(storageRef);
-		getDownloadURL(storageRef)
-			.then((url) => {
-				setUserImageURL(url);
-			})
-			.catch((error) => {
-				// Handle any errors
-				console.log(error);
-				setUserImageURL(null);
-			});
-	}, [storageRef]);
-	console.log(userImageURL);
-
-	// console.log(getMoviesSearch);
-	// console.log(userImageURL);
-	// console.log(moviesSearch?.results)
 	const userMenu = (
 		<div
 			onMouseLeave={() => setUserMenuState(false)}
@@ -89,7 +53,7 @@ const Navbar = () => {
 				Watchlist
 			</Link>
 			<Link
-				to={`account/${userData?.uid}/${userData?.name}`}
+				to={`account/${userData?.data?.uid}`}
 				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
 			>
 				Settings
@@ -230,16 +194,14 @@ const Navbar = () => {
 									<label className="font-semibold">Watchlist</label>
 								</Link>
 								<div className="font-semibold w-full text-center text-white max-sm:text-end">
-									{user ? (
-										user.photoURL || userImageURL ? (
+									{!userAuthLoading && user ? (
+										!loading && userData?.userImageURL ? (
 											<div
 												className="p-[1.5px] w-9 rounded-full relative bg-[#5699ef] flex items-center justify-center max-sm:mx-0 max-sm:ml-3 max-sm:mr-0 sm:mx-auto"
 												onClick={() => setUserMenuState(!userMenuState)}
 											>
 												<img
-													src={
-														userImageURL !== null ? userImageURL : user.photoURL
-													}
+													src={userData?.userImageURL}
 													alt="avatar"
 													className="w-8 h-8 rounded-full hover:brightness-75"
 												/>

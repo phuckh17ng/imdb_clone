@@ -4,6 +4,10 @@ import "./App.css";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 
+import { useEffect } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useDispatch } from "react-redux";
+import { auth } from "./firebaseConfig";
 import HomePage from "./pages/HomePage";
 import IMDbForgotPassword from "./pages/IMDbForgotPassword";
 import IMDbSignInPage from "./pages/IMDbSignInPage";
@@ -13,8 +17,16 @@ import SearchPage from "./pages/SearchPage";
 import SignInPage from "./pages/SignInPage";
 import UserSettingsPage from "./pages/UserSettingsPage";
 import WatchlistPage from "./pages/WatchlistPage";
+import { getUserData } from "./redux/actions/userSettingActions";
 
 function App() {
+	const [user, loading] = useAuthState(auth);
+	const dispatch = useDispatch();
+	useEffect(() => {
+		if (!loading && user?.uid) {
+			dispatch(getUserData(user?.uid));
+		}
+	}, [dispatch, loading, user?.uid]);
 	return (
 		<Router>
 			<main className="App">
@@ -36,11 +48,7 @@ function App() {
 						path="/search/:searchOption/:searchValue"
 						element={<SearchPage />}
 					/>
-					<Route
-						exact
-						path="account/:uid/:displayName"
-						element={<UserSettingsPage />}
-					/>
+					<Route exact path="account/:uid" element={<UserSettingsPage />} />
 				</Routes>
 				<Footer />
 			</main>

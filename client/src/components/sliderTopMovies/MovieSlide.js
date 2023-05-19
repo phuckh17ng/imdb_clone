@@ -6,15 +6,16 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { useCallback, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 // import { useDispatch, useSelector } from "react-redux";
-import { addMovieToWatchlist, auth, db } from "../../firebaseConfig";
+import { auth, db } from "../../firebaseConfig";
 // import { addToWatchlist } from "../../redux/actions/watchlistActions";
 import * as styles from "../../styles/styles";
 // import WatchlistMovie from "../WatchlistMovie";
-// import { useDispatch, useSelector } from "react-redux";
-// import { addMovieToWatchlist as addToWatchlist } from "../../redux/actions/watchlistActions";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { addMovieToWatchlist } from "../../redux/actions/watchlistActions";
 import "./MovieSlide.css";
+
 const MovieSlide = ({
 	id,
 	image,
@@ -36,12 +37,11 @@ const MovieSlide = ({
 		imDbRatingCount: imDbRatingCount,
 		description: description,
 	};
-	// const dispatch = useDispatch();
-	// const watchlistMovieState = useSelector((state) => state.addToWatchlist);
-	// console.log(watchlistMovieState);
-	// const handleAddToWatchlist = () => {
-	// 	dispatch(addToWatchlist(user?.uid, movie));
-	// };
+	const dispatch = useDispatch();
+	const watchlistMovieState = useSelector((state) => state.addToWatchlist);
+	const { addMovieToWatchlistState, loading } = watchlistMovieState;
+	console.log(addMovieToWatchlistState);
+
 	const [data, getData] = useState();
 	const fetchUserData = useCallback(async () => {
 		const q = query(
@@ -61,7 +61,7 @@ const MovieSlide = ({
 	const handleAddToWatchlist = (e) => {
 		e.preventDefault();
 		if (user) {
-			addMovieToWatchlist(user?.uid, movie).then(() => {
+			dispatch(addMovieToWatchlist(user?.uid, movie)).then(() => {
 				fetchUserData();
 			});
 		} else {

@@ -25,7 +25,7 @@ import {
 	getStorage,
 	listAll,
 	ref,
-	uploadBytes,
+	uploadString,
 } from "firebase/storage";
 
 const firebaseConfig = {
@@ -57,7 +57,6 @@ const signInWithGoogle = async () => {
 				authProvider: "google",
 				email: user.email,
 				profileImage: user.photoURL,
-				watchlist: null,
 			});
 		}
 	} catch (err) {
@@ -77,8 +76,6 @@ const signInWithFacebook = async () => {
 				uid: user.uid,
 				name: user.displayName,
 				authProvider: "facebook",
-				// email: user.email,
-				// profileImage: user.photoURL,
 				watchlist: null,
 			});
 		}

@@ -2,15 +2,17 @@ import React, { useState } from "react";
 // import { useAuthState } from "react-firebase-hooks/auth";
 // import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { removeFromWatchlist } from "../firebaseConfig";
+// import { removeFromWatchlist } from "../firebaseConfig";
 import "./WatchlistMovie.css";
 // import {
 // 	getMovieDetails,
 // 	getMovieTrailer,
 // } from "../redux/actions/moviesActions";
 // import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { removeFromWatchlist } from "../redux/actions/watchlistActions";
 import { starStyle } from "../styles/styles";
 const WatchlistMovie = ({
 	movieId,
@@ -25,8 +27,11 @@ const WatchlistMovie = ({
 }) => {
 	// const [user] = useAuthState(auth);
 	const [isDeleted, setIsDeleted] = useState(isAdded);
+	const dispatch = useDispatch();
+	const removeState = useSelector((state) => state.removeFromWatchlist);
+	console.log(removeState);
 	const handleRemove = () => {
-		removeFromWatchlist(watchlistId);
+		dispatch(removeFromWatchlist(watchlistId));
 		setIsDeleted(!isAdded);
 		toast("Movie has been deleted!", {
 			position: "top-right",

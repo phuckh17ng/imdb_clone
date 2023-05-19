@@ -1,45 +1,23 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
-import React, { useCallback, useEffect, useState } from "react";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-// import { useNavigate } from "react-router-dom";
-// import { doc } from "firebase/firestore";
-// import { useSelector } from "react-redux";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { auth, db, sendPasswordReset, updateUserName } from "../firebaseConfig";
+import { auth, sendPasswordReset, updateUserName } from "../firebaseConfig";
 import "./UserSettingsPage.css";
 
 const UserSettingsPage = () => {
-	const [user, loading] = useAuthState(auth);
-	const [userData, setUserData] = useState();
-
-	useEffect(() => {
-		const fetchUserData = async () => {
-			if (loading) return;
-			if (user !== null) {
-				const q = query(collection(db, "users"), where("uid", "==", user?.uid));
-				console.log(q);
-				const docs = await getDocs(q);
-				console.log(docs);
-				docs.forEach((docc) => {
-					setUserData(docc.data());
-					console.log(docc.ref.id);
-				});
-			}
-		};
-		fetchUserData();
-	}, [user?.uid, loading, user]);
-
+	const [user] = useAuthState(auth);
+	const userDataReq = useSelector((state) => state.userData);
+	const { userData } = userDataReq;
 	const [name, setName] = useState("");
 	const [disable, setDisable] = useState(true);
 	const handleChangeName = (e) => {
 		e.preventDefault();
 		updateUserName(user?.uid, name);
 		setDisable(!disable);
-		console.log(name);
 		if (name !== "") {
-			console.log(1);
 			toast("User name has been changed!", {
 				position: "top-right",
 				autoClose: 5000,
@@ -67,39 +45,16 @@ const UserSettingsPage = () => {
 		});
 	};
 
-	const storage = getStorage();
-	const storageRef = ref(storage, `userImages/${userData?.uid}`);
-	const [userImageURL, setUserImageURL] = useState(null);
-	const [selectedImage, setSelectedImage] = useState(null);
-
-	console.log(userImageURL);
-	console.log(selectedImage);
-
-	const handleChangeUserImage = useCallback(() => {
-		if (selectedImage !== null && selectedImage !== undefined) {
-			uploadBytes(storageRef, selectedImage).then(() => {
-				// toast("User image has been changed!", {
-				// 	position: "top-right",
-				// 	autoClose: 5000,
-				// 	hideProgressBar: false,
-				// 	closeOnClick: true,
-				// 	pauseOnHover: true,
-				// 	draggable: true,
-				// 	progress: undefined,
-				// 	theme: "light",
-				// });
-				// toast.clearWaitingQueue();
-			});
-			window.location.reload();
+	const handleChangeUserImage = (e) => {
+		const selectedImage = e.target.files[0];
+		if (selectedImage === null || selectedImage === undefined) {
+			return;
 		}
-	}, [selectedImage, storageRef]);
-	useEffect(() => {
-		handleChangeUserImage();
-		getDownloadURL(storageRef).then((url) => {
-			setUserImageURL(url);
-		});
-	}, [storageRef, handleChangeUserImage]);
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		const storage = getStorage();
+		const storageRef = ref(storage, `userImages/${user?.uid}`);
+		uploadBytes(storageRef, selectedImage);
+		window.location.reload();
+	};
 
 	return (
 		<div className="h-[400px] bg-zinc-100 text-black px-3 py-12 max-sm:h-full">
@@ -108,17 +63,15 @@ const UserSettingsPage = () => {
 					<div className="w-1/3 max-sm:h-fit max-sm:w-2/3 flex items-center justify-center border-r-[1px] max-sm:border-r-0 border-zinc-200 h-3/4 px-3 min-w-[120px] max-sm:border-b-[1px] py-3">
 						<div className="user--img border-zinc-800 border rounded-full h-fit bg-zinc-100/50 p-2 hover:brightness-[.85] relative flex justify-center items-center">
 							<img
-								src={
-									userImageURL !== null ? userImageURL : userData?.profileImage
-								}
+								src={userData?.userImageURL}
 								alt="profile"
 								className="rounded-full w-[120px] max-md:min-w-0"
 							/>
 
 							<div className="edit w-full h-full absolute flex justify-center items-center">
 								<label
-									for="files"
-									class="btn edit--btn w-full h-full flex justify-center items-center rounded-full"
+									htmlFor="files"
+									className="btn edit--btn w-full h-full flex justify-center items-center rounded-full"
 								>
 									<img
 										src={require("../images/icons8-edit-24 (1).png")}
@@ -132,11 +85,7 @@ const UserSettingsPage = () => {
 									style={{ visibility: "hidden" }}
 									type="file"
 									className="absolute"
-									onChange={(e) => {
-										// debugger;
-										setSelectedImage(e.target.files[0]);
-										// handleChangeUserImage();
-									}}
+									onChange={handleChangeUserImage}
 								/>
 							</div>
 						</div>
@@ -148,7 +97,7 @@ const UserSettingsPage = () => {
 									Email:
 								</span>
 								<span className="text-zinc-800/70 font-light inline-block">
-									{userData?.email}
+									{userData?.data?.email}
 								</span>
 							</div>
 							<div className="my-2">
@@ -161,7 +110,7 @@ const UserSettingsPage = () => {
 											? ` bg-white font-light disabled:text-zinc-800/70 pl-1`
 											: "text-black pl-1 font-normal bg-white focus:border-black focus:border placeholder:text-black "
 									}
-									placeholder={userData?.name}
+									placeholder={userData?.data?.name}
 									disabled={disable}
 									onChange={(e) => {
 										setName(e.target.value);

@@ -14,16 +14,47 @@ import {
 import { db } from "../../firebaseConfig";
 import * as actionTypes from "../constants/watchlistConstants";
 
-export const addMovieToWatchlist =
-	(uid, movie) => async (dispatch, getState) => {
-		// try {
+export const getWatchlist = (uid) => async (dispatch) => {
+	console.log(uid);
+	try {
+		dispatch({ type: actionTypes.GET_WATCHLIST_REQUEST });
+
+		var data = [];
+		const q = query(
+			collection(db, "watchlist"),
+			where("uid", "==", uid),
+			where("isAdded", "==", true)
+		);
+		const docs = await getDocs(q);
+		docs.forEach((doc) => {
+			data = [...data, doc?.data()];
+		});
+		dispatch({
+			type: actionTypes.GET_WATCHLIST_SUCCESS,
+			payload: data,
+		});
+	} catch (error) {
+		dispatch({
+			type: actionTypes.GET_WATCHLIST_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};
+
+export const addMovieToWatchlist = (uid, movie) => async (dispatch) => {
+	try {
+		dispatch({ type: actionTypes.ADD_MOVIE_TO_WATCHLIST_REQUEST });
 		const q = query(
 			collection(db, "watchlist"),
 			where("watchlistId", "==", uid + movie.id)
 		);
 		const docs = await getDocs(q);
+
 		if (docs.docs.length === 0) {
-			await addDoc(collection(db, "watchlist"), {
+			addDoc(collection(db, "watchlist"), {
 				watchlistId: uid + movie.id,
 				uid: uid,
 				movieId: movie.id,
@@ -43,74 +74,49 @@ export const addMovieToWatchlist =
 				});
 			});
 		}
-		var watchlistMovie = {};
-		docs.forEach((doc) => {
-			console.log(doc.data());
-			watchlistMovie = doc.data();
-		});
-		// dispatch({
-		// 	type: actionTypes.ADD_MOVIE_TO_WATCHLIST,
-		// 	payload: { watchlistId: uid + movie.id },
-		// });
+
 		dispatch({
 			type: actionTypes.ADD_MOVIE_TO_WATCHLIST_SUCCESS,
-			payload: { watchlistMovie: watchlistMovie },
+			payload: { isAdded: true },
 		});
-		localStorage.setItem(
-			"watchlist",
-			JSON.stringify(getState().watchlist.watchlistItems)
+	} catch (error) {
+		dispatch({
+			type: actionTypes.ADD_MOVIE_TO_WATCHLIST_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};
+
+export const removeFromWatchlist = (watchlistId) => async (dispatch) => {
+	try {
+		dispatch({
+			type: actionTypes.REMOVE_MOVIE_FROM_WATCHLIST_REQUEST,
+		});
+		const q = query(
+			collection(db, "watchlist"),
+			where("watchlistId", "==", watchlistId)
 		);
-		// } catch (error) {
-		// 	dispatch({
-		// 		type: actionTypes.ADD_MOVIE_TO_WATCHLIST_FAIL,
-		// 		payload:
-		// 			error.response && error.response.data.message
-		// 				? error.response.data.message
-		// 				: error.message,
-		// 	});
-		// }
-	};
-
-export const getMovieFromWatchlist =
-	(uid, movieId) => async (dispatch, getState) => {
-		try {
-			dispatch({ type: actionTypes.GET_WATCHLIST_REQUEST });
-
-			var data;
-			const q = query(
-				collection(db, "watchlist"),
-				where("watchlistId", uid + movieId)
-			);
-			const docs = await getDocs(q);
-			docs.forEach((doc) => {
-				data = doc.data();
+		const docs = await getDocs(q);
+		docs.forEach((document) => {
+			updateDoc(doc(db, "watchlist", document.ref.id), {
+				isAdded: false,
 			});
-			dispatch({
-				type: actionTypes.GET_WATCHLIST_SUCCESS,
-				payload: data,
-			});
+		});
 
-			let movies = getState().watchlist.watchlistItems;
-			console.log(movies);
-		} catch (error) {
-			dispatch({
-				type: actionTypes.GET_WATCHLIST_FAIL,
-				payload:
-					error.response && error.response.data.message
-						? error.response.data.message
-						: error.message,
-			});
-		}
-	};
-
-// export const removeFromWatchlist = (movieId) => (dispatch, getState) => {
-// 	dispatch({
-// 		type: actionTypes.REMOVE_MOVIE_FROM_WATCHLIST,
-// 		payload: movieId,
-// 	});
-
-// 	localStorage.setItem(
-// 		"watchlist",
-// 		JSON.stringify(getState().watchlist.watchlistItems)
-// 	);
-// };
+		dispatch({
+			type: actionTypes.REMOVE_MOVIE_FROM_WATCHLIST_SUCCESS,
+			payload: { isAdded: false },
+		});
+	} catch (error) {
+		dispatch({
+			type: actionTypes.REMOVE_MOVIE_FROM_WATCHLIST_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};

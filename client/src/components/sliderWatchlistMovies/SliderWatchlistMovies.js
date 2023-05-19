@@ -1,34 +1,41 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
+import PropagateLoader from "react-spinners/PropagateLoader";
 import { auth, db } from "../../firebaseConfig";
+import { getWatchlist } from "../../redux/actions/watchlistActions";
 import * as style from "../../styles/styles";
 import * as styles from "../../styles/styles";
 import MovieSlide from "./MovieSlide";
 
 const SliderWatchlistMovies = () => {
-	const [user, loading] = useAuthState(auth);
+	const [user, userLoading] = useAuthState(auth);
 	const [data, getData] = useState([]);
-
+	const dispatch = useDispatch();
+	const watchlistItems = useSelector((state) => state.getWatchlist);
+	const { watchlistMovies, loading } = watchlistItems;
 	useEffect(() => {
 		const fetchUserData = async () => {
-			if (loading) return;
-			if (user !== null) {
-				const q = query(
-					collection(db, "watchlist"),
-					where("uid", "==", user?.uid),
-					where("isAdded", "==", true)
-				);
-				const docs = await getDocs(q);
-				docs.forEach((doc) => {
-					getData((data) => [...data, doc.data()]);
-				});
+			if (!userLoading) {
+				dispatch(getWatchlist(user?.uid));
 			}
+			// if (user !== null) {
+			// 	const q = query(
+			// 		collection(db, "watchlist"),
+			// 		where("uid", "==", user?.uid),
+			// 		where("isAdded", "==", true)
+			// 	);
+			// 	const docs = await getDocs(q);
+			// 	docs.forEach((doc) => {
+			// 		getData((data) => [...data, doc.data()]);
+			// 	});
+			// }
 		};
 		fetchUserData();
-	}, [user?.uid, loading, user]);
+	}, [user?.uid, userLoading, dispatch]);
 
 	console.log(data);
 	function SampleNextArrow(props) {
@@ -95,7 +102,19 @@ const SliderWatchlistMovies = () => {
 			{/* <div className="text-zinc-400 pt-3 pb-4">
 				This week's top TV and movies
 			</div> */}
-			{!user?.uid ? (
+			{loading ? (
+				<div className="w-full h-12 flex items-center justify-center">
+					<PropagateLoader
+						loading={loading}
+						// cssOverride={override}
+						aria-label="Loading Spinner"
+						data-testid="loader"
+						size="15"
+						color="#f5c518"
+						className="m-auto"
+					/>
+				</div>
+			) : !user?.uid && !userLoading & !loading ? (
 				<div className="text-white flex justify-center flex-col items-center">
 					<div
 						style={styles.bookmarkStyle}
@@ -123,9 +142,9 @@ const SliderWatchlistMovies = () => {
 						</div>
 					</Link>
 				</div>
-			) : (
+			) : ( 
 				<Slider {...settings} className="mt-6">
-					{data.map((movie) => (
+					{watchlistMovies?.map((movie) => (
 						<MovieSlide
 							key={movie.movieId}
 							id={movie?.movieId}
