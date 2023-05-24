@@ -1,11 +1,11 @@
 import React from "react";
-import SliderBannerMovies from "../components/bannerMovies/SliderBannerMovies";
-import SliderFanFavoriteMovies from "../components/sliderFanFavoriteMovies/SliderFanFavoriteMovies";
-import SliderTopMovies from "../components/sliderTopMovies/SliderTopMovies";
-import SliderWatchlistMovies from "../components/sliderWatchlistMovies/SliderWatchlistMovies";
-// import * as styles from "../styles/styles";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SliderFanFavoriteMovies from "../components/slider/sliderFanFavoriteMovies/SliderFanFavoriteMovies";
+import SliderTopMovies from "../components/slider/sliderTopMovies/SliderTopMovies";
+import SliderWatchlistMovies from "../components/slider/sliderWatchlistMovies/SliderWatchlistMovies"
+import SliderBannerMovies from "../components/bannerMovies/SliderBannerMovies";
+
 const HomePage = () => {
 	return (
 		<div className="w-full bg-black">

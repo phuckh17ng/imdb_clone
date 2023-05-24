@@ -1,10 +1,14 @@
 import React, { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { auth, signInWithFacebook, signInWithGoogle } from "../firebaseConfig";
+import { auth } from "../firebase/firebaseConfig";
+import {
+	signInWithFacebook,
+	signInWithGoogle,
+} from "../firebase/firebaseFunctions";
 
 const SignInPage = () => {
-	const [user, loading, error] = useAuthState(auth);
+	const [user, loading] = useAuthState(auth);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -14,8 +18,6 @@ const SignInPage = () => {
 		}
 	}, [user, loading, navigate]);
 
-	console.log(user);
-	console.log(error);
 	return (
 		<div className="w-full h-[80vh] bg-zinc-300">
 			<div className="w-full max-w-[1000px] bg-white mx-auto px-3 h-full flex">

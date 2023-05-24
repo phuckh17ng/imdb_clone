@@ -4,36 +4,27 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import SquareLoader from "react-spinners/SquareLoader";
-import { addMovieToWatchlist, auth, db } from "../firebaseConfig";
+import { auth, db } from "../firebase/firebaseConfig";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { addMovieToWatchlist } from "../firebase/firebaseFunctions";
 import {
 	getMovieDetails,
 	getMovieTrailer,
 } from "../redux/actions/moviesActions";
-// import { addToWatchlist } from "../redux/actions/watchlistActions";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import * as styles from "../styles/styles";
 
 const MovieDetailsPage = () => {
-	// const [mydata, setMyData] = useState({});
-	// const [loading, setLoading] = useState(false);
 	const [user] = useAuthState(auth);
 	const movieDispatcher = useDispatch();
 	const trailerDispatcher = useDispatch();
-	// const watchlistDisatcher = useDispatch();
 	const movieDetails = useSelector((state) => state.getMovieDetails);
 	const movieTrailer = useSelector((state) => state.getMovieTrailer);
-	const watchlist = useSelector((state) => state.watchlist);
-
-	console.log(watchlist);
-
 	const { loading, error, movie } = movieDetails;
 	const { trailer } = movieTrailer;
 	const { id } = useParams();
-	// const history = useNavigate();
 
-	console.log(id);
-	console.log(movie);
 	const movieAdded = {
 		id: movie?.id,
 		image: movie?.image,
@@ -55,6 +46,7 @@ const MovieDetailsPage = () => {
 			trailerDispatcher(getMovieTrailer(id));
 		}
 	}, [trailerDispatcher, trailer, id]);
+
 	const [data, getData] = useState();
 	const fetchUserData = useCallback(async () => {
 		const q = query(
@@ -94,7 +86,6 @@ const MovieDetailsPage = () => {
 
 	return (
 		<div className="w-full bg-zinc-900 max-[1024px]:pb-40">
-			{" "}
 			<ToastContainer
 				position="top-right"
 				autoClose={5000}
@@ -112,7 +103,6 @@ const MovieDetailsPage = () => {
 				<div className="w-full h-[100vh] flex items-center justify-center bg-zinc-900">
 					<SquareLoader
 						loading={loading}
-						// cssOverride={override}
 						aria-label="Loading Spinner"
 						data-testid="loader"
 						size="50"

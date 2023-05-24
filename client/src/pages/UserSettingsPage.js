@@ -4,13 +4,19 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { auth, sendPasswordReset, updateUserName } from "../firebaseConfig";
+import { auth } from "../firebase/firebaseConfig";
+import {
+	sendPasswordReset,
+	updateUserName,
+} from "../firebase/firebaseFunctions";
 import "./UserSettingsPage.css";
 
 const UserSettingsPage = () => {
 	const [user] = useAuthState(auth);
 	const userDataReq = useSelector((state) => state.userData);
+
 	const { userData } = userDataReq;
+	console.log(userData);
 	const [name, setName] = useState("");
 	const [disable, setDisable] = useState(true);
 	const handleChangeName = (e) => {
@@ -32,7 +38,8 @@ const UserSettingsPage = () => {
 	};
 
 	const handleChangePassword = () => {
-		sendPasswordReset(userData?.email);
+		console.log(userData?.data?.email);
+		sendPasswordReset(userData?.data?.email);
 		toast("An email has been sent!", {
 			position: "top-right",
 			autoClose: 5000,

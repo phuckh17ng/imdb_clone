@@ -1,20 +1,13 @@
-// import axios from "axios";
-// import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { useCallback, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-// import { useDispatch, useSelector } from "react-redux";
-import { auth, db } from "../../firebaseConfig";
-// import { addToWatchlist } from "../../redux/actions/watchlistActions";
-import * as styles from "../../styles/styles";
-// import WatchlistMovie from "../WatchlistMovie";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { auth, db } from "../../firebase/firebaseConfig";
 import { addMovieToWatchlist } from "../../redux/actions/watchlistActions";
-import "./MovieSlide.css";
+import * as styles from "../../styles/styles";
 
 const MovieSlide = ({
 	id,
@@ -38,31 +31,36 @@ const MovieSlide = ({
 		description: description,
 	};
 	const dispatch = useDispatch();
-	const watchlistMovieState = useSelector((state) => state.addToWatchlist);
-	const { addMovieToWatchlistState, loading } = watchlistMovieState;
-	console.log(addMovieToWatchlistState);
-
-	const [data, getData] = useState();
-	const fetchUserData = useCallback(async () => {
+	const [watchlistMovie, getWatchlistMovie] = useState();
+	const fetchWatchlistData = useCallback(async () => {
 		const q = query(
 			collection(db, "watchlist"),
 			where("watchlistId", "==", user?.uid + id)
 		);
 		const docs = await getDocs(q);
 		docs.forEach((doc) => {
-			getData(doc.data());
+			getWatchlistMovie(doc.data());
 		});
 	}, [id, user?.uid]);
 
 	useEffect(() => {
-		fetchUserData();
-	}, [fetchUserData]);
+		fetchWatchlistData();
+	}, [fetchWatchlistData]);
 
+	// const [addState, getAddState] = useState(false);
+	// const userWatchlistState = useSelector((state) => state.getUserWatchlist);
+	// const { loading, userWatchlist } = userWatchlistState;
+	// useEffect(() => {
+	// 	dispatch(getUserWatchlist(user?.uid, id));
+	// 	getAddState(userWatchlist);
+	// }, [dispatch, user?.uid, id]);
+	// console.log(addState);
+	// console.log(userWatchlist);
 	const handleAddToWatchlist = (e) => {
 		e.preventDefault();
 		if (user) {
 			dispatch(addMovieToWatchlist(user?.uid, movie)).then(() => {
-				fetchUserData();
+				fetchWatchlistData();
 			});
 		} else {
 			toast("Sign in for more access!", {
@@ -77,7 +75,6 @@ const MovieSlide = ({
 			});
 			toast.clearWaitingQueue();
 		}
-		// fetchUserData();
 	};
 
 	return (
@@ -94,14 +91,14 @@ const MovieSlide = ({
 				<div
 					style={styles.bookmarkStyle}
 					className={
-						(user?.uid === data?.uid) & data?.isAdded
+						watchlistMovie?.isAdded
 							? `bg-[#f5c518] absolute top-0 left-0 w-[32px] h-[42px] flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:bg-yellow-600`
 							: `bg-zinc-800/50 absolute top-0 left-0 w-[32px] h-[42px] flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:bg-zinc-500/80`
 					}
 				>
 					<img
 						src={
-							(user?.uid === data?.uid) & data?.isAdded
+							watchlistMovie?.isAdded
 								? require("../../images/icons8-done-30.png")
 								: require("../../images/icons8-plus-20.png")
 						}
@@ -130,7 +127,7 @@ const MovieSlide = ({
 					>
 						<img
 							src={
-								(user?.uid === data?.uid) & data?.isAdded
+								watchlistMovie?.isAdded
 									? require("../../images/icons8-done-30 (1).png")
 									: require("../../images/icons8-plus-24.png")
 							}

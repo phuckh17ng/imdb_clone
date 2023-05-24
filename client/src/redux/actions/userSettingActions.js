@@ -1,6 +1,6 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
-import { db } from "../../firebaseConfig";
+import { db } from "../../firebase/firebaseConfig";
 import * as actionTypes from "../constants/userSettingConstants";
 
 export const getUserData = (uid) => async (dispatch) => {
@@ -18,7 +18,6 @@ export const getUserData = (uid) => async (dispatch) => {
 		try {
 			await getDownloadURL(storageRef).then((url) => {
 				userImageURL = url;
-				console.log(url);
 			});
 		} catch (error) {
 			console.log(error);
@@ -26,7 +25,6 @@ export const getUserData = (uid) => async (dispatch) => {
 
 		if (userImageURL === "") {
 			userImageURL = data?.profileImage;
-			console.log(userImageURL);
 		}
 		dispatch({
 			type: actionTypes.GET_USER_DATA_SUCCESS,

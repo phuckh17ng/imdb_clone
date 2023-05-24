@@ -11,14 +11,12 @@ import {
 	updateDoc,
 	where,
 } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
+import { db } from "../../firebase/firebaseConfig";
 import * as actionTypes from "../constants/watchlistConstants";
 
 export const getWatchlist = (uid) => async (dispatch) => {
-	console.log(uid);
 	try {
 		dispatch({ type: actionTypes.GET_WATCHLIST_REQUEST });
-
 		var data = [];
 		const q = query(
 			collection(db, "watchlist"),
@@ -29,6 +27,7 @@ export const getWatchlist = (uid) => async (dispatch) => {
 		docs.forEach((doc) => {
 			data = [...data, doc?.data()];
 		});
+
 		dispatch({
 			type: actionTypes.GET_WATCHLIST_SUCCESS,
 			payload: data,
@@ -36,6 +35,38 @@ export const getWatchlist = (uid) => async (dispatch) => {
 	} catch (error) {
 		dispatch({
 			type: actionTypes.GET_WATCHLIST_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};
+
+export const getUserWatchlist = (userId, movieId) => async (dispatch) => {
+	try {
+		dispatch({ type: actionTypes.GET_USER_WATCHLIST_REQUEST });
+		var data = [];
+		const q = query(
+			collection(db, "watchlist"),
+			where("watchlistId", "==", userId + movieId)
+		);
+		const docs = await getDocs(q);
+		if (docs.docs.length === 0) {
+			data = [];
+		} else {
+			docs.forEach((doc) => {
+				data = doc?.data();
+				console.log(doc.data());
+			});
+		}
+		dispatch({
+			type: actionTypes.GET_USER_WATCHLIST_SUCCESS,
+			payload: data,
+		});
+	} catch (error) {
+		dispatch({
+			type: actionTypes.GET_USER_WATCHLIST_FAIL,
 			payload:
 				error.response && error.response.data.message
 					? error.response.data.message

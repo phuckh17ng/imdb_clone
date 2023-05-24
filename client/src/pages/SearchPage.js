@@ -8,8 +8,6 @@ const SearchPage = () => {
 	// const dispatch = useDispatch();
 	const getMoviesSearch = useSelector((state) => state.moviesSearch);
 	const { moviesSearch, loading } = getMoviesSearch;
-	console.log(moviesSearch?.results);
-	console.log(getMoviesSearch);
 
 	return loading ? (
 		<div className="w-full h-[100vh] flex items-center justify-center bg-zinc-900">

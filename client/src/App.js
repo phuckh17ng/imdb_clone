@@ -1,13 +1,17 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 
-import Footer from "./components/Footer";
-import Navbar from "./components/Navbar";
-
 import { useEffect } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+
 import { useDispatch } from "react-redux";
-import { auth } from "./firebaseConfig";
+import { getUserData } from "./redux/actions/userSettingActions";
+
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "./firebase/firebaseConfig";
+
+import Footer from "./components/Footer";
+import Navbar from "./components/navbar/Navbar";
+
 import HomePage from "./pages/HomePage";
 import IMDbForgotPassword from "./pages/IMDbForgotPassword";
 import IMDbSignInPage from "./pages/IMDbSignInPage";
@@ -17,7 +21,6 @@ import SearchPage from "./pages/SearchPage";
 import SignInPage from "./pages/SignInPage";
 import UserSettingsPage from "./pages/UserSettingsPage";
 import WatchlistPage from "./pages/WatchlistPage";
-import { getUserData } from "./redux/actions/userSettingActions";
 
 function App() {
 	const [user, loading] = useAuthState(auth);

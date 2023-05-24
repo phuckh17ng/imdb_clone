@@ -15,6 +15,7 @@ import { getMovieSearchReducer } from "./reducers/searchReducers";
 import { getUserDataReducer } from "./reducers/userSettingReducers";
 import {
 	addToWatchlist,
+	getUserWatchlistReducer,
 	removeFromWatchlist,
 	watchlistReducer,
 } from "./reducers/watchlistReducers";
@@ -29,6 +30,7 @@ let reducers = combineReducers({
 	getWatchlist: watchlistReducer,
 	removeFromWatchlist: removeFromWatchlist,
 	addToWatchlist: addToWatchlist,
+	getUserWatchlist: getUserWatchlistReducer,
 
 	//SEARCH REDUCERS
 	moviesSearch: getMovieSearchReducer,

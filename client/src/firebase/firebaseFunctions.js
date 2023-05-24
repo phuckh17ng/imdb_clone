@@ -1,9 +1,7 @@
-import { initializeApp } from "firebase/app";
 import {
 	FacebookAuthProvider,
 	GoogleAuthProvider,
 	createUserWithEmailAndPassword,
-	getAuth,
 	sendPasswordResetEmail,
 	signInWithEmailAndPassword,
 	signInWithPopup,
@@ -15,35 +13,15 @@ import {
 	collection,
 	doc,
 	getDocs,
-	getFirestore,
 	query,
 	updateDoc,
 	where,
 } from "firebase/firestore";
-import {
-	getDownloadURL,
-	getStorage,
-	listAll,
-	ref,
-	uploadString,
-} from "firebase/storage";
+import { getDownloadURL, getStorage, listAll, ref } from "firebase/storage";
+import { auth, db } from "./firebaseConfig";
 
-const firebaseConfig = {
-	apiKey: "AIzaSyDIe4ydGxAxw_5egv7fRtDfJdUm4zO47ig",
-	authDomain: "imdb-testing1.firebaseapp.com",
-	projectId: "imdb-testing1",
-	storageBucket: "imdb-testing1.appspot.com",
-	messagingSenderId: "191179270054",
-	appId: "1:191179270054:web:58702da1d26990c2d0d167",
-	measurementId: "G-9MEMZLSGY2",
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
-
 const signInWithGoogle = async () => {
 	try {
 		const res = await signInWithPopup(auth, googleProvider);
@@ -105,7 +83,7 @@ const registerWithEmailAndPassword = async (name, email, password) => {
 			authProvider: "local",
 			email,
 			password: password,
-			profileImage: require("./images/icons8-customer-96.png"),
+			profileImage: require("../images/icons8-customer-96.png"),
 			watchlist: [],
 		});
 		alert("create account successfully");
@@ -118,7 +96,7 @@ const registerWithEmailAndPassword = async (name, email, password) => {
 
 const sendPasswordReset = async (email) => {
 	try {
-		await sendPasswordResetEmail(auth, email);
+		await sendPasswordResetEmail(auth, email).then(() => console.log(1));
 		console.log("Password reset link sent!");
 	} catch (err) {
 		console.error(err);
@@ -185,21 +163,16 @@ const updateUserImage = async (uid) => {
 	const storage = getStorage();
 	const listRef = ref(storage, `images/${uid}`);
 
-	// Find all the prefixes and items.
 	await listAll(listRef)
 		.then((res) => {
-			res.prefixes.forEach((folderRef) => {
-				// All the prefixes under listRef.
-				// You may call listAll() recursively on them.
-			});
+			res.prefixes.forEach((folderRef) => {});
 			res.items.forEach((itemRef) => {
-				// All the items under listRef.
 				getDownloadURL(itemRef);
 				console.log(getDownloadURL(itemRef));
 			});
 		})
 		.catch((error) => {
-			// Uh-oh, an error occurred!
+			console.error(error);
 		});
 };
 
@@ -208,8 +181,6 @@ const logout = () => {
 };
 
 export {
-	auth,
-	db,
 	signInWithGoogle,
 	logInWithEmailAndPassword,
 	registerWithEmailAndPassword,

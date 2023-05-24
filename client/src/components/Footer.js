@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useLocation } from "react-router-dom";
-import { auth } from "../firebaseConfig";
+import { Link, useLocation } from "react-router-dom";
+import { auth } from "../firebase/firebaseConfig";
 
 const Footer = () => {
 	const location = useLocation();
@@ -13,9 +13,12 @@ const Footer = () => {
 			location.pathname === "/signin/imdb/resetpassword" ? null : (
 				<div className="w-full max-w-[1280px] mx-auto px-3 pt-16 h-full">
 					{!user ? (
-						<button className="bg-[#f5c518] rounded hover:brightness-90 h-9 flex items-center justify-center text-black text-sm font-semibold pb-1 px-6 mx-auto">
+						<Link
+							to="/signin"
+							className="bg-[#f5c518] w-fit rounded hover:brightness-90 h-9 flex items-center justify-center text-black text-sm font-semibold pb-1 px-6 mx-auto"
+						>
 							Sign in for more access
-						</button>
+						</Link>
 					) : (
 						""
 					)}

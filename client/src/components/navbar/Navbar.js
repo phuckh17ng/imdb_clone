@@ -1,118 +1,32 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { getStorage, ref } from "firebase/storage";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch, useSelector } from "react-redux";
-import {
-	Link,
-	useLoaderData,
-	useLocation,
-	useNavigate,
-} from "react-router-dom";
-import { auth, logout } from "../firebaseConfig";
-import { getSearchMovies } from "../redux/actions/searchActions";
-import { bookmarkStyle } from "../styles/styles";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { auth } from "../../firebase/firebaseConfig";
+import { getSearchMovies } from "../../redux/actions/searchActions";
+import { bookmarkStyle } from "../../styles/styles";
+import SearchOptions from "./SearchOptions";
+import UserMenu from "./UserMenu";
 
 const Navbar = () => {
-	const navigate = useNavigate();
 	const [user, userAuthLoading] = useAuthState(auth);
 	const userDataReq = useSelector((state) => state.userData);
 	const { userData, loading } = userDataReq;
 
 	const [userMenuState, setUserMenuState] = useState(false);
 	const [searchOptionsState, setSearchOptionsState] = useState(false);
-	const options = {
-		all: "All",
-		title: "Title",
-		movie: "Movie",
-		series: "Series",
-		name: "Name",
-		episode: "Episode",
-	};
+
 	const [searchOption, setSearchOption] = useState("All");
 	const [searchValue, setSearchValue] = useState();
-	console.log(userDataReq);
-	const location = useLocation();
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const handleSearchSubmit = (e) => {
 		e.preventDefault();
 		navigate(`/search/${searchOption}/${searchValue}`);
 		dispatch(getSearchMovies(searchOption, searchValue));
 		setSearchValue("");
 	};
-
-	const userMenu = (
-		<div
-			onMouseLeave={() => setUserMenuState(false)}
-			className="font-normal w-[170px] bg-zinc-800 absolute top-10 right-0 z-50 flex flex-col justify-start items-start py-3 rounded"
-		>
-			<Link
-				to={`/watchlist`}
-				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2 sm:hidden"
-			>
-				Watchlist
-			</Link>
-			<Link
-				to={`account/${userData?.data?.uid}`}
-				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
-			>
-				Settings
-			</Link>
-			<Link
-				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
-				onClick={() => {
-					logout();
-				}}
-				to="/"
-			>
-				Logout
-			</Link>
-		</div>
-	);
-	const searchOptions = (
-		<div
-			onMouseLeave={() => setSearchOptionsState(false)}
-			className="font-normal w-[170px] bg-zinc-800 absolute top-10 left-0 z-50 flex flex-col justify-start items-start py-3 rounded"
-		>
-			<div
-				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
-				onClick={() => setSearchOption(options.all)}
-			>
-				All
-			</div>
-			<div
-				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
-				onClick={() => setSearchOption(options.title)}
-			>
-				Title
-			</div>
-			<div
-				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
-				onClick={() => setSearchOption(options.movie)}
-			>
-				Movie
-			</div>
-			<div
-				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
-				onClick={() => setSearchOption(options.series)}
-			>
-				Series
-			</div>
-			<div
-				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
-				onClick={() => setSearchOption(options.name)}
-			>
-				Name
-			</div>
-			<div
-				className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
-				onClick={() => setSearchOption(options.episode)}
-			>
-				Episode
-			</div>
-		</div>
-	);
-
+	const location = useLocation();
 	return (
 		<div className="bg-black z-50">
 			{location.pathname === "/signin/imdb" ||
@@ -147,11 +61,21 @@ const Navbar = () => {
 									{searchOption}
 								</div>
 								<img
-									src={require("../images/icons8-sort-down-30.png")}
+									src={require("../../images/icons8-sort-down-30.png")}
 									alt="down-arrow"
 									className="w-[10px] h-[10px] mt-1 max-md:mr-1"
 								/>
-								{searchOptionsState ? searchOptions : ""}
+								{searchOptionsState && (
+									<SearchOptions
+										mouseLeave={() => {
+											setSearchOptionsState(false);
+										}}
+										click={(e) => {
+											const value = e.target.title;
+											setSearchOption(value);
+										}}
+									/>
+								)}
 							</div>
 
 							<div className="flex w-full">
@@ -164,7 +88,7 @@ const Navbar = () => {
 									}}
 								/>
 								<img
-									src={require("../images/icons8-search-50.png")}
+									src={require("../../images/icons8-search-50.png")}
 									alt="search-icon"
 									className="w-5 h-5 cursor-pointer"
 									onClick={handleSearchSubmit}
@@ -186,7 +110,7 @@ const Navbar = () => {
 										className="flex justify-center mr-2 hover:!bg-[#f5c518] w-[14px] h-[18px] bg-white"
 									>
 										<img
-											src={require("../images/icons8-plus-math-15.png")}
+											src={require("../../images/icons8-plus-math-15.png")}
 											alt="bookmark"
 											className="mt-[2px] w-[10px] h-[10px]"
 										/>
@@ -194,32 +118,26 @@ const Navbar = () => {
 									<label className="font-semibold">Watchlist</label>
 								</Link>
 								<div className="font-semibold w-full text-center text-white max-sm:text-end">
-									{!userAuthLoading && user ? (
-										!loading && userData?.userImageURL ? (
-											<div
-												className="p-[1.5px] w-9 rounded-full relative bg-[#5699ef] flex items-center justify-center max-sm:mx-0 max-sm:ml-3 max-sm:mr-0 sm:mx-auto"
-												onClick={() => setUserMenuState(!userMenuState)}
-											>
-												<img
-													src={userData?.userImageURL}
-													alt="avatar"
-													className="w-8 h-8 rounded-full hover:brightness-75"
+									{!userAuthLoading &&
+									user &&
+									!loading &&
+									userData?.userImageURL ? (
+										<div
+											className="p-[1.5px] w-9 rounded-full relative bg-white flex items-center justify-center max-sm:mx-0 max-sm:ml-3 max-sm:mr-0 sm:mx-auto"
+											onClick={() => setUserMenuState(!userMenuState)}
+										>
+											<img
+												src={userData?.userImageURL}
+												alt="avatar"
+												className="w-8 h-8 rounded-full hover:brightness-75"
+											/>
+											{userMenuState && (
+												<UserMenu
+													mouseLeave={() => setUserMenuState(false)}
+													uid={user?.uid}
 												/>
-												{userMenuState ? userMenu : ""}
-											</div>
-										) : (
-											<div
-												className="rounded-full w-8 h-8 bg-zinc-700/50 relative flex items-center justify-center mx-auto "
-												onClick={() => setUserMenuState(!userMenuState)}
-											>
-												<img
-													src={require("../images/icons8-customer-40.png")}
-													alt="blank-avatar"
-													className="w-6 h-6 hover:brightness-75"
-												/>
-												{userMenuState ? userMenu : ""}
-											</div>
-										)
+											)}
+										</div>
 									) : (
 										<Link
 											to="/signin"
@@ -232,7 +150,7 @@ const Navbar = () => {
 								<div className="flex items-center justify-evenly ml-3 max-[960px]:hidden">
 									<label className="font-semibold mr-1">EN</label>
 									<img
-										src={require("../images/icons8-sort-down-30 (1).png")}
+										src={require("../../images/icons8-sort-down-30 (1).png")}
 										className="w-[10px] h-[10px] mt-1"
 										alt="down-arrow"
 									/>

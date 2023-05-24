@@ -36,8 +36,6 @@ export const getSearchMovies =
 					`https://imdb-api.com/en/API/SearchName/k_7svrxe8z/${searchValue}`
 				);
 			}
-
-			console.log(data);
 			dispatch({
 				type: actionTypes.GET_SEARCH_MOVIES_SUCCESS,
 				payload: data,

@@ -22,6 +22,28 @@ export const watchlistReducer = (state = { watchlistMovies: [] }, action) => {
 	}
 };
 
+export const getUserWatchlistReducer = (
+	state = { userWatchlist: [] },
+	action
+) => {
+	switch (action.type) {
+		case actionTypes.GET_USER_WATCHLIST_REQUEST:
+			return {
+				loading: true,
+				userWatchlist: [],
+			};
+		case actionTypes.GET_USER_WATCHLIST_SUCCESS:
+			return { loading: false, userWatchlist: action.payload };
+		case actionTypes.GET_USER_WATCHLIST_FAIL:
+			return {
+				loading: false,
+				error: action.payload,
+			};
+		default:
+			return state;
+	}
+};
+
 export const addToWatchlist = (
 	state = { addMovieToWatchlistState: {} },
 	action

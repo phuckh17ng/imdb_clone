@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { auth, registerWithEmailAndPassword } from "../firebaseConfig";
-
+import { auth } from "../firebase/firebaseConfig";
+import { registerWithEmailAndPassword } from "../firebase/firebaseFunctions";
 const RegisterPage = () => {
 	const [name, setName] = useState();
 	const [email, setEmail] = useState();
@@ -17,12 +17,6 @@ const RegisterPage = () => {
 		if (loading) return;
 		if (user) navigate("/");
 	}, [user, loading, navigate]);
-	// useEffect(() => {
-	// 	if (loading) return;
-	// 	if (user !== null) {
-	// 		navigate("/");
-	// 	}
-	// }, [user, loading, navigate]);
 
 	return (
 		<div className="m-auto h-[100vh] flex items-center">
@@ -41,9 +35,6 @@ const RegisterPage = () => {
 							value={name}
 							onChange={(e) => setName(e.target.value)}
 						/>
-						{/* <div id="emailHelp" class="form-text">
-							We'll never share your email with anyone else.
-						</div> */}
 					</div>
 					<div class="mb-3">
 						<label for="exampleInputEmail1" class="form-label">
@@ -82,10 +73,7 @@ const RegisterPage = () => {
 						/>
 					</div>
 
-					<button
-						// type="submit"
-						className="text-zinc-800 mt-3 w-full rounded py-1 bg-gradient-to-b from-cyan-500 to-blue-500 font-semibold"
-					>
+					<button className="text-zinc-800 mt-3 w-full rounded py-1 bg-gradient-to-b from-cyan-500 to-blue-500 font-semibold">
 						Create your IMDb account
 					</button>
 

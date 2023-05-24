@@ -3,7 +3,8 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { auth, logInWithEmailAndPassword } from "../firebaseConfig";
+import { auth } from "../firebase/firebaseConfig";
+import { logInWithEmailAndPassword } from "../firebase/firebaseFunctions";
 
 const IMDbSignInPage = () => {
 	const [email, setEmail] = useState();
@@ -21,7 +22,6 @@ const IMDbSignInPage = () => {
 			navigate("/");
 		}
 	}, [user, loading, navigate]);
-	console.log(user);
 
 	return (
 		<div className="m-auto h-[100vh] flex items-center">

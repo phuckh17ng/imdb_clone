@@ -1,92 +1,25 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
-import PropagateLoader from "react-spinners/PropagateLoader";
-import { auth, db } from "../../firebaseConfig";
-import { getWatchlist } from "../../redux/actions/watchlistActions";
-import * as style from "../../styles/styles";
-import * as styles from "../../styles/styles";
-import MovieSlide from "./MovieSlide";
+import { auth } from "../../../firebase/firebaseConfig";
+import { getWatchlist } from "../../../redux/actions/watchlistActions";
+import * as styles from "../../../styles/styles";
+import MovieSlide from "../MovieSlide";
+import PropagateLoading from "../PropagateLoading";
+import { slickSliderSettings } from "../slickSliderSettings";
 
 const SliderWatchlistMovies = () => {
 	const [user, userLoading] = useAuthState(auth);
-	const [data, getData] = useState([]);
+
 	const dispatch = useDispatch();
 	const watchlistItems = useSelector((state) => state.getWatchlist);
 	const { watchlistMovies, loading } = watchlistItems;
 	useEffect(() => {
-		const fetchUserData = async () => {
-			if (!userLoading) {
-				dispatch(getWatchlist(user?.uid));
-			}
-			// if (user !== null) {
-			// 	const q = query(
-			// 		collection(db, "watchlist"),
-			// 		where("uid", "==", user?.uid),
-			// 		where("isAdded", "==", true)
-			// 	);
-			// 	const docs = await getDocs(q);
-			// 	docs.forEach((doc) => {
-			// 		getData((data) => [...data, doc.data()]);
-			// 	});
-			// }
-		};
-		fetchUserData();
-	}, [user?.uid, userLoading, dispatch]);
+		dispatch(getWatchlist(user?.uid));
+	}, [user?.uid, dispatch]);
 
-	console.log(data);
-	function SampleNextArrow(props) {
-		const { className, onClick } = props;
-		return <div className={`${className} mr-4`} onClick={onClick}></div>;
-	}
-
-	function SamplePrevArrow(props) {
-		const { className, onClick } = props;
-		return <div className={`${className} ml-5 z-50`} onClick={onClick} />;
-	}
-	const settings = {
-		dots: false,
-		infinite: false,
-		speed: 500,
-		slidesToShow: 6,
-		slidesToScroll: 5,
-		lazyLoad: true,
-		nextArrow: <SampleNextArrow />,
-		prevArrow: <SamplePrevArrow />,
-		responsive: [
-			{
-				breakpoint: 1200,
-				settings: {
-					slidesToShow: 5,
-					slidesToScroll: 4,
-				},
-			},
-			{
-				breakpoint: 1024,
-				settings: {
-					slidesToShow: 4,
-					slidesToScroll: 4,
-				},
-			},
-			{
-				breakpoint: 768,
-				settings: {
-					slidesToShow: 3,
-					slidesToScroll: 3,
-				},
-			},
-			{
-				breakpoint: 640,
-				settings: {
-					slidesToShow: 2,
-					slidesToScroll: 2,
-				},
-			},
-		],
-	};
 	return (
 		<div className="bg-black m-auto max-w-[1280px] px-3 pt-12">
 			<div className="flex items-center">
@@ -95,7 +28,7 @@ const SliderWatchlistMovies = () => {
 					From your watchlist
 				</label>
 				<div
-					style={style.forwardStyle}
+					style={styles.forwardStyle}
 					className="hover:!bg-[#f5c518] transition-all duration-300"
 				></div>
 			</div>
@@ -104,15 +37,7 @@ const SliderWatchlistMovies = () => {
 			</div> */}
 			{loading ? (
 				<div className="w-full h-12 flex items-center justify-center">
-					<PropagateLoader
-						loading={loading}
-						// cssOverride={override}
-						aria-label="Loading Spinner"
-						data-testid="loader"
-						size="15"
-						color="#f5c518"
-						className="m-auto"
-					/>
+					<PropagateLoading loading={loading} />
 				</div>
 			) : !user?.uid && !userLoading & !loading ? (
 				<div className="text-white flex justify-center flex-col items-center">
@@ -121,7 +46,7 @@ const SliderWatchlistMovies = () => {
 						className=" w-[32px] h-[42px] bg-zinc-800/70 flex items-center justify-center pb-3 z-10 drop-shadow-xl"
 					>
 						<img
-							src={require("../../images/icons8-plus-20.png")}
+							src={require("../../../images/icons8-plus-20.png")}
 							alt="bookmark"
 							style={{ opacity: "1!important" }}
 							className="z-10"
@@ -142,8 +67,8 @@ const SliderWatchlistMovies = () => {
 						</div>
 					</Link>
 				</div>
-			) : ( 
-				<Slider {...settings} className="mt-6">
+			) : (
+				<Slider {...slickSliderSettings} className="mt-6">
 					{watchlistMovies?.map((movie) => (
 						<MovieSlide
 							key={movie.movieId}
