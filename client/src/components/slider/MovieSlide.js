@@ -37,6 +37,7 @@ const MovieSlide = ({
 			collection(db, "watchlist"),
 			where("watchlistId", "==", user?.uid + id)
 		);
+
 		const docs = await getDocs(q);
 		docs.forEach((doc) => {
 			getWatchlistMovie(doc.data());

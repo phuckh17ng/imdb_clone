@@ -3,7 +3,7 @@ import "./App.css";
 import { useEffect } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getUserData } from "./redux/actions/userSettingActions";
 
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -23,13 +23,24 @@ import UserSettingsPage from "./pages/UserSettingsPage";
 import WatchlistPage from "./pages/WatchlistPage";
 
 function App() {
-	const [user, loading] = useAuthState(auth);
+	const [user, userLoading] = useAuthState(auth);
 	const dispatch = useDispatch();
-	useEffect(() => {
-		if (!loading && user?.uid) {
-			dispatch(getUserData(user?.uid));
-		}
-	}, [dispatch, loading, user?.uid]);
+	const userDataState = useSelector((state) => state.userData);
+	const { loading, userData } = userDataState;
+	console.log(userData);
+
+	// useEffect(() => {
+	// 	// debugger;
+	// 	if (!userLoading && user) {
+	// 		const fetchUserData = setTimeout(() => {
+	// 			dispatch(getUserData(user?.uid));
+	// 		}, 100);
+	// 		if (userData?.data !== undefined) {
+	// 			clearTimeout(fetchUserData);
+	// 		}
+	// 	}
+	// }, [user, dispatch]);
+
 	return (
 		<Router>
 			<main className="App">

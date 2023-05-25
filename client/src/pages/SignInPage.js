@@ -1,16 +1,24 @@
 import React, { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../firebase/firebaseConfig";
 import {
 	signInWithFacebook,
 	signInWithGoogle,
 } from "../firebase/firebaseFunctions";
+import { getUserData } from "../redux/actions/userSettingActions";
 
 const SignInPage = () => {
 	const [user, loading] = useAuthState(auth);
 	const navigate = useNavigate();
-
+	const dispatch = useDispatch();
+	const googleSignin = () => {
+		signInWithGoogle().then(() => {
+			console.log(1);
+			// dispatch(getUserData(user?.uid));
+		});
+	};
 	useEffect(() => {
 		if (loading) return;
 		if (user !== null) {
@@ -40,7 +48,7 @@ const SignInPage = () => {
 							</Link>
 							<div
 								className="w-[242px] rounded border-zinc-300 border text-zinc-600 font-bold h-8 cursor-pointer flex items-center my-3 mx-auto"
-								onClick={signInWithGoogle}
+								onClick={googleSignin}
 							>
 								<img
 									src={require("../images/icons8-google-30.png")}

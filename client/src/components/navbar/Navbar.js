@@ -1,24 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase/firebaseConfig";
 import { getSearchMovies } from "../../redux/actions/searchActions";
+import { getUserData } from "../../redux/actions/userSettingActions";
 import { bookmarkStyle } from "../../styles/styles";
 import SearchOptions from "./SearchOptions";
 import UserMenu from "./UserMenu";
 
 const Navbar = () => {
 	const [user, userAuthLoading] = useAuthState(auth);
+	const dispatch = useDispatch();
 	const userDataReq = useSelector((state) => state.userData);
+	useEffect(() => {
+		dispatch(getUserData(user?.uid));
+	}, [dispatch, user?.uid]);
 	const { userData, loading } = userDataReq;
-
+	console.log(userData);
 	const [userMenuState, setUserMenuState] = useState(false);
 	const [searchOptionsState, setSearchOptionsState] = useState(false);
 
 	const [searchOption, setSearchOption] = useState("All");
 	const [searchValue, setSearchValue] = useState();
-	const dispatch = useDispatch();
+
 	const navigate = useNavigate();
 	const handleSearchSubmit = (e) => {
 		e.preventDefault();
@@ -27,6 +32,7 @@ const Navbar = () => {
 		setSearchValue("");
 	};
 	const location = useLocation();
+	console.log(userData?.userImageURL);
 	return (
 		<div className="bg-black z-50">
 			{location.pathname === "/signin/imdb" ||

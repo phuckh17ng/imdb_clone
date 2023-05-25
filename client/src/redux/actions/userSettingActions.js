@@ -7,11 +7,14 @@ export const getUserData = (uid) => async (dispatch) => {
 	try {
 		dispatch({ type: actionTypes.GET_USER_DATA_REQUEST });
 		let data;
-		const q = query(collection(db, "users"), where("uid", "==", uid));
-		const docs = await getDocs(q);
-		docs.forEach((doc) => {
-			data = doc.data();
-		});
+		if (where("uid", "==", uid) !== undefined) {
+			const q = query(collection(db, "users"), where("uid", "==", uid));
+			const docs = await getDocs(q);
+			docs.forEach((doc) => {
+				data = doc.data();
+			});
+		}
+
 		let userImageURL = "";
 		const storage = getStorage();
 		const storageRef = ref(storage, `userImages/${uid}`);

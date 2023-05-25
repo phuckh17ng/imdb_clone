@@ -1,3 +1,4 @@
+import { sendPasswordResetEmail } from "firebase/auth";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -14,7 +15,6 @@ import "./UserSettingsPage.css";
 const UserSettingsPage = () => {
 	const [user] = useAuthState(auth);
 	const userDataReq = useSelector((state) => state.userData);
-
 	const { userData } = userDataReq;
 	console.log(userData);
 	const [name, setName] = useState("");
@@ -39,16 +39,19 @@ const UserSettingsPage = () => {
 
 	const handleChangePassword = () => {
 		console.log(userData?.data?.email);
-		sendPasswordReset(userData?.data?.email);
-		toast("An email has been sent!", {
-			position: "top-right",
-			autoClose: 5000,
-			hideProgressBar: false,
-			closeOnClick: true,
-			pauseOnHover: true,
-			draggable: true,
-			progress: undefined,
-			theme: "light",
+		// sendPasswordReset(userData?.data?.email);
+		sendPasswordResetEmail(auth, userData?.data?.email).then(() => {
+			console.log(userData?.data?.email);
+			toast("An email has been sent!", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: "light",
+			});
 		});
 	};
 
