@@ -75,6 +75,7 @@ export const addToWatchlist = createAsyncThunk(
 					error.response.data.message) ||
 				error.message ||
 				error.toString();
+			console.error(message, error);
 			return thunkAPI.rejectWithValue(message);
 		}
 	}

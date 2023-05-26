@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { addToWatchlist } from "../../features/watchlist/watchlistService";
 import { auth, db } from "../../firebase/firebaseConfig";
 import { addMovieToWatchlist } from "../../redux/actions/watchlistActions";
 import * as styles from "../../styles/styles";
@@ -51,7 +52,8 @@ const MovieSlide = ({
 	const handleAddToWatchlist = (e) => {
 		e.preventDefault();
 		if (user) {
-			dispatch(addMovieToWatchlist(user?.uid, movie)).then(() => {
+			console.log(movie);
+			dispatch(addToWatchlist(user?.uid, movie)).then(() => {
 				fetchWatchlistData();
 			});
 		} else {
