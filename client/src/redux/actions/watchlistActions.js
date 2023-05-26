@@ -1,7 +1,3 @@
-// import axios from "axios";
-// import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
-// import { useAuthState } from "react-firebase-hooks/auth";
-// import { auth, db } from "../../firebaseConfig";
 import {
 	addDoc,
 	collection,
@@ -57,7 +53,6 @@ export const getUserWatchlist = (userId, movieId) => async (dispatch) => {
 		} else {
 			docs.forEach((doc) => {
 				data = doc?.data();
-				console.log(doc.data());
 			});
 		}
 		dispatch({

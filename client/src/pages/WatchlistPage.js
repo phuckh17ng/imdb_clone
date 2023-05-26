@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import PropagateLoader from "react-spinners/PropagateLoader";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -18,7 +17,6 @@ const WatchlistPage = () => {
 			dispatch(getWatchlist(user?.uid));
 		}
 	}, [user?.uid, dispatch, userLoading]);
-
 	const watchlistItems = useSelector((state) => state.getWatchlist);
 	const { watchlistMovies, loading } = watchlistItems;
 	return (

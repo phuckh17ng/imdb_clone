@@ -1,5 +1,3 @@
-import { sendPasswordResetEmail } from "firebase/auth";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useSelector } from "react-redux";
@@ -8,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { auth } from "../firebase/firebaseConfig";
 import {
 	sendPasswordReset,
+	updateUserImage,
 	updateUserName,
 } from "../firebase/firebaseFunctions";
 import "./UserSettingsPage.css";
@@ -38,10 +37,7 @@ const UserSettingsPage = () => {
 	};
 
 	const handleChangePassword = () => {
-		console.log(userData?.data?.email);
-		// sendPasswordReset(userData?.data?.email);
-		sendPasswordResetEmail(auth, userData?.data?.email).then(() => {
-			console.log(userData?.data?.email);
+		sendPasswordReset(userData?.data?.email).then(() => {
 			toast("An email has been sent!", {
 				position: "top-right",
 				autoClose: 5000,
@@ -60,10 +56,7 @@ const UserSettingsPage = () => {
 		if (selectedImage === null || selectedImage === undefined) {
 			return;
 		}
-		const storage = getStorage();
-		const storageRef = ref(storage, `userImages/${user?.uid}`);
-		uploadBytes(storageRef, selectedImage);
-		window.location.reload();
+		updateUserImage(user?.uid, selectedImage);
 	};
 
 	return (

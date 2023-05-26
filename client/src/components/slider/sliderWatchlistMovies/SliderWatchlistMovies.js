@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
+import { getUserWatchlist } from "../../../features/movie/movieService";
 import { auth } from "../../../firebase/firebaseConfig";
-import { getWatchlist } from "../../../redux/actions/watchlistActions";
 import * as styles from "../../../styles/styles";
 import MovieSlide from "../MovieSlide";
 import PropagateLoading from "../PropagateLoading";
@@ -12,13 +12,9 @@ import { slickSliderSettings } from "../slickSliderSettings";
 
 const SliderWatchlistMovies = () => {
 	const [user, userLoading] = useAuthState(auth);
-
-	const dispatch = useDispatch();
-	const watchlistItems = useSelector((state) => state.getWatchlist);
-	const { watchlistMovies, loading } = watchlistItems;
-	useEffect(() => {
-		dispatch(getWatchlist(user?.uid));
-	}, [user?.uid, dispatch]);
+	const movies = useSelector((state) => state.watchlist);
+	const { watchlist, isLoading, isError } = movies;
+	console.log(watchlist);
 
 	return (
 		<div className="bg-black m-auto max-w-[1280px] px-3 pt-12">
@@ -35,11 +31,11 @@ const SliderWatchlistMovies = () => {
 			{/* <div className="text-zinc-400 pt-3 pb-4">
 				This week's top TV and movies
 			</div> */}
-			{loading ? (
+			{isLoading ? (
 				<div className="w-full h-12 flex items-center justify-center">
-					<PropagateLoading loading={loading} />
+					<PropagateLoading loading={isLoading} />
 				</div>
-			) : !user?.uid && !userLoading & !loading ? (
+			) : !user?.uid && !userLoading & !isLoading ? (
 				<div className="text-white flex justify-center flex-col items-center">
 					<div
 						style={styles.bookmarkStyle}
@@ -69,7 +65,7 @@ const SliderWatchlistMovies = () => {
 				</div>
 			) : (
 				<Slider {...slickSliderSettings} className="mt-6">
-					{watchlistMovies?.map((movie) => (
+					{watchlist?.map((movie) => (
 						<MovieSlide
 							key={movie.movieId}
 							id={movie?.movieId}

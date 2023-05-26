@@ -17,7 +17,7 @@ import {
 	updateDoc,
 	where,
 } from "firebase/firestore";
-import { getDownloadURL, getStorage, listAll, ref } from "firebase/storage";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { auth, db } from "./firebaseConfig";
 
 const googleProvider = new GoogleAuthProvider();
@@ -159,21 +159,12 @@ const updateUserName = async (uid, name) => {
 	});
 };
 
-const updateUserImage = async (uid) => {
+const updateUserImage = async (uid, selectedImage) => {
 	const storage = getStorage();
-	const listRef = ref(storage, `images/${uid}`);
-
-	await listAll(listRef)
-		.then((res) => {
-			res.prefixes.forEach((folderRef) => {});
-			res.items.forEach((itemRef) => {
-				getDownloadURL(itemRef);
-				console.log(getDownloadURL(itemRef));
-			});
-		})
-		.catch((error) => {
-			console.error(error);
-		});
+	const storageRef = ref(storage, `userImages/${uid}`);
+	await uploadBytes(storageRef, selectedImage).then(() =>
+		window.location.reload()
+	);
 };
 
 const logout = () => {

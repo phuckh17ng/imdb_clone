@@ -1,20 +1,14 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 import Slider from "react-slick";
-import { getMovies as listMovies } from "../../../redux/actions/moviesActions";
 import * as style from "../../../styles/styles";
 import MovieSlide from "../MovieSlide";
 import PropagateLoading from "../PropagateLoading";
 import { slickSliderSettings } from "../slickSliderSettings";
 
 const SliderFanFavoriteMovies = () => {
-	const dispatch = useDispatch();
 	const getMovies = useSelector((state) => state.getMovies);
 	const { movies, loading, error } = getMovies;
-
-	useEffect(() => {
-		dispatch(listMovies());
-	}, [dispatch]);
 
 	return (
 		<div className="bg-black m-auto max-w-[1280px] px-3 pt-12 ">

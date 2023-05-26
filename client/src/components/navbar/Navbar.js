@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 import { auth } from "../../firebase/firebaseConfig";
 import { getSearchMovies } from "../../redux/actions/searchActions";
-import { getUserData } from "../../redux/actions/userSettingActions";
 import { bookmarkStyle } from "../../styles/styles";
 import SearchOptions from "./SearchOptions";
 import UserMenu from "./UserMenu";
@@ -13,11 +13,7 @@ const Navbar = () => {
 	const [user, userAuthLoading] = useAuthState(auth);
 	const dispatch = useDispatch();
 	const userDataReq = useSelector((state) => state.userData);
-	useEffect(() => {
-		dispatch(getUserData(user?.uid));
-	}, [dispatch, user?.uid]);
 	const { userData, loading } = userDataReq;
-	console.log(userData);
 	const [userMenuState, setUserMenuState] = useState(false);
 	const [searchOptionsState, setSearchOptionsState] = useState(false);
 
@@ -32,7 +28,6 @@ const Navbar = () => {
 		setSearchValue("");
 	};
 	const location = useLocation();
-	console.log(userData?.userImageURL);
 	return (
 		<div className="bg-black z-50">
 			{location.pathname === "/signin/imdb" ||
@@ -124,10 +119,9 @@ const Navbar = () => {
 									<label className="font-semibold">Watchlist</label>
 								</Link>
 								<div className="font-semibold w-full text-center text-white max-sm:text-end">
-									{!userAuthLoading &&
-									user &&
-									!loading &&
-									userData?.userImageURL ? (
+									{loading ? (
+										<ClipLoader color="#f5c518" />
+									) : !userAuthLoading && user && userData?.userImageURL ? (
 										<div
 											className="p-[1.5px] w-9 rounded-full relative bg-white flex items-center justify-center max-sm:mx-0 max-sm:ml-3 max-sm:mr-0 sm:mx-auto"
 											onClick={() => setUserMenuState(!userMenuState)}

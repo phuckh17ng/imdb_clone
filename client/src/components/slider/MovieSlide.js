@@ -48,15 +48,6 @@ const MovieSlide = ({
 		fetchWatchlistData();
 	}, [fetchWatchlistData]);
 
-	// const [addState, getAddState] = useState(false);
-	// const userWatchlistState = useSelector((state) => state.getUserWatchlist);
-	// const { loading, userWatchlist } = userWatchlistState;
-	// useEffect(() => {
-	// 	dispatch(getUserWatchlist(user?.uid, id));
-	// 	getAddState(userWatchlist);
-	// }, [dispatch, user?.uid, id]);
-	// console.log(addState);
-	// console.log(userWatchlist);
 	const handleAddToWatchlist = (e) => {
 		e.preventDefault();
 		if (user) {

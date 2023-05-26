@@ -1,19 +1,14 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 import Slider from "react-slick";
-import { getMovies as listMovies } from "../../../redux/actions/moviesActions";
 import * as style from "../../../styles/styles";
 import MovieSlide from "../MovieSlide";
 import PropagateLoading from "../PropagateLoading";
 import { slickSliderSettings } from "../slickSliderSettings";
 
 const SliderTopMovies = () => {
-	const dispatch = useDispatch();
-	const getMovies = useSelector((state) => state.getMovies);
-	const { movies, loading, error } = getMovies;
-	useEffect(() => {
-		dispatch(listMovies());
-	}, [dispatch]);
+	const getAllMovies = useSelector((state) => state.movies);
+	const { movies, isLoading, isError } = getAllMovies;
 
 	return (
 		<div className="bg-black m-auto max-w-[1280px] px-3 pt-12 ">
@@ -31,12 +26,12 @@ const SliderTopMovies = () => {
 				This week's top TV and movies
 			</div>
 			<div>
-				{loading ? (
+				{isLoading ? (
 					<div className="w-full h-12 flex items-center justify-center">
-						<PropagateLoading loading={loading} />
+						<PropagateLoading loading={isLoading} />
 					</div>
-				) : error ? (
-					<h2>{error}</h2>
+				) : isError ? (
+					<h2>{isError}</h2>
 				) : (
 					<Slider {...slickSliderSettings}>
 						{movies.items?.map((movie, index) => {

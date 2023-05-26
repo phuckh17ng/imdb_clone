@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../../firebase/firebaseFunctions";
+import { getUserData } from "../../redux/actions/userSettingActions";
 
 const UserMenu = ({ uid, mouseLeave }) => {
+	const dispatch = useDispatch();
+	const handleLogout = () => {
+		logout();
+		dispatch(getUserData(uid));
+	};
+	// useEffect(() => {
+	// 	dispatch(getUserData(uid));
+	// }, [dispatch, uid]);
 	return (
 		mouseLeave && (
 			<div
@@ -23,7 +33,7 @@ const UserMenu = ({ uid, mouseLeave }) => {
 				</Link>
 				<Link
 					className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
-					onClick={logout}
+					onClick={handleLogout}
 					to="/"
 				>
 					Logout

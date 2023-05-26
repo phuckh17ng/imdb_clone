@@ -1,10 +1,8 @@
 import "./App.css";
 
 import { useEffect } from "react";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-
 import { useDispatch, useSelector } from "react-redux";
-import { getUserData } from "./redux/actions/userSettingActions";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase/firebaseConfig";
@@ -22,24 +20,36 @@ import SignInPage from "./pages/SignInPage";
 import UserSettingsPage from "./pages/UserSettingsPage";
 import WatchlistPage from "./pages/WatchlistPage";
 
+import { getAllMovies } from "./features/movie/movieService";
+import { getUserWatchlist } from "./features/watchlist/watchlistService";
+import { getMovies } from "./redux/actions/moviesActions";
+import { getUserData } from "./redux/actions/userSettingActions";
+import { getWatchlist } from "./redux/actions/watchlistActions";
+
 function App() {
-	const [user, userLoading] = useAuthState(auth);
+	const [user] = useAuthState(auth);
 	const dispatch = useDispatch();
 	const userDataState = useSelector((state) => state.userData);
-	const { loading, userData } = userDataState;
+	const { userData } = userDataState;
 	console.log(userData);
+	useEffect(() => {
+		dispatch(getAllMovies());
+	}, [dispatch]);
 
-	// useEffect(() => {
-	// 	// debugger;
-	// 	if (!userLoading && user) {
-	// 		const fetchUserData = setTimeout(() => {
-	// 			dispatch(getUserData(user?.uid));
-	// 		}, 100);
-	// 		if (userData?.data !== undefined) {
-	// 			clearTimeout(fetchUserData);
-	// 		}
-	// 	}
-	// }, [user, dispatch]);
+	useEffect(() => {
+		dispatch(getMovies());
+	}, [dispatch]);
+
+	console.log(user?.uid);
+	useEffect(() => {
+		if (user?.uid === undefined) return;
+		dispatch(getUserWatchlist(user?.uid));
+	}, [user?.uid, dispatch]);
+
+	useEffect(() => {
+		if (user?.uid === undefined) return;
+		setTimeout(() => dispatch(getUserData(user?.uid)), 1000);
+	}, [dispatch, user?.uid]);
 
 	return (
 		<Router>

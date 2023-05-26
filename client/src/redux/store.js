@@ -6,6 +6,9 @@ import {
 } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
 
+import moviesReducers from "../features/movie/movieSlice";
+import watchlistReducers from "../features/watchlist/watchlistSlice";
+
 import {
 	getMovieDetailsReducer,
 	getMoviesReducer,
@@ -17,7 +20,6 @@ import {
 	addToWatchlist,
 	getUserWatchlistReducer,
 	removeFromWatchlist,
-	watchlistReducer,
 } from "./reducers/watchlistReducers";
 
 let reducers = combineReducers({
@@ -27,7 +29,7 @@ let reducers = combineReducers({
 	getMovieTrailer: getMovieTrailerReducer,
 
 	//WATCHLIST REDUCERS
-	getWatchlist: watchlistReducer,
+	// getWatchlist: watchlistReducer,
 	removeFromWatchlist: removeFromWatchlist,
 	addToWatchlist: addToWatchlist,
 	getUserWatchlist: getUserWatchlistReducer,
@@ -37,6 +39,10 @@ let reducers = combineReducers({
 
 	//USER SETTINGS REDUCERS
 	userData: getUserDataReducer,
+
+	//RTK
+	movies: moviesReducers,
+	watchlist: watchlistReducers,
 });
 const middleware = [thunk];
 
