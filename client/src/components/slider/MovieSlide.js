@@ -22,6 +22,7 @@ const MovieSlide = ({
 }) => {
 	const [user] = useAuthState(auth);
 	const movie = {
+		uid: user?.uid,
 		id: id,
 		image: image,
 		title: title,
@@ -53,7 +54,7 @@ const MovieSlide = ({
 		e.preventDefault();
 		if (user) {
 			console.log(movie);
-			dispatch(addToWatchlist(user?.uid, movie)).then(() => {
+			dispatch(addToWatchlist(movie)).then(() => {
 				fetchWatchlistData();
 			});
 		} else {

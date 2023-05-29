@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addToWatchlist, getUserWatchlist } from "./watchlistService";
+import {
+	addToWatchlist,
+	deleteFromWatchlist,
+	getUserWatchlist,
+} from "./watchlistService";
 
 const initialState = {
 	watchlist: [],
@@ -32,15 +36,34 @@ export const watchlistSlice = createSlice({
 				state.isError = true;
 				state.message = action.payload;
 			})
-			.addCase(addToWatchlist.pending, (state) => {
-				state.isLoading = true;
-			})
+
+			// .addCase(addToWatchlist.pending, (state) => {
+			// 	state.isLoading = true;
+			// })
 			.addCase(addToWatchlist.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
-				state.watchlist = [action.payload];
+				console.log(...state.watchlist);
+				console.log(action.payload);
+				state.watchlist = [...state.watchlist, action.payload];
 			})
 			.addCase(addToWatchlist.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
+
+			.addCase(deleteFromWatchlist.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(deleteFromWatchlist.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.watchlist = state.watchlist.filter((item) => {
+					return item.watchlistId !== action.payload;
+				});
+			})
+			.addCase(deleteFromWatchlist.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

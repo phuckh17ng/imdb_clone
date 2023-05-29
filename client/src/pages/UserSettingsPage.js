@@ -13,7 +13,7 @@ import "./UserSettingsPage.css";
 
 const UserSettingsPage = () => {
 	const [user] = useAuthState(auth);
-	const userDataReq = useSelector((state) => state.userData);
+	const userDataReq = useSelector((state) => state.user);
 	const { userData } = userDataReq;
 	console.log(userData);
 	const [name, setName] = useState("");
@@ -64,11 +64,11 @@ const UserSettingsPage = () => {
 			<div className="w-2/3 h-full max-sm:pb-6 bg-white m-auto flex items-center justify-between rounded-xl max-lg:w-4/5 max-md:w-full">
 				<div className="w-full h-full mx-auto flex items-center justify-start max-sm:flex-col">
 					<div className="w-1/3 max-sm:h-fit max-sm:w-2/3 flex items-center justify-center border-r-[1px] max-sm:border-r-0 border-zinc-200 h-3/4 px-3 min-w-[120px] max-sm:border-b-[1px] py-3">
-						<div className="user--img border-zinc-800 border rounded-full h-fit bg-zinc-100/50 p-2 hover:brightness-[.85] relative flex justify-center items-center">
+						<div className="user--img  max-h-[136px] border-zinc-800 border rounded-full h-fit bg-zinc-100/50 p-2 hover:brightness-[.85] relative flex justify-center items-center">
 							<img
 								src={userData?.userImageURL}
 								alt="profile"
-								className="rounded-full w-[120px] max-md:min-w-0"
+								className="rounded-full w-[120px] h-[120px] object-scale-down bg-center max-md:min-w-0"
 							/>
 
 							<div className="edit w-full h-full absolute flex justify-center items-center">

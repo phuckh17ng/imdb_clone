@@ -39,18 +39,31 @@ export const getUserWatchlist = createAsyncThunk(
 
 export const addToWatchlist = createAsyncThunk(
 	"watchlist/add",
-	async (uid, movie, thunkAPI) => {
+	async (movie, thunkAPI) => {
 		try {
+			let data = {
+				watchlistId: movie?.uid + movie.id,
+				uid: movie?.uid,
+				movieId: movie.id,
+				image: movie.image,
+				title: movie.title,
+				fullTitle: movie.fullTitle,
+				year: movie.year,
+				imDbRating: movie.imDbRating,
+				imDbRatingCount: movie.imDbRatingCount,
+				description: movie.description,
+				isAdded: true,
+			};
 			const q = query(
 				collection(db, "watchlist"),
-				where("watchlistId", "==", uid + movie.id)
+				where("watchlistId", "==", movie?.uid + movie.id)
 			);
 			const docs = await getDocs(q);
 
 			if (docs.docs.length === 0) {
 				addDoc(collection(db, "watchlist"), {
-					watchlistId: uid + movie.id,
-					uid: uid,
+					watchlistId: movie?.uid + movie.id,
+					uid: movie?.uid,
 					movieId: movie.id,
 					image: movie.image,
 					title: movie.title,
@@ -68,6 +81,41 @@ export const addToWatchlist = createAsyncThunk(
 					});
 				});
 			}
+			console.log(data);
+			return data;
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			console.error(message, error);
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
+export const deleteFromWatchlist = createAsyncThunk(
+	"watchlist/delete",
+	async (watchlistId, thunkAPI) => {
+		try {
+			const q = query(
+				collection(db, "watchlist"),
+				where("watchlistId", "==", watchlistId)
+			);
+			const docs = await getDocs(q);
+			docs.forEach((document) => {
+				updateDoc(doc(db, "watchlist", document.ref.id), {
+					isAdded: false,
+				});
+			});
+
+			return watchlistId;
+			// dispatch({
+			// 	type: actionTypes.REMOVE_MOVIE_FROM_WATCHLIST_SUCCESS,
+			// 	payload: { isAdded: false },
+			// });
 		} catch (error) {
 			const message =
 				(error.response &&

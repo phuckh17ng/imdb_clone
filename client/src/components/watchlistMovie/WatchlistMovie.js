@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { removeFromWatchlist } from "../../redux/actions/watchlistActions";
 import { starStyle } from "../../styles/styles";
+
+import { deleteFromWatchlist } from "../../features/watchlist/watchlistService";
 import "./WatchlistMovie.css";
 const WatchlistMovie = ({
 	movieId,
@@ -20,7 +22,7 @@ const WatchlistMovie = ({
 	const [isDeleted, setIsDeleted] = useState(!isAdded);
 	const dispatch = useDispatch();
 	const handleRemove = () => {
-		dispatch(removeFromWatchlist(watchlistId));
+		dispatch(deleteFromWatchlist(watchlistId));
 		setIsDeleted(true);
 		toast("Movie has been deleted!", {
 			position: "top-right",

@@ -12,8 +12,8 @@ import UserMenu from "./UserMenu";
 const Navbar = () => {
 	const [user, userAuthLoading] = useAuthState(auth);
 	const dispatch = useDispatch();
-	const userDataReq = useSelector((state) => state.userData);
-	const { userData, loading } = userDataReq;
+	const userDataReq = useSelector((state) => state.user);
+	const { userData, isLoading } = userDataReq;
 	const [userMenuState, setUserMenuState] = useState(false);
 	const [searchOptionsState, setSearchOptionsState] = useState(false);
 
@@ -119,7 +119,7 @@ const Navbar = () => {
 									<label className="font-semibold">Watchlist</label>
 								</Link>
 								<div className="font-semibold w-full text-center text-white max-sm:text-end">
-									{loading ? (
+									{isLoading ? (
 										<ClipLoader color="#f5c518" />
 									) : !userAuthLoading && user && userData?.userImageURL ? (
 										<div
@@ -129,7 +129,7 @@ const Navbar = () => {
 											<img
 												src={userData?.userImageURL}
 												alt="avatar"
-												className="w-8 h-8 rounded-full hover:brightness-75"
+												className="w-8 h-8 rounded-full object-scale-down hover:brightness-75"
 											/>
 											{userMenuState && (
 												<UserMenu

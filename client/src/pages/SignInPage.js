@@ -1,19 +1,20 @@
 import React, { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
+import { authSignIn } from "../features/auth/authService";
 import { auth } from "../firebase/firebaseConfig";
 import {
 	signInWithFacebook,
 	signInWithGoogle,
 } from "../firebase/firebaseFunctions";
 // import { getUserData } from "../redux/actions/userSettingActions";
-
+import { useDispatch } from "react-redux";
 const SignInPage = () => {
 	const [user, loading] = useAuthState(auth);
 	const navigate = useNavigate();
-	// const dispatch = useDispatch();
+	const dispatch = useDispatch();
 	const googleSignin = () => {
-		signInWithGoogle();
+		dispatch(authSignIn());
 	};
 	useEffect(() => {
 		if (loading) return;
