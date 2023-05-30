@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { updateUserName } from "../../firebase/firebaseFunctions";
 import { getUserData, setUserImage, setUserName } from "./userService";
 
 const initialState = {

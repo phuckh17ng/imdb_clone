@@ -5,7 +5,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import { getSearchData } from "../../features/search/searchService";
 import { auth } from "../../firebase/firebaseConfig";
-import { getSearchMovies } from "../../redux/actions/searchActions";
 import { bookmarkStyle } from "../../styles/styles";
 import SearchOptions from "./SearchOptions";
 import UserMenu from "./UserMenu";

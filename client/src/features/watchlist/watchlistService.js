@@ -112,10 +112,6 @@ export const deleteFromWatchlist = createAsyncThunk(
 			});
 
 			return watchlistId;
-			// dispatch({
-			// 	type: actionTypes.REMOVE_MOVIE_FROM_WATCHLIST_SUCCESS,
-			// 	payload: { isAdded: false },
-			// });
 		} catch (error) {
 			const message =
 				(error.response &&
