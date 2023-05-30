@@ -6,13 +6,13 @@ import SquareLoader from "react-spinners/SquareLoader";
 
 const SearchPage = () => {
 	// const dispatch = useDispatch();
-	const getMoviesSearch = useSelector((state) => state.moviesSearch);
-	const { moviesSearch, loading } = getMoviesSearch;
-
-	return loading ? (
+	const getMoviesSearch = useSelector((state) => state.search);
+	const { searchData, isLoading } = getMoviesSearch;
+	console.log(searchData);
+	return isLoading ? (
 		<div className="w-full h-[100vh] flex items-center justify-center bg-zinc-900">
 			<SquareLoader
-				loading={loading}
+				loading={isLoading}
 				// cssOverride={override}
 				aria-label="Loading Spinner"
 				data-testid="loader"
@@ -29,7 +29,7 @@ const SearchPage = () => {
 						<div className="text-white text-3xl border-l-[3.5px] border-[#f5c518] pl-3 mb-3 mr-6">
 							Titles
 						</div>
-						{moviesSearch?.data?.results.map((movie) => {
+						{searchData?.data?.results.map((movie) => {
 							if (movie.id.search("tt") !== -1) {
 								return (
 									<Link
@@ -110,36 +110,36 @@ const SearchPage = () => {
 						People
 					</div>
 					<div className="grid grid-cols-2 w-3/5 max-[1024px]:w-full max-md:grid-cols-1">
-						{moviesSearch?.data?.results.map((movie) => {
-							if (movie.id.search("nm") !== -1) {
+						{searchData?.data?.results.map((people) => {
+							if (people.id.search("nm") !== -1) {
 								return (
 									<Link
 										className="h-32 my-2 px-2 mr-3 rounded-full flex hover:bg-zinc-700/50 py-2"
-										key={movie?.id}
-										to={`/details/${movie.id}`}
+										key={people?.id}
+										to={`/details/${people.id}`}
 									>
 										<Link className="min-w-[112px] rounded-full flex items-center justify-center p-[2px] bg-blue-500">
 											<img
 												src={
-													movie?.image
-														? movie.image
+													people?.image
+														? people.image
 														: require("../images/blank-people.png")
 												}
-												alt={movie.id}
+												alt={people.id}
 												className="hover:brightness-110 object-cover min-w-[104px] w-[104px] h-full rounded-full"
-												to={`/details/${movie.id}`}
+												to={`/details/${people.id}`}
 											/>
 										</Link>
 
 										<div className="w-2/3 px-3 mt-2">
 											<Link
-												to={`/details/${movie.id}`}
+												to={`/details/${people.id}`}
 												className="text-blue-500 hover:brightness-125"
 											>
-												{movie.title}
+												{people.title}
 											</Link>
 											<div className="text-sm font-thin">
-												{movie.description}
+												{people.description}
 											</div>
 										</div>
 									</Link>

@@ -24,39 +24,21 @@ import { getAllMovies } from "./features/movie/movieService";
 import { getUserData } from "./features/user/userService";
 import { getUserWatchlist } from "./features/watchlist/watchlistService";
 
-import { getMovies } from "./redux/actions/moviesActions";
-// import { getUserData } from "./redux/actions/userSettingActions";
-import { authSignIn } from "./features/auth/authService";
-import { getWatchlist } from "./redux/actions/watchlistActions";
-
 function App() {
 	const [user] = useAuthState(auth);
-	console.log(user);
 	const dispatch = useDispatch();
-	const userDataState = useSelector((state) => state.userData);
-	const { userData } = userDataState;
-	console.log(userData);
-	// useEffect(() => {
-	// 	dispatch(getMovies());
-	// }, [dispatch]);
+	useEffect(() => {
+		if (user?.uid === undefined) return;
+		setTimeout(() => dispatch(getUserData(user?.uid)), 1000);
+		// dispatch(getUserData(user?.uid));
+	}, [dispatch, user?.uid]);
 	useEffect(() => {
 		dispatch(getAllMovies());
 	}, [dispatch]);
-	console.log(user?.uid);
 	useEffect(() => {
 		if (user?.uid === undefined) return;
 		dispatch(getUserWatchlist(user?.uid));
 	}, [user?.uid, dispatch]);
-
-	const userAuth = useSelector((state) => state.auth);
-	console.log(userAuth.isSiginIn);
-
-	useEffect(() => {
-		if (user?.uid === undefined) return;
-		// setTimeout(() => dispatch(getUserData(user?.uid)), 1000);
-		console.log(user?.uid);
-		dispatch(getUserData(user?.uid));
-	}, [dispatch, user?.uid]);
 
 	return (
 		<Router>

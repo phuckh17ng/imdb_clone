@@ -3,6 +3,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
+import { getSearchData } from "../../features/search/searchService";
 import { auth } from "../../firebase/firebaseConfig";
 import { getSearchMovies } from "../../redux/actions/searchActions";
 import { bookmarkStyle } from "../../styles/styles";
@@ -24,7 +25,7 @@ const Navbar = () => {
 	const handleSearchSubmit = (e) => {
 		e.preventDefault();
 		navigate(`/search/${searchOption}/${searchValue}`);
-		dispatch(getSearchMovies(searchOption, searchValue));
+		dispatch(getSearchData({ searchOption, searchValue }));
 		setSearchValue("");
 	};
 	const location = useLocation();

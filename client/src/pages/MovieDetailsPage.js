@@ -1,74 +1,60 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import SquareLoader from "react-spinners/SquareLoader";
-import { auth, db } from "../firebase/firebaseConfig";
+import { auth } from "../firebase/firebaseConfig";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { addMovieToWatchlist } from "../firebase/firebaseFunctions";
+import { addToWatchlist } from "../features/watchlist/watchlistService";
+
 import {
 	getMovieDetails,
 	getMovieTrailer,
-} from "../redux/actions/moviesActions";
+} from "../features/movie/movieService";
 import * as styles from "../styles/styles";
 
 const MovieDetailsPage = () => {
 	const [user] = useAuthState(auth);
-	const movieDispatcher = useDispatch();
-	const trailerDispatcher = useDispatch();
-	const movieDetails = useSelector((state) => state.getMovieDetails);
-	const movieTrailer = useSelector((state) => state.getMovieTrailer);
-	const { loading, error, movie } = movieDetails;
-	const { trailer } = movieTrailer;
-	const { id } = useParams();
 
-	const movieAdded = {
-		id: movie?.id,
-		image: movie?.image,
-		title: movie?.title,
-		fullTitle: movie?.fullTitle,
-		year: movie?.year,
-		imDbRating: movie?.imDbRating,
-		imDbRatingCount: movie?.imDbRatingVotes,
-		description: movie?.stars,
+	const movieState = useSelector((state) => state.movies);
+	const watchlistState = useSelector((state) => state.watchlist);
+
+	const { movieDetails, movieTrailer, isLoading, isError } = movieState;
+	const { id } = useParams();
+	const dispatch = useDispatch();
+	const movieAdd = {
+		uid: user?.uid,
+		id: movieDetails?.id,
+		image: movieDetails?.image,
+		title: movieDetails?.title,
+		fullTitle: movieDetails?.fullTitle,
+		year: movieDetails?.year,
+		imDbRating: movieDetails?.imDbRating,
+		imDbRatingCount: movieDetails?.imDbRatingVotes,
+		description: movieDetails?.stars,
 	};
 	useEffect(() => {
-		if (movie && id !== movie?.id) {
-			movieDispatcher(getMovieDetails(id));
+		dispatch(getMovieDetails(id));
+		dispatch(getMovieTrailer(id));
+	}, [dispatch, id]);
+
+	var isAdded = false;
+	for (var i = 0; i < watchlistState.watchlist.length; i++) {
+		if (watchlistState.watchlist[i].movieId === id) {
+			isAdded = true;
+			console.log(watchlistState.watchlist[i].movieId);
+			console.log(id);
+			console.log(isAdded);
+			break;
 		}
-	}, [movieDispatcher, movie, id]);
-
-	useEffect(() => {
-		if (trailer && id !== trailer.imDbId) {
-			trailerDispatcher(getMovieTrailer(id));
-		}
-	}, [trailerDispatcher, trailer, id]);
-
-	const [data, getData] = useState();
-	const fetchUserData = useCallback(async () => {
-		const q = query(
-			collection(db, "watchlist"),
-			where("watchlistId", "==", user?.uid + id)
-		);
-		const docs = await getDocs(q);
-		docs.forEach((doc) => {
-			getData(doc.data());
-		});
-	}, [id, user?.uid]);
-
-	useEffect(() => {
-		fetchUserData();
-	}, [fetchUserData]);
-
+	}
 	const handleAddToWatchlist = (e) => {
 		e.preventDefault();
 		if (user) {
-			addMovieToWatchlist(user?.uid, movieAdded).then(() => {
-				fetchUserData();
-			});
+			console.log(movieDetails);
+			dispatch(addToWatchlist(movieAdd));
 		} else {
 			toast("Sign in for more access!", {
 				position: "top-right",
@@ -99,10 +85,10 @@ const MovieDetailsPage = () => {
 				pauseOnHover
 				theme="light"
 			/>
-			{loading ? (
+			{isLoading ? (
 				<div className="w-full h-[100vh] flex items-center justify-center bg-zinc-900">
 					<SquareLoader
-						loading={loading}
+						loading={isLoading}
 						aria-label="Loading Spinner"
 						data-testid="loader"
 						size="50"
@@ -110,8 +96,8 @@ const MovieDetailsPage = () => {
 						className="m-auto"
 					/>
 				</div>
-			) : error ? (
-				<h2>{error}</h2>
+			) : isError ? (
+				<h2>{isError}</h2>
 			) : (
 				<div className="w-full max-w-[1280px] px-3 mx-auto h-[845px] relative z-10 max-[1280px]:max-w-[1024px]">
 					<div
@@ -121,7 +107,7 @@ const MovieDetailsPage = () => {
 							backgroundSize: "cover",
 							backgroundBlendMode: "normal",
 							filter: "blur(120px)",
-							backgroundImage: `url(${movie.image})`,
+							backgroundImage: `url(${movieDetails.image})`,
 						}}
 						className="w-full m-auto h-[600px] relative top-[120px]"
 					></div>
@@ -158,7 +144,7 @@ const MovieDetailsPage = () => {
 							</div>
 
 							<div className="w-full flex justify-between pt-3">
-								<p className="text-5xl max-sm:text-4xl">{movie.title}</p>
+								<p className="text-5xl max-sm:text-4xl">{movieDetails.title}</p>
 								<ul className="flex">
 									<li className="mx-6">
 										<p className="text-zinc-400 text-sm font-bold tracking-widest max-md:text-end">
@@ -171,7 +157,7 @@ const MovieDetailsPage = () => {
 												className="w-6 h-6 mr-3"
 											/>
 											<div className="text-xl font-semibold">
-												{movie.imDbRating}
+												{movieDetails.imDbRating}
 												<span className=" text-lg text-zinc-400">/10</span>
 											</div>
 										</div>
@@ -194,8 +180,8 @@ const MovieDetailsPage = () => {
 								</ul>
 							</div>
 							<ul className="flex list-disc text-zinc-400 text-sm font-bold mb-3">
-								<li className="list-none mr-3">{movie.year}</li>
-								<li className="mx-3">{movie.runtimeMins} min</li>
+								<li className="list-none mr-3">{movieDetails.year}</li>
+								<li className="mx-3">{movieDetails.runtimeMins} min</li>
 							</ul>
 						</div>
 
@@ -203,22 +189,22 @@ const MovieDetailsPage = () => {
 							<div className="flex w-full h-full max-[1280px]:h-[334px]">
 								<div className="relative h-full max-w-[275px] max-[1280px]:max-w-[234px] w-full cursor-pointer hover:brightness-[.85] transition-all duration-500">
 									<img
-										src={movie.image}
-										alt={movie.title}
+										src={movieDetails.image}
+										alt={movieDetails.title}
 										className="z-0 h-full w-fit object-cover"
 									/>
 
 									<div
 										style={styles.bookmarkStyle}
 										className={
-											(user?.uid === data?.uid) & data?.isAdded
+											isAdded
 												? `bg-[#f5c518] absolute top-0 left-0 w-[32px] h-[42px] flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:bg-yellow-600`
 												: `bg-zinc-800/50 absolute top-0 left-0 w-[32px] h-[42px] flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:bg-zinc-500/80`
 										}
 									>
 										<img
 											src={
-												(user?.uid === data?.uid) & data?.isAdded
+												isAdded
 													? require("../images/icons8-done-30.png")
 													: require("../images/icons8-plus-20.png")
 											}
@@ -235,7 +221,7 @@ const MovieDetailsPage = () => {
 											disableremoteplayback
 											webkit-playsinline
 											playsInline
-											src={trailer?.linkEmbed}
+											src={movieTrailer?.linkEmbed}
 											title="movie trailer"
 											allowfullscreen
 											marginheight="0"
@@ -290,7 +276,7 @@ const MovieDetailsPage = () => {
 						</div>
 
 						<div className="mt-3">
-							{movie.genreList?.map((values) => (
+							{movieDetails.genreList?.map((values) => (
 								<span
 									className="border text-sm border-zinc-400 hover:bg-zinc-600/50 rounded-full px-3 pt-[2px] pb-[6px] mr-3"
 									key={values.key}
@@ -302,11 +288,13 @@ const MovieDetailsPage = () => {
 
 						<div className="flex justify-between h-full max-[1024px]:flex-col max-[1024px]:mr-3">
 							<div className="w-full h-full max-w-[813px]">
-								<div className="py-3 text-zinc-100 h-full">{movie.plot}</div>
+								<div className="py-3 text-zinc-100 h-full">
+									{movieDetails.plot}
+								</div>
 								<div className="h-12 border-y flex items-center border-zinc-400">
 									<span className="font-bold">Creators</span>
 									<span className="pl-3">
-										{movie.directorList?.map((list) => (
+										{movieDetails.directorList?.map((list) => (
 											<span key={list.id}>
 												<span className="text-white mr-3">-</span>
 												<span className=" text-[#5699ef] hover:underline mr-3">
@@ -319,7 +307,7 @@ const MovieDetailsPage = () => {
 								<div className="h-12 border-b flex items-center border-zinc-400">
 									<span className="font-bold">Stars</span>
 									<span className="pl-3">
-										{movie.starList?.map((list) => (
+										{movieDetails.starList?.map((list) => (
 											<span key={list.id}>
 												<span className="text-white mr-3">-</span>
 												<span className=" text-[#5699ef] hover:underline mr-3">
@@ -344,7 +332,7 @@ const MovieDetailsPage = () => {
 								>
 									<img
 										src={
-											(user?.uid === data?.uid) & data?.isAdded
+											isAdded
 												? require("../images/icons8-checked-30.png")
 												: require("../images/icons8-plus-20.png")
 										}

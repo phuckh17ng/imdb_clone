@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllMovies } from "./movieService";
-
+import { getAllMovies, getMovieDetails, getMovieTrailer } from "./movieService";
 const initialState = {
 	movies: [],
-	watchlist: [],
+	movieDetails: {},
+	movieTrailer: {},
 	isError: false,
 	isSuccess: false,
 	isLoading: false,
@@ -25,6 +25,34 @@ export const moviesSlice = createSlice({
 				state.movies = action.payload;
 			})
 			.addCase(getAllMovies.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
+
+			.addCase(getMovieDetails.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(getMovieDetails.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.movieDetails = action.payload;
+			})
+			.addCase(getMovieDetails.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
+
+			.addCase(getMovieTrailer.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(getMovieTrailer.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.movieTrailer = action.payload;
+			})
+			.addCase(getMovieTrailer.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

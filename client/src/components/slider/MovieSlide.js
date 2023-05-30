@@ -1,13 +1,10 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { useCallback, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { addToWatchlist } from "../../features/watchlist/watchlistService";
-import { auth, db } from "../../firebase/firebaseConfig";
-import { addMovieToWatchlist } from "../../redux/actions/watchlistActions";
+import { auth } from "../../firebase/firebaseConfig";
 import * as styles from "../../styles/styles";
 
 const MovieSlide = ({
@@ -33,30 +30,24 @@ const MovieSlide = ({
 		description: description,
 	};
 	const dispatch = useDispatch();
-	const [watchlistMovie, getWatchlistMovie] = useState();
-	const fetchWatchlistData = useCallback(async () => {
-		const q = query(
-			collection(db, "watchlist"),
-			where("watchlistId", "==", user?.uid + id)
-		);
+	const watchlistState = useSelector((state) => state.watchlist);
 
-		const docs = await getDocs(q);
-		docs.forEach((doc) => {
-			getWatchlistMovie(doc.data());
-		});
-	}, [id, user?.uid]);
-
-	useEffect(() => {
-		fetchWatchlistData();
-	}, [fetchWatchlistData]);
+	var isAdded = false;
+	for (var i = 0; i < watchlistState.watchlist.length; i++) {
+		if (watchlistState.watchlist[i].movieId === id) {
+			isAdded = true;
+			console.log(watchlistState.watchlist[i].movieId);
+			console.log(id);
+			console.log(isAdded);
+			break;
+		}
+	}
 
 	const handleAddToWatchlist = (e) => {
 		e.preventDefault();
 		if (user) {
 			console.log(movie);
-			dispatch(addToWatchlist(movie)).then(() => {
-				fetchWatchlistData();
-			});
+			dispatch(addToWatchlist(movie));
 		} else {
 			toast("Sign in for more access!", {
 				position: "top-right",
@@ -86,14 +77,14 @@ const MovieSlide = ({
 				<div
 					style={styles.bookmarkStyle}
 					className={
-						watchlistMovie?.isAdded
+						isAdded
 							? `bg-[#f5c518] absolute top-0 left-0 w-[32px] h-[42px] flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:bg-yellow-600`
 							: `bg-zinc-800/50 absolute top-0 left-0 w-[32px] h-[42px] flex items-center justify-center pb-3 z-10 drop-shadow-xl hover:bg-zinc-500/80`
 					}
 				>
 					<img
 						src={
-							watchlistMovie?.isAdded
+							isAdded
 								? require("../../images/icons8-done-30.png")
 								: require("../../images/icons8-plus-20.png")
 						}
@@ -122,7 +113,7 @@ const MovieSlide = ({
 					>
 						<img
 							src={
-								watchlistMovie?.isAdded
+								isAdded
 									? require("../../images/icons8-done-30 (1).png")
 									: require("../../images/icons8-plus-24.png")
 							}

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { setUserImage, setUserName } from "../features/user/userService";
 import { auth } from "../firebase/firebaseConfig";
 import {
 	sendPasswordReset,
@@ -13,14 +14,34 @@ import "./UserSettingsPage.css";
 
 const UserSettingsPage = () => {
 	const [user] = useAuthState(auth);
+	const uid = user?.uid;
 	const userDataReq = useSelector((state) => state.user);
 	const { userData } = userDataReq;
-	console.log(userData);
+	const dispatch = useDispatch();
+
+	const handleChangeUserImage = (e) => {
+		const selectedImage = e.target.files[0];
+		if (selectedImage === null || selectedImage === undefined) {
+			return;
+		}
+		dispatch(setUserImage({ uid, selectedImage }));
+		toast("User image has been changed!", {
+			position: "top-right",
+			autoClose: 5000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+			theme: "light",
+		});
+	};
+
 	const [name, setName] = useState("");
 	const [disable, setDisable] = useState(true);
 	const handleChangeName = (e) => {
 		e.preventDefault();
-		updateUserName(user?.uid, name);
+		dispatch(setUserName({ uid, name }));
 		setDisable(!disable);
 		if (name !== "") {
 			toast("User name has been changed!", {
@@ -51,14 +72,6 @@ const UserSettingsPage = () => {
 		});
 	};
 
-	const handleChangeUserImage = (e) => {
-		const selectedImage = e.target.files[0];
-		if (selectedImage === null || selectedImage === undefined) {
-			return;
-		}
-		updateUserImage(user?.uid, selectedImage);
-	};
-
 	return (
 		<div className="h-[400px] bg-zinc-100 text-black px-3 py-12 max-sm:h-full">
 			<div className="w-2/3 h-full max-sm:pb-6 bg-white m-auto flex items-center justify-between rounded-xl max-lg:w-4/5 max-md:w-full">
@@ -68,7 +81,7 @@ const UserSettingsPage = () => {
 							<img
 								src={userData?.userImageURL}
 								alt="profile"
-								className="rounded-full w-[120px] h-[120px] object-scale-down bg-center max-md:min-w-0"
+								className="w-[120px] h-[120px] rounded-full object-center bg-center max-md:min-w-0"
 							/>
 
 							<div className="edit w-full h-full absolute flex justify-center items-center">

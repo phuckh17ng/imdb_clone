@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUserData } from "./userService";
+import { updateUserName } from "../../firebase/firebaseFunctions";
+import { getUserData, setUserImage, setUserName } from "./userService";
 
 const initialState = {
 	userData: {},
@@ -24,6 +25,32 @@ export const userSlice = createSlice({
 				state.userData = action.payload;
 			})
 			.addCase(getUserData.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
+			.addCase(setUserName.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(setUserName.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.userData.data.name = action.payload;
+			})
+			.addCase(setUserName.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
+			.addCase(setUserImage.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(setUserImage.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.userData.userImageURL = action.payload;
+			})
+			.addCase(setUserImage.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

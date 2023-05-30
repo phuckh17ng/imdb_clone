@@ -7,8 +7,8 @@ import PropagateLoading from "../PropagateLoading";
 import { slickSliderSettings } from "../slickSliderSettings";
 
 const SliderFanFavoriteMovies = () => {
-	const getMovies = useSelector((state) => state.getMovies);
-	const { movies, loading, error } = getMovies;
+	const getMovies = useSelector((state) => state.movies);
+	const { movies, isLoading, isError } = getMovies;
 
 	return (
 		<div className="bg-black m-auto max-w-[1280px] px-3 pt-12 ">
@@ -26,12 +26,12 @@ const SliderFanFavoriteMovies = () => {
 				This week's top TV and movies
 			</div>
 			<div>
-				{loading ? (
+				{isLoading ? (
 					<div className="w-full h-12 flex items-center justify-center">
-						<PropagateLoading loading={loading} />
+						<PropagateLoading loading={isLoading} />
 					</div>
-				) : error ? (
-					<h2>{error}</h2>
+				) : isError ? (
+					<h2>{isError}</h2>
 				) : (
 					<Slider {...slickSliderSettings}>
 						{movies.items?.map((movie, index) => {

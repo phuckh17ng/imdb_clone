@@ -14,7 +14,7 @@ const SignInPage = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const googleSignin = () => {
-		dispatch(authSignIn());
+		signInWithGoogle();
 	};
 	useEffect(() => {
 		if (loading) return;

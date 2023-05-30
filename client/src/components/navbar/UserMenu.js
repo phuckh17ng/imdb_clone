@@ -1,18 +1,15 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { resetWatchlist } from "../../features/watchlist/watchlistSlice";
 import { logout } from "../../firebase/firebaseFunctions";
-import { getUserData } from "../../redux/actions/userSettingActions";
 
 const UserMenu = ({ uid, mouseLeave }) => {
 	const dispatch = useDispatch();
 	const handleLogout = () => {
 		logout();
-		dispatch(getUserData(uid));
+		dispatch(resetWatchlist());
 	};
-	// useEffect(() => {
-	// 	dispatch(getUserData(uid));
-	// }, [dispatch, uid]);
 	return (
 		mouseLeave && (
 			<div

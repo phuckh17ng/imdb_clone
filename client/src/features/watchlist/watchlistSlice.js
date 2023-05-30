@@ -16,11 +16,7 @@ const initialState = {
 export const watchlistSlice = createSlice({
 	name: "watchlist",
 	initialState,
-	reducers: {
-		// addToWatchlist: (state, action) => {
-		// 	state.watchlist = [action.payload];
-		// },
-	},
+	reducers: { resetWatchlist: () => initialState },
 	extraReducers: (builder) => {
 		builder
 			.addCase(getUserWatchlist.pending, (state) => {
@@ -37,14 +33,14 @@ export const watchlistSlice = createSlice({
 				state.message = action.payload;
 			})
 
-			// .addCase(addToWatchlist.pending, (state) => {
-			// 	state.isLoading = true;
-			// })
 			.addCase(addToWatchlist.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
-				console.log(...state.watchlist);
-				console.log(action.payload);
+				for (var i = 0; i < state.watchlist.length; i++) {
+					if (state.watchlist[i].movieId === action.payload.movieId) {
+						return;
+					}
+				}
 				state.watchlist = [...state.watchlist, action.payload];
 			})
 			.addCase(addToWatchlist.rejected, (state, action) => {
@@ -72,3 +68,4 @@ export const watchlistSlice = createSlice({
 });
 
 export default watchlistSlice.reducer;
+export const { resetWatchlist } = watchlistSlice.actions;

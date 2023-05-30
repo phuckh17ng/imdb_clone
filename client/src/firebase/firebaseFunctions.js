@@ -18,6 +18,7 @@ import {
 	where,
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { toast } from "react-toastify";
 import { auth, db } from "./firebaseConfig";
 
 const googleProvider = new GoogleAuthProvider();
@@ -86,7 +87,16 @@ const registerWithEmailAndPassword = async (name, email, password) => {
 			profileImage: require("../images/icons8-customer-96.png"),
 			watchlist: [],
 		});
-		alert("create account successfully");
+		toast("Create account successfully!", {
+			position: "top-right",
+			autoClose: 5000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+			theme: "light",
+		});
 		return true;
 	} catch (err) {
 		console.error(err);
@@ -162,9 +172,7 @@ const updateUserName = async (uid, name) => {
 const updateUserImage = async (uid, selectedImage) => {
 	const storage = getStorage();
 	const storageRef = ref(storage, `userImages/${uid}`);
-	await uploadBytes(storageRef, selectedImage).then(() =>
-		window.location.reload()
-	);
+	await uploadBytes(storageRef, selectedImage);
 };
 
 const logout = () => {
