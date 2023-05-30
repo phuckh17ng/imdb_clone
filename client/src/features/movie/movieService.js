@@ -7,7 +7,7 @@ export const getAllMovies = createAsyncThunk(
 	async (thunkAPI) => {
 		try {
 			const { data } = await axios.get(
-				"https://imdb-api.com/en/API/IMDbList/k_7svrxe8z/ls004285275"
+				"https://imdb-api.com/en/API/IMDbList/k_q2h77cjg/ls004285275"
 			);
 			return data;
 		} catch (error) {
@@ -27,7 +27,7 @@ export const getMovieDetails = createAsyncThunk(
 	async (movieId, thunkAPI) => {
 		try {
 			const { data } = await axios.get(
-				`https://imdb-api.com/en/API/Title/k_7svrxe8z/${movieId}`
+				`https://imdb-api.com/en/API/Title/k_q2h77cjg/${movieId}`
 			);
 
 			return data;
@@ -48,7 +48,7 @@ export const getMovieTrailer = createAsyncThunk(
 	async (movieId, thunkAPI) => {
 		try {
 			const { data } = await axios.get(
-				`https://imdb-api.com/en/API/Trailer/k_7svrxe8z/${movieId}`
+				`https://imdb-api.com/en/API/Trailer/k_q2h77cjg/${movieId}`
 			);
 
 			return data;
