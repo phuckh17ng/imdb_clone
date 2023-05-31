@@ -2,13 +2,10 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import SquareLoader from "react-spinners/SquareLoader";
-// import { getSearchMovies } from "../redux/actions/searchActions";
 
 const SearchPage = () => {
-	// const dispatch = useDispatch();
 	const getMoviesSearch = useSelector((state) => state.search);
 	const { searchData, isLoading } = getMoviesSearch;
-	console.log(searchData);
 	return isLoading ? (
 		<div className="w-full h-[100vh] flex items-center justify-center bg-zinc-900">
 			<SquareLoader

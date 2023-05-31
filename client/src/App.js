@@ -1,7 +1,7 @@
 import "./App.css";
 
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -30,7 +30,6 @@ function App() {
 	useEffect(() => {
 		if (user?.uid === undefined) return;
 		setTimeout(() => dispatch(getUserData(user?.uid)), 1000);
-		// dispatch(getUserData(user?.uid));
 	}, [dispatch, user?.uid]);
 	useEffect(() => {
 		dispatch(getAllMovies());

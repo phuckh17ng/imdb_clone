@@ -1,16 +1,14 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { setUserImage, setUserName } from "../features/user/userService";
+import { setUserName } from "../features/user/userService";
 import { auth } from "../firebase/firebaseConfig";
-import {
-	sendPasswordReset,
-	updateUserImage,
-	updateUserName,
-} from "../firebase/firebaseFunctions";
+import { sendPasswordReset } from "../firebase/firebaseFunctions";
 import "./UserSettingsPage.css";
+
+import CropImage from "../components/CropImage";
 
 const UserSettingsPage = () => {
 	const [user] = useAuthState(auth);
@@ -18,24 +16,6 @@ const UserSettingsPage = () => {
 	const userDataReq = useSelector((state) => state.user);
 	const { userData } = userDataReq;
 	const dispatch = useDispatch();
-
-	const handleChangeUserImage = (e) => {
-		const selectedImage = e.target.files[0];
-		if (selectedImage === null || selectedImage === undefined) {
-			return;
-		}
-		dispatch(setUserImage({ uid, selectedImage }));
-		toast("User image has been changed!", {
-			position: "top-right",
-			autoClose: 5000,
-			hideProgressBar: false,
-			closeOnClick: true,
-			pauseOnHover: true,
-			draggable: true,
-			progress: undefined,
-			theme: "light",
-		});
-	};
 
 	const [name, setName] = useState("");
 	const [disable, setDisable] = useState(true);
@@ -72,6 +52,15 @@ const UserSettingsPage = () => {
 		});
 	};
 
+	const [src, setSrc] = useState(null);
+	const [modalOpen, setModalOpen] = useState(false);
+	const inputRef = useRef(null);
+	const handleChangeUserImage = (e) => {
+		setSrc(URL.createObjectURL(e.target.files[0]));
+		setModalOpen(true);
+		inputRef.current.click();
+	};
+
 	return (
 		<div className="h-[400px] bg-zinc-100 text-black px-3 py-12 max-sm:h-full">
 			<div className="w-2/3 h-full max-sm:pb-6 bg-white m-auto flex items-center justify-between rounded-xl max-lg:w-4/5 max-md:w-full">
@@ -81,10 +70,13 @@ const UserSettingsPage = () => {
 							<img
 								src={userData?.userImageURL}
 								alt="profile"
-								className="w-[120px] h-[120px] rounded-full object-center bg-center max-md:min-w-0"
+								className="w-[120px] h-[120px] rounded-full  bg-center max-md:min-w-0"
 							/>
 
-							<div className="edit w-full h-full absolute flex justify-center items-center">
+							<div
+								className="edit w-full h-full absolute flex justify-center items-center"
+								// onClick={handleInputClick}
+							>
 								<label
 									htmlFor="files"
 									className="btn edit--btn w-full h-full flex justify-center items-center rounded-full"
@@ -97,6 +89,8 @@ const UserSettingsPage = () => {
 								</label>
 
 								<input
+									accept="image/*"
+									ref={inputRef}
 									id="files"
 									style={{ visibility: "hidden" }}
 									type="file"
@@ -182,6 +176,12 @@ const UserSettingsPage = () => {
 					/>
 				</div>
 			</div>
+			<CropImage
+				modalOpen={modalOpen}
+				src={src}
+				setModalOpen={setModalOpen}
+				uid={uid}
+			/>
 		</div>
 	);
 };

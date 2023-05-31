@@ -13,12 +13,10 @@ export const getUserData = createAsyncThunk(
 		try {
 			let data = {};
 			let userImageURL = "";
-			console.log(uid);
 			const userRef = collection(db, "users");
 			const q = query(userRef, where("uid", "==", uid));
 			const docs = await getDocs(q);
 			docs.forEach((doc) => {
-				console.log(doc.data());
 				data = doc.data();
 			});
 			const storage = getStorage();
@@ -66,15 +64,13 @@ export const setUserName = createAsyncThunk(
 
 export const setUserImage = createAsyncThunk(
 	"user/setImage",
-	async ({ uid, selectedImage }, thunkAPI) => {
+	async ({ uid, img }, thunkAPI) => {
 		try {
 			let userImageURL = "";
-			console.log(selectedImage);
-			await updateUserImage(uid, selectedImage);
+			await updateUserImage(uid, img);
 			const storage = getStorage();
 			const storageRef = ref(storage, `userImages/${uid}`);
 			await getDownloadURL(storageRef).then((url) => {
-				console.log(url);
 				userImageURL = url;
 			});
 			return userImageURL;

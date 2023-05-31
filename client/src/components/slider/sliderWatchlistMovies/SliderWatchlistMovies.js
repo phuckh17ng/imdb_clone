@@ -3,7 +3,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
-import { getUserWatchlist } from "../../../features/movie/movieService";
 import { auth } from "../../../firebase/firebaseConfig";
 import * as styles from "../../../styles/styles";
 import MovieSlide from "../MovieSlide";
@@ -13,8 +12,7 @@ import { slickSliderSettings } from "../slickSliderSettings";
 const SliderWatchlistMovies = () => {
 	const [user, userLoading] = useAuthState(auth);
 	const movies = useSelector((state) => state.watchlist);
-	const { watchlist, isLoading, isError } = movies;
-	console.log(watchlist);
+	const { watchlist, isLoading } = movies;
 
 	return (
 		<div className="bg-black m-auto max-w-[1280px] px-3 pt-12">

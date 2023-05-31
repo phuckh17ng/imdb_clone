@@ -36,9 +36,6 @@ const MovieSlide = ({
 	for (var i = 0; i < watchlistState.watchlist.length; i++) {
 		if (watchlistState.watchlist[i].movieId === id) {
 			isAdded = true;
-			console.log(watchlistState.watchlist[i].movieId);
-			console.log(id);
-			console.log(isAdded);
 			break;
 		}
 	}
@@ -46,7 +43,6 @@ const MovieSlide = ({
 	const handleAddToWatchlist = (e) => {
 		e.preventDefault();
 		if (user) {
-			console.log(movie);
 			dispatch(addToWatchlist(movie));
 		} else {
 			toast("Sign in for more access!", {

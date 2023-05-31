@@ -7,11 +7,9 @@ export const getUserData = (uid) => async (dispatch) => {
 	try {
 		dispatch({ type: actionTypes.GET_USER_DATA_REQUEST });
 		let data;
-		console.log(uid);
 		const q = query(collection(db, "users"), where("uid", "==", uid));
 		const docs = await getDocs(q);
 		docs.forEach((doc) => {
-			console.log(doc.data());
 			data = doc.data();
 		});
 
@@ -29,8 +27,6 @@ export const getUserData = (uid) => async (dispatch) => {
 		if (userImageURL === "") {
 			userImageURL = data?.profileImage;
 		}
-		console.log(data);
-		console.log(userImageURL);
 		dispatch({
 			type: actionTypes.GET_USER_DATA_SUCCESS,
 			payload: { data, userImageURL: userImageURL },

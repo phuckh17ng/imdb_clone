@@ -44,16 +44,12 @@ const MovieDetailsPage = () => {
 	for (var i = 0; i < watchlistState.watchlist.length; i++) {
 		if (watchlistState.watchlist[i].movieId === id) {
 			isAdded = true;
-			console.log(watchlistState.watchlist[i].movieId);
-			console.log(id);
-			console.log(isAdded);
 			break;
 		}
 	}
 	const handleAddToWatchlist = (e) => {
 		e.preventDefault();
 		if (user) {
-			console.log(movieDetails);
 			dispatch(addToWatchlist(movieAdd));
 		} else {
 			toast("Sign in for more access!", {

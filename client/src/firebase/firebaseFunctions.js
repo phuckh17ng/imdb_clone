@@ -161,7 +161,6 @@ const updateUserName = async (uid, name) => {
 	const q = query(collection(db, "users"), where("uid", "==", uid));
 	const docs = await getDocs(q);
 	docs.forEach((document) => {
-		console.log(document.ref.id);
 		updateDoc(doc(db, "users", document.ref.id), {
 			name: name,
 		});
