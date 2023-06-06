@@ -16,6 +16,7 @@ const SliderBannerMovies = () => {
 			direction: "vertical",
 			autoplay: {
 				delay: 5000,
+				pauseOnMouseEnter: true,
 			},
 		});
 
@@ -34,6 +35,10 @@ const SliderBannerMovies = () => {
 			},
 			thumbs: {
 				swiper: galleryThumbs,
+			},
+			autoplay: {
+				delay: 5000,
+				pauseOnMouseEnter: true,
 			},
 		});
 
@@ -185,9 +190,9 @@ const SliderBannerMovies = () => {
 							<div className="w-full h-[540px] relative max-md:h-[440px] max-sm:h-[330px]">
 								<div className="cursor-pointer relative">
 									<img
-										src={require("../../images/slider/slide (3).jpg")}
+										src={require("../../images/slider/slide (38).jpg")}
 										alt="slide"
-										className="cursor-pointer w-full max-h-[477px] h-full object-cover"
+										className="cursor-pointer w-full max-h-[477px] min-h-[500px] h-full object-cover"
 									/>
 									<div
 										style={{
@@ -200,7 +205,7 @@ const SliderBannerMovies = () => {
 
 								<div className="absolute bottom-0 left-0 flex items-end px-3 max-sm:w-full">
 									<img
-										src={require("../../images/slider/slide (12).jpg")}
+										src={require("../../images/paging/page-7.jpg")}
 										alt="slide"
 										className="w-[165px] h-[244px] max-md:w-[120px] max-md:h-auto"
 									/>
@@ -228,7 +233,7 @@ const SliderBannerMovies = () => {
 							<div className="w-full h-[540px] relative max-md:h-[440px] max-sm:h-[330px]">
 								<div className="cursor-pointer relative">
 									<img
-										src={require("../../images/slider/slide (3).jpg")}
+										src={require("../../images/slider/slide (10).jpg")}
 										alt="slide"
 										className="cursor-pointer w-full max-h-[477px] h-full object-cover"
 									/>
@@ -243,7 +248,7 @@ const SliderBannerMovies = () => {
 
 								<div className="absolute bottom-0 left-0 flex items-end px-3 max-sm:w-full">
 									<img
-										src={require("../../images/slider/slide (12).jpg")}
+										src={require("../../images/paging/page-6.jpg")}
 										alt="slide"
 										className="w-[165px] h-[244px] max-md:w-[120px] max-md:h-auto"
 									/>
@@ -271,7 +276,7 @@ const SliderBannerMovies = () => {
 							<div className="w-full h-[540px] relative max-md:h-[440px] max-sm:h-[330px]">
 								<div className="cursor-pointer relative">
 									<img
-										src={require("../../images/slider/slide (3).jpg")}
+										src={require("../../images/slider/slide (29).jpg")}
 										alt="slide"
 										className="cursor-pointer w-full max-h-[477px] h-full object-cover"
 									/>
@@ -286,7 +291,7 @@ const SliderBannerMovies = () => {
 
 								<div className="absolute bottom-0 left-0 flex items-end px-3 max-sm:w-full">
 									<img
-										src={require("../../images/slider/slide (12).jpg")}
+										src={require("../../images/paging/page-5.jpg")}
 										alt="slide"
 										className="w-[165px] h-[244px] max-md:w-[120px] max-md:h-auto"
 									/>
@@ -314,7 +319,7 @@ const SliderBannerMovies = () => {
 							<div className="w-full h-[540px] relative max-md:h-[440px] max-sm:h-[330px]">
 								<div className="cursor-pointer relative">
 									<img
-										src={require("../../images/slider/slide (3).jpg")}
+										src={require("../../images/slider/slide (36).jpg")}
 										alt="slide"
 										className="cursor-pointer w-full max-h-[477px] h-full object-cover"
 									/>
@@ -329,7 +334,7 @@ const SliderBannerMovies = () => {
 
 								<div className="absolute bottom-0 left-0 flex items-end px-3 max-sm:w-full">
 									<img
-										src={require("../../images/slider/slide (12).jpg")}
+										src={require("../../images/paging/page-1.jpg")}
 										alt="slide"
 										className="w-[165px] h-[244px] max-md:w-[120px] max-md:h-auto"
 									/>
@@ -357,7 +362,7 @@ const SliderBannerMovies = () => {
 							<div className="w-full h-[540px] relative max-md:h-[440px] max-sm:h-[330px]">
 								<div className="cursor-pointer relative">
 									<img
-										src={require("../../images/slider/slide (3).jpg")}
+										src={require("../../images/slider/slide (32).jpg")}
 										alt="slide"
 										className="cursor-pointer w-full max-h-[477px] h-full object-cover"
 									/>
@@ -372,7 +377,7 @@ const SliderBannerMovies = () => {
 
 								<div className="absolute bottom-0 left-0 flex items-end px-3 max-sm:w-full">
 									<img
-										src={require("../../images/slider/slide (12).jpg")}
+										src={require("../../images/paging/page-2.jpg")}
 										alt="slide"
 										className="w-[165px] h-[244px] max-md:w-[120px] max-md:h-auto"
 									/>
@@ -400,7 +405,7 @@ const SliderBannerMovies = () => {
 							<div className="w-full h-[540px] relative max-md:h-[440px] max-sm:h-[330px]">
 								<div className="cursor-pointer relative">
 									<img
-										src={require("../../images/slider/slide (3).jpg")}
+										src={require("../../images/slider/slide (16).jpg")}
 										alt="slide"
 										className="cursor-pointer w-full max-h-[477px] h-full object-cover"
 									/>
@@ -415,7 +420,7 @@ const SliderBannerMovies = () => {
 
 								<div className="absolute bottom-0 left-0 flex items-end px-3 max-sm:w-full">
 									<img
-										src={require("../../images/slider/slide (12).jpg")}
+										src={require("../../images/paging/page-3.jpg")}
 										alt="slide"
 										className="w-[165px] h-[244px] max-md:w-[120px] max-md:h-auto"
 									/>
@@ -443,7 +448,7 @@ const SliderBannerMovies = () => {
 							<div className="w-full h-[540px] relative max-md:h-[440px] max-sm:h-[330px]">
 								<div className="cursor-pointer relative">
 									<img
-										src={require("../../images/slider/slide (3).jpg")}
+										src={require("../../images/slider/slide (25).jpg")}
 										alt="slide"
 										className="cursor-pointer w-full max-h-[477px] h-full object-cover"
 									/>
@@ -458,7 +463,7 @@ const SliderBannerMovies = () => {
 
 								<div className="absolute bottom-0 left-0 flex items-end px-3 max-sm:w-full">
 									<img
-										src={require("../../images/slider/slide (12).jpg")}
+										src={require("../../images/paging/page-4.jpg")}
 										alt="slide"
 										className="w-[165px] h-[244px] max-md:w-[120px] max-md:h-auto"
 									/>
@@ -490,7 +495,7 @@ const SliderBannerMovies = () => {
 				<div class="swiper-container gallery-thumbs">
 					<div class="swiper-wrapper">
 						<div class="swiper-slide">
-							<div className="flex">
+							<div className="flex cursor-pointer">
 								<img
 									src={require("../../images/paging/page-0.jpg")}
 									alt="Slide 01"
@@ -516,7 +521,7 @@ const SliderBannerMovies = () => {
 							</div>
 						</div>
 						<div class="swiper-slide">
-							<div className="flex">
+							<div className="flex cursor-pointer">
 								<img
 									src={require("../../images/paging/page-10.jpg")}
 									alt="Slide 01"
@@ -543,7 +548,7 @@ const SliderBannerMovies = () => {
 						</div>
 
 						<div class="swiper-slide">
-							<div className="flex">
+							<div className="flex cursor-pointer">
 								<img
 									src={require("../../images/paging/page-8.jpg")}
 									alt="Slide 01"
@@ -569,7 +574,7 @@ const SliderBannerMovies = () => {
 							</div>
 						</div>
 						<div class="swiper-slide">
-							<div className="flex">
+							<div className="flex cursor-pointer">
 								<img
 									src={require("../../images/paging/page-7.jpg")}
 									alt="Slide 01"
@@ -595,7 +600,7 @@ const SliderBannerMovies = () => {
 							</div>
 						</div>
 						<div class="swiper-slide">
-							<div className="flex">
+							<div className="flex cursor-pointer">
 								<img
 									src={require("../../images/paging/page-6.jpg")}
 									alt="Slide 01"
@@ -621,7 +626,7 @@ const SliderBannerMovies = () => {
 							</div>
 						</div>
 						<div class="swiper-slide">
-							<div className="flex">
+							<div className="flex cursor-pointer">
 								<img
 									src={require("../../images/paging/page-5.jpg")}
 									alt="Slide 01"
@@ -647,7 +652,7 @@ const SliderBannerMovies = () => {
 							</div>
 						</div>
 						<div class="swiper-slide">
-							<div className="flex">
+							<div className="flex cursor-pointer">
 								<img
 									src={require("../../images/paging/page-1.jpg")}
 									alt="Slide 01"
@@ -673,7 +678,7 @@ const SliderBannerMovies = () => {
 							</div>
 						</div>
 						<div class="swiper-slide">
-							<div className="flex">
+							<div className="flex cursor-pointer">
 								<img
 									src={require("../../images/paging/page-2.jpg")}
 									alt="Slide 01"
@@ -699,7 +704,7 @@ const SliderBannerMovies = () => {
 							</div>
 						</div>
 						<div class="swiper-slide">
-							<div className="flex">
+							<div className="flex cursor-pointer">
 								<img
 									src={require("../../images/paging/page-3.jpg")}
 									alt="Slide 01"
@@ -725,7 +730,7 @@ const SliderBannerMovies = () => {
 							</div>
 						</div>
 						<div class="swiper-slide">
-							<div className="flex">
+							<div className="flex cursor-pointer">
 								<img
 									src={require("../../images/paging/page-4.jpg")}
 									alt="Slide 01"

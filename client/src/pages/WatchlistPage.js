@@ -25,7 +25,7 @@ const WatchlistPage = () => {
 		);
 	};
 	return (
-		<div className="bg-black w-full h-full py-6 flex px-3">
+		<div className="bg-black w-full h-full min-h-[100vh] py-6 flex px-3">
 			<div className="bg-zinc-800/50 w-full py-6 max-w-[1250px] mx-auto flex justify-between rounded-3xl flex-col px-9 max-md:px-3">
 				<ToastContainer
 					position="top-right"
@@ -42,16 +42,16 @@ const WatchlistPage = () => {
 				<span className="text-white text-3xl border-l-[3.5px] border-[#f5c518] pl-3 max-md:ml-3">
 					My Watchlist
 				</span>
-				<div className="h-full py-3 flex w-full">
-					<div className="w-full flex justify-between">
-						<div
-							className={`w-[70%] max-[960px]:w-full ${
-								!user ? "flex items-center justify-center" : ""
-							}`}
-						>
-							{!user && !userLoading ? (
-								<WatchlistUnSign />
-							) : (
+				<div className="h-full py-3 flex w-full justify-center">
+					{!user && !userLoading ? (
+						<WatchlistUnSign />
+					) : (
+						<div className="w-full flex justify-between">
+							<div
+								className={`w-[70%] max-[960px]:w-full ${
+									!user ? "flex items-center justify-center" : ""
+								}`}
+							>
 								<div className="mt-4">
 									{watchlistSearchData?.map((item) => {
 										return (
@@ -71,22 +71,24 @@ const WatchlistPage = () => {
 										);
 									})}
 								</div>
-							)}
-						</div>
+							</div>
 
-						<div className="w-[26%] mt-4 mx-2 h-[400px] bg-zinc-800/50 rounded flex flex-col justify-between items-center py-6 max-[960px]:hidden">
-							<input
-								placeholder="Search your movies..."
-								className="w-[90%] bg-zinc-800/50 h-10 rounded px-3 placeholder:text-white text-white hover:bg-zinc-700/50"
-								onChange={handleSearchWatchlist}
-							/>
+							<div className="w-[26%] mt-4 mx-2 h-[400px] bg-zinc-800/50 rounded flex flex-col justify-between items-center py-6 max-[960px]:hidden">
+								<input
+									placeholder="Search your movies..."
+									className="w-[90%] bg-zinc-800/50 h-10 rounded px-3 placeholder:text-white text-white hover:bg-zinc-700/50"
+									onChange={handleSearchWatchlist}
+								/>
 
-							<div className="text-white h-[330px] flex flex-col items-center justify-center bg-zinc-800/50 rounded w-[90%] mt-3 text-5xl font-thin hover:bg-zinc-700/50">
-								<div>+</div>
-								<div className="text-center text-2xl">Create new Watchlist</div>
+								<div className="text-white h-[330px] flex flex-col items-center justify-center bg-zinc-800/50 rounded w-[90%] mt-3 text-5xl font-thin hover:bg-zinc-700/50">
+									<div>+</div>
+									<div className="text-center text-2xl">
+										Create new Watchlist
+									</div>
+								</div>
 							</div>
 						</div>
-					</div>
+					)}
 				</div>
 			</div>
 		</div>

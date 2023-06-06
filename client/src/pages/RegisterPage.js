@@ -21,9 +21,12 @@ const RegisterPage = () => {
 	return (
 		<div className="m-auto h-[100vh] flex items-center">
 			<div className="w-[400px] m-auto flex justify-center items-center flex-col border py-10 rounded">
-				<span className="bg-[#f5c518] rounded text-zinc-800 font-black text-4xl px-2 pt-1 pb-[6px]">
+				<Link
+					to="/"
+					className="bg-[#f5c518] rounded text-zinc-800 font-black text-4xl px-2 pt-1 pb-[6px] cursor-pointer"
+				>
 					IMDb
-				</span>
+				</Link>
 				<div className="text-3xl pt-3 pb-12">Create account</div>
 				<form onSubmit={handleRegister}>
 					<div class="mb-3">

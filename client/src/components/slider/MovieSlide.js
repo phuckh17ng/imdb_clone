@@ -99,8 +99,13 @@ const MovieSlide = ({
 						></div>
 						<span className="ml-2">{imDbRating}</span>
 					</div>
-					<div className="h-[50px] cursor-pointer hover:decoration-solid hover:underline ">
-						{title}
+					<div className="h-[50px]">
+						<Link
+							to={`details/${id}`}
+							className="cursor-pointer hover:decoration-solid hover:underline"
+						>
+							{title}
+						</Link>
 					</div>
 					<Link
 						// to={user ? "/" : "signin"}

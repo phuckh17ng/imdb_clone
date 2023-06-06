@@ -1,18 +1,15 @@
 import React, { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { authSignIn } from "../features/auth/authService";
 import { auth } from "../firebase/firebaseConfig";
 import {
 	signInWithFacebook,
 	signInWithGoogle,
 } from "../firebase/firebaseFunctions";
-// import { getUserData } from "../redux/actions/userSettingActions";
-import { useDispatch } from "react-redux";
+
 const SignInPage = () => {
 	const [user, loading] = useAuthState(auth);
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
 	const googleSignin = () => {
 		signInWithGoogle();
 	};
@@ -24,7 +21,7 @@ const SignInPage = () => {
 	}, [user, loading, navigate]);
 
 	return (
-		<div className="w-full h-[80vh] bg-zinc-300">
+		<div className="w-full h-[100vh] bg-zinc-300">
 			<div className="w-full max-w-[1000px] bg-white mx-auto px-3 h-full flex">
 				<div className="w-full max-w-[800px] mx-auto flex justify-between">
 					<div className="w-2/5 my-auto max-sm:mx-auto max-sm:w-full">

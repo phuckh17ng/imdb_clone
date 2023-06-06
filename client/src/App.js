@@ -29,7 +29,7 @@ function App() {
 	const dispatch = useDispatch();
 	useEffect(() => {
 		if (user?.uid === undefined) return;
-		setTimeout(() => dispatch(getUserData(user?.uid)), 1000);
+		setTimeout(() => dispatch(getUserData(user?.uid)), 2000);
 	}, [dispatch, user?.uid]);
 	useEffect(() => {
 		dispatch(getAllMovies());
@@ -60,7 +60,7 @@ function App() {
 						path="/search/:searchOption/:searchValue"
 						element={<SearchPage />}
 					/>
-					<Route exact path="account/:uid" element={<UserSettingsPage />} />
+					<Route exact path="user" element={<UserSettingsPage />} />
 				</Routes>
 				<Footer />
 			</main>

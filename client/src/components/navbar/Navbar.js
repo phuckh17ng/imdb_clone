@@ -42,12 +42,12 @@ const Navbar = () => {
 							IMDb
 						</Link>
 						<div className="flex items-center mx-4 max-[960px]:hidden">
-							<div className="h-[13px] flex flex-col justify-between mr-2">
+							<div className="h-[13px] flex flex-col justify-between mr-2 cursor-pointer">
 								<div className="w-4 h-[1.5px] bg-white"></div>
 								<div className="w-4 h-[1.5px] bg-white"></div>
 								<div className="w-4 h-[1.5px] bg-white"></div>
 							</div>
-							<label className="font-semibold">Menu</label>
+							<label className="font-semibold cursor-pointer">Menu</label>
 						</div>
 
 						<form
@@ -58,14 +58,17 @@ const Navbar = () => {
 								className="flex items-center border-r border-r-zinc-400 h-full px-2 justify-between relative"
 								onClick={() => setSearchOptionsState(!searchOptionsState)}
 							>
-								<div className="text-black font-semibold text-[13px] mr-1">
-									{searchOption}
+								<div className="cursor-pointer flex items-center">
+									<div className="text-black font-semibold text-[13px] mr-1 cursor-pointer">
+										{searchOption}
+									</div>
+									<img
+										src={require("../../images/icons8-sort-down-30.png")}
+										alt="down-arrow"
+										className="w-[10px] h-[10px] mt-1 max-md:mr-1 cursor-pointer"
+									/>
 								</div>
-								<img
-									src={require("../../images/icons8-sort-down-30.png")}
-									alt="down-arrow"
-									className="w-[10px] h-[10px] mt-1 max-md:mr-1"
-								/>
+
 								{searchOptionsState && (
 									<SearchOptions
 										mouseLeave={() => {
@@ -98,7 +101,7 @@ const Navbar = () => {
 						</form>
 
 						<div className="flex items-center">
-							<div className="font-semibold tracking-[-1.25px] w-24 h-9 flex items-center justify-center border-r-2 border-r-zinc-700 mr-2 max-[960px]:hidden">
+							<div className="cursor-pointer font-semibold tracking-[-1.25px] w-24 h-9 flex items-center justify-center border-r-2 border-r-zinc-700 mr-2 max-[960px]:hidden">
 								IMDb<span className=" text-[#5699ef]">Pro</span>
 							</div>
 							<div className="flex items-center">
@@ -116,14 +119,16 @@ const Navbar = () => {
 											className="mt-[2px] w-[10px] h-[10px]"
 										/>
 									</div>
-									<label className="font-semibold">Watchlist</label>
+									<label className="font-semibold cursor-pointer">
+										Watchlist
+									</label>
 								</Link>
 								<div className="font-semibold w-full text-center text-white max-sm:text-end">
 									{isLoading ? (
 										<ClipLoader color="#f5c518" />
 									) : !userAuthLoading && user && userData?.userImageURL ? (
 										<div
-											className="p-[1.5px] w-9 rounded-full relative bg-white flex items-center justify-center max-sm:mx-0 max-sm:ml-3 max-sm:mr-0 sm:mx-auto"
+											className="p-[1.5px] w-9 rounded-full relative bg-white flex items-center cursor-pointer justify-center max-sm:mx-0 max-sm:ml-3 max-sm:mr-0 sm:mx-auto"
 											onClick={() => setUserMenuState(!userMenuState)}
 										>
 											<img
@@ -147,7 +152,7 @@ const Navbar = () => {
 										</Link>
 									)}
 								</div>
-								<div className="flex items-center justify-evenly ml-3 max-[960px]:hidden">
+								<div className="flex items-center justify-evenly ml-3 max-[960px]:hidden cursor-pointer">
 									<label className="font-semibold mr-1">EN</label>
 									<img
 										src={require("../../images/icons8-sort-down-30 (1).png")}
