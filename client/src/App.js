@@ -23,6 +23,7 @@ import WatchlistPage from "./pages/WatchlistPage";
 import { getAllMovies } from "./features/movie/movieService";
 import { getUserData } from "./features/user/userService";
 import { getUserWatchlist } from "./features/watchlist/watchlistService";
+import NowShowingPage from "./pages/NowShowingPage";
 
 function App() {
 	const [user] = useAuthState(auth);
@@ -47,6 +48,7 @@ function App() {
 					<Route exact path="/" element={<HomePage />} />
 					<Route exact path="/details/:id" element={<MovieDetailsPage />} />
 					<Route exact path="/watchlist" element={<WatchlistPage />} />
+					<Route exact path="/nowshowing" element={<NowShowingPage />} />
 					<Route exact path="signin" element={<SignInPage />} />
 					<Route exact path="signin/imdb" element={<IMDbSignInPage />} />
 					<Route

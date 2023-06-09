@@ -64,6 +64,7 @@ const MovieSlide = ({
 			<div className="relative h-full w-full cursor-pointer transition-all duration-500 hover:brightness-75 ">
 				<Link to={`details/${id}`}>
 					<img
+						loading="lazy"
 						src={image}
 						alt={title}
 						className="z-0 w-full h-[275px] max-[1200px]:h-[295px] max-[1024px]:h-[340px] max-[900px]:h-[275px] max-md:h-[320px]"
@@ -108,7 +109,6 @@ const MovieSlide = ({
 						</Link>
 					</div>
 					<Link
-						// to={user ? "/" : "signin"}
 						className=" bg-zinc-700/50 rounded h-[36px] flex items-center justify-center mt-4 cursor-pointer hover:bg-blue-400/10"
 						onClick={handleAddToWatchlist}
 					>

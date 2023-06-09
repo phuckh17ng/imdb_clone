@@ -14,13 +14,19 @@ const UserMenu = ({ uid, mouseLeave }) => {
 		mouseLeave && (
 			<div
 				onMouseLeave={mouseLeave}
-				className="font-normal w-[170px] bg-zinc-800 absolute top-10 right-0 z-50 flex flex-col justify-start items-start py-3 rounded"
+				className="font-normal w-[200px] bg-zinc-800 absolute top-10 right-0 z-50 flex flex-col justify-start items-start py-3 rounded"
 			>
 				<Link
 					to={`/watchlist`}
 					className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2 sm:hidden"
 				>
 					Watchlist
+				</Link>
+				<Link
+					to="nowshowing"
+					className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
+				>
+					Showing Movie
 				</Link>
 				<Link
 					to={`user`}

@@ -36,6 +36,7 @@ const SearchPage = () => {
 									>
 										<div className="flex items-center justify-center">
 											<img
+												loading="lazy"
 												src={
 													movie?.image
 														? movie.image

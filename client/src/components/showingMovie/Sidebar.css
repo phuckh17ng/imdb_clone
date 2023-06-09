@@ -1,0 +1,14 @@
+.active {
+	background: #f4f4f5;
+	color: black;
+}
+.active,
+.add {
+	border: transparent !important;
+}
+.active > div {
+	display: block;
+}
+.active:hover {
+	background-color: #f4f4f5 !important;
+}

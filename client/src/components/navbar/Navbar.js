@@ -37,21 +37,13 @@ const Navbar = () => {
 					<div className="flex items-center h-full">
 						<Link
 							to="/"
-							className="bg-[#f5c518] rounded flex items-center justify-center text-black font-black text-lg w-16 px-4 h-8 no-underline max-[960px]:mr-3"
+							className="bg-[#f5c518] mr-3 rounded flex items-center justify-center text-black font-black text-lg w-16 px-4 h-8 no-underline max-[960px]:mr-3"
 						>
 							IMDb
 						</Link>
-						<div className="flex items-center mx-4 max-[960px]:hidden">
-							<div className="h-[13px] flex flex-col justify-between mr-2 cursor-pointer">
-								<div className="w-4 h-[1.5px] bg-white"></div>
-								<div className="w-4 h-[1.5px] bg-white"></div>
-								<div className="w-4 h-[1.5px] bg-white"></div>
-							</div>
-							<label className="font-semibold cursor-pointer">Menu</label>
-						</div>
 
 						<form
-							className="flex items-center h-8 bg-white rounded pr-3 w-full"
+							className="flex items-center h-8 bg-white rounded pr-3 w-[70%] mr-3"
 							onSubmit={handleSearchSubmit}
 						>
 							<div
@@ -101,9 +93,12 @@ const Navbar = () => {
 						</form>
 
 						<div className="flex items-center">
-							<div className="cursor-pointer font-semibold tracking-[-1.25px] w-24 h-9 flex items-center justify-center border-r-2 border-r-zinc-700 mr-2 max-[960px]:hidden">
-								IMDb<span className=" text-[#5699ef]">Pro</span>
-							</div>
+							<Link
+								to="/nowshowing"
+								className="cursor-pointer pr-3 font-semibold tracking-[-1.25px] w-full h-9 flex items-center justify-center border-r-2 border-r-zinc-700 mr-2 max-[960px]:hidden"
+							>
+								Now &nbsp;<p className=" text-[#5699ef]"> Showing</p>
+							</Link>
 							<div className="flex items-center">
 								<Link
 									to="/watchlist"
