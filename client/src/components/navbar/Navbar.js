@@ -95,7 +95,7 @@ const Navbar = () => {
 						<div className="flex items-center">
 							<Link
 								to="/nowshowing"
-								className="cursor-pointer pr-3 font-semibold tracking-[-1.25px] w-full h-9 flex items-center justify-center border-r-2 border-r-zinc-700 mr-2 max-[960px]:hidden"
+								className="cursor-pointer pr-3 font-semibold tracking-[-1.25px] w-28 h-9 flex items-center justify-center border-r-2 border-r-zinc-700 mr-2 max-[960px]:hidden"
 							>
 								Now &nbsp;<p className=" text-[#5699ef]"> Showing</p>
 							</Link>

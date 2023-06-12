@@ -1,6 +1,13 @@
+import axios from "axios";
 import React, { useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useDispatch } from "react-redux";
+import { addShowingMovie } from "../../features/show/showService";
+import { auth } from "../../firebase/firebaseConfig";
 import ShowModal from "./ShowModal";
+
 const ShowingMovies = () => {
+	const [user] = useAuthState(auth);
 	const [name, setName] = useState("");
 	const [gerne, setGerne] = useState("");
 	const [actor, setActor] = useState("");
@@ -14,16 +21,19 @@ const ShowingMovies = () => {
 
 	const [modalState, setModalState] = useState(false);
 	const [form, setForm] = useState({
-		name: "",
-		gerne: "",
-		actor: "",
-		director: "",
-		type: "",
-		trailer: "",
-		banner: "",
-		cinema: [],
-		day: [],
-		time: [],
+		movieId: "",
+		userAdd: "",
+		dayCreate: "",
+		_name: "",
+		_gerne: "",
+		_actor: "",
+		_director: "",
+		_type: "",
+		_trailer: "",
+		_banner: "",
+		_cinema: [],
+		_day: [],
+		_time: [],
 	});
 	const handleRemoveDay = (index) => {
 		setDay(
@@ -49,22 +59,27 @@ const ShowingMovies = () => {
 		);
 	};
 
-	const handleFormSubmit = () => {
+	const dispatch = useDispatch();
+	const handleFormSubmit = async () => {
 		setForm({
-			name: name,
-			gerne: gerne,
-			actor: actor,
-			director: director,
-			type: type,
-			trailer: trailer,
-			banner: banner,
-			cinema: cinema,
-			day: day,
-			time: time,
+			movieId: "",
+			userAdd: user?.uid,
+			dayCreate: "",
+			_name: name,
+			_gerne: gerne,
+			_actor: actor,
+			_director: director,
+			_type: type,
+			_trailer: trailer,
+			_banner: banner,
+			_cinema: cinema,
+			_day: day,
+			_time: time,
 		});
-
-		setModalState(true);
+		console.log(user?.uid);
 		console.log(form);
+		dispatch(addShowingMovie(form));
+		setModalState(true);
 		console.log(modalState);
 	};
 	return (
@@ -263,11 +278,11 @@ const ShowingMovies = () => {
 					Submit
 				</div>
 			</div>
-			<ShowModal
+			{/* <ShowModal
 				show={modalState}
 				click={() => setModalState(false)}
 				form={form}
-			/>
+			/> */}
 		</div>
 	);
 };

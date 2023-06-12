@@ -178,15 +178,34 @@ const logout = () => {
 	signOut(auth);
 };
 
+const addShowingMovieFunc = async (movie) => {
+	addDoc(collection(db, "showing-movie"), {
+		movieId: movie.movieId,
+		userAdd: movie.userAdd,
+		dayCreate: movie.dayCreate,
+		_name: movie._name,
+		_gerne: movie._gerne,
+		_actor: movie._actor,
+		_director: movie._director,
+		_type: movie._type,
+		_trailer: movie._trailer,
+		_banner: movie._banner,
+		_cinema: movie._cinema,
+		_day: movie._day,
+		_time: movie._time,
+	});
+};
+
 export {
-	signInWithGoogle,
-	logInWithEmailAndPassword,
-	registerWithEmailAndPassword,
-	sendPasswordReset,
-	logout,
 	addMovieToWatchlist,
-	updateUserName,
+	addShowingMovieFunc,
+	logInWithEmailAndPassword,
+	logout,
+	registerWithEmailAndPassword,
 	removeFromWatchlist,
-	updateUserImage,
+	sendPasswordReset,
 	signInWithFacebook,
+	signInWithGoogle,
+	updateUserImage,
+	updateUserName,
 };

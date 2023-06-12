@@ -1,0 +1,31 @@
+import { composeWithDevTools } from "@redux-devtools/extension";
+import {
+	applyMiddleware,
+	combineReducers,
+	configureStore,
+} from "@reduxjs/toolkit";
+import thunk from "redux-thunk";
+
+import authReducers from "./auth/authSlice";
+import moviesReducers from "./movie/movieSlice";
+import searchReducer from "./search/searchSlice";
+import showReducers from "./show/showSlice";
+import userReducers from "./user/userSlice";
+import watchlistReducers from "./watchlist/watchlistSlice";
+let reducers = combineReducers({
+	//RTK
+	movies: moviesReducers,
+	watchlist: watchlistReducers,
+	user: userReducers,
+	auth: authReducers,
+	search: searchReducer,
+	show: showReducers,
+});
+const middleware = [thunk];
+
+const store = configureStore(
+	{ reducer: reducers },
+	composeWithDevTools(applyMiddleware(...middleware))
+);
+
+export default store;
