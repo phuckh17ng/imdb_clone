@@ -123,9 +123,7 @@ const UserSettingsPage = () => {
 										}
 										placeholder={userData?.data?.name}
 										disabled={disable}
-										onChange={(e) => {
-											setName(e.target.value);
-										}}
+										onChange={(e) => setName(e.target.value)}
 									/>
 									<img
 										src={require("../images/icons8-edit-24 (1).png")}

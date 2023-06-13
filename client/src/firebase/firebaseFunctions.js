@@ -17,7 +17,7 @@ import {
 	updateDoc,
 	where,
 } from "firebase/firestore";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { toast } from "react-toastify";
 import { auth, db } from "./firebaseConfig";
 
@@ -174,6 +174,18 @@ const updateUserImage = async (uid, selectedImage) => {
 	await uploadBytes(storageRef, selectedImage);
 };
 
+const updateBannerMovie = async (movieId, selectedImage) => {
+	console.log(selectedImage);
+	const storage = getStorage();
+	const storageRef = ref(storage, `banner/${movieId}`);
+	let bannerImg;
+	await uploadBytes(storageRef, selectedImage);
+	await getDownloadURL(storageRef).then((url) => {
+		bannerImg = url;
+	});
+	return bannerImg;
+};
+
 const logout = () => {
 	signOut(auth);
 };
@@ -197,6 +209,7 @@ const addShowingMovieFunc = async (movie) => {
 };
 
 export {
+	updateBannerMovie,
 	addMovieToWatchlist,
 	addShowingMovieFunc,
 	logInWithEmailAndPassword,

@@ -9,17 +9,19 @@ import {
 	where,
 } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
-import { addShowingMovieFunc } from "../../firebase/firebaseFunctions";
+import {
+	addShowingMovieFunc,
+	updateBannerMovie,
+} from "../../firebase/firebaseFunctions";
 
 export const getShowingMovies = createAsyncThunk(
 	"showingMovies/get",
-	async (uid, thunkAPI) => {
+	async (movieId, thunkAPI) => {
 		try {
 			var data = [];
 			const q = query(
-				collection(db, "watchlist"),
-				where("uid", "==", uid),
-				where("isAdded", "==", true)
+				collection(db, "showing-movie"),
+				where("movieId", "==", movieId)
 			);
 			const docs = await getDocs(q);
 			docs.forEach((doc) => {
@@ -33,6 +35,31 @@ export const getShowingMovies = createAsyncThunk(
 					error.response.data.message) ||
 				error.message ||
 				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
+export const addMovieBanner = createAsyncThunk(
+	"showingMovie/addBanner",
+	async ({ movieId, banner }, thunkAPI) => {
+		console.log(movieId, banner);
+		let imgURL;
+		try {
+			await updateBannerMovie(movieId, banner).then((url) => {
+				console.log(url);
+				imgURL = url;
+			});
+			console.log(imgURL);
+			return imgURL;
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			console.error(message, error);
 			return thunkAPI.rejectWithValue(message);
 		}
 	}

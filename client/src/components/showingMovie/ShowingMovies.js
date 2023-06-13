@@ -1,13 +1,16 @@
-import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useDispatch } from "react-redux";
-import { addShowingMovie } from "../../features/show/showService";
+import { useDispatch, useSelector } from "react-redux";
+import {
+	addMovieBanner,
+	addShowingMovie,
+} from "../../features/show/showService";
 import { auth } from "../../firebase/firebaseConfig";
 import ShowModal from "./ShowModal";
 
 const ShowingMovies = () => {
 	const [user] = useAuthState(auth);
+	const [movieId, setMovieId] = useState("");
 	const [name, setName] = useState("");
 	const [gerne, setGerne] = useState("");
 	const [actor, setActor] = useState("");
@@ -59,28 +62,65 @@ const ShowingMovies = () => {
 		);
 	};
 
+	const formValidation = (obj) => {
+		for (var key in obj) {
+			if (obj.hasOwnProperty(key)) {
+				if (!obj[key]) {
+					return false;
+				}
+			}
+		}
+		return true;
+	};
+	let date = new Date().toLocaleDateString();
 	const dispatch = useDispatch();
-	const handleFormSubmit = async () => {
+	const showingMovie = useSelector((state) => state.show);
+	useEffect(() => {
+		dispatch(addMovieBanner({ movieId, banner }));
+	}, [banner, dispatch]);
+	console.log(showingMovie);
+	useEffect(() => {
 		setForm({
-			movieId: "",
+			movieId: movieId,
 			userAdd: user?.uid,
-			dayCreate: "",
+			dayCreate: date,
 			_name: name,
 			_gerne: gerne,
 			_actor: actor,
 			_director: director,
 			_type: type,
 			_trailer: trailer,
-			_banner: banner,
+			_banner: showingMovie.banner,
 			_cinema: cinema,
 			_day: day,
 			_time: time,
 		});
-		console.log(user?.uid);
-		console.log(form);
-		dispatch(addShowingMovie(form));
-		setModalState(true);
-		console.log(modalState);
+	}, [
+		movieId,
+		user?.uid,
+		date,
+		name,
+		gerne,
+		actor,
+		director,
+		type,
+		trailer,
+		cinema,
+		day,
+		time,
+		showingMovie.banner,
+		banner,
+	]);
+	console.log(form);
+
+	const handleFormSubmit = () => {
+		console.log(movieId, banner);
+		if (formValidation(form)) {
+			dispatch(addShowingMovie(form));
+		} else {
+			alert("Please enter a valid value");
+		}
+		// setModalState(true);
 	};
 	return (
 		<div className="text-black w-full h-full flex items-center justify-center">
@@ -88,8 +128,22 @@ const ShowingMovies = () => {
 				<form className="flex relative">
 					<div className="w-1/2">
 						<div className="">
+							<label for="movieId" className="block pb-1">
+								Movie ID:<span className="text-2xl text-red-500">*</span>
+							</label>
+							<input
+								autocomplete="off"
+								type="text"
+								id="movieId"
+								name="movieId"
+								className="border border-zinc-500 rounded p-2 w-[90%]"
+								onChange={(e) => setMovieId(e.target.value)}
+							></input>
+						</div>
+						<div className="mt3">
 							<label for="name" className="block pb-1">
-								Movie name: &nbsp; {name}
+								Movie name:<span className="text-2xl text-red-500">*</span>
+								&nbsp; {name}
 							</label>
 							<input
 								autocomplete="off"
@@ -102,7 +156,7 @@ const ShowingMovies = () => {
 
 						<div className="mt-3">
 							<label for="genre" className="block pb-1">
-								Genre:
+								Genre:<span className="text-2xl text-red-500">*</span>
 							</label>
 							<input
 								autocomplete="off"
@@ -115,7 +169,7 @@ const ShowingMovies = () => {
 
 						<div className="mt-3">
 							<label for="actor" className="block pb-1">
-								Actor/Actress:
+								Actor/Actress:<span className="text-2xl text-red-500">*</span>
 							</label>
 							<input
 								autocomplete="off"
@@ -128,7 +182,7 @@ const ShowingMovies = () => {
 
 						<div className="mt-3">
 							<label for="director" className="block pb-1">
-								Director:
+								Director:<span className="text-2xl text-red-500">*</span>
 							</label>
 							<input
 								autocomplete="off"
@@ -141,7 +195,7 @@ const ShowingMovies = () => {
 
 						<div className="mt-3">
 							<label for="type" className="block pb-1">
-								Type:
+								Type:<span className="text-2xl text-red-500">*</span>
 							</label>
 							<input
 								autocomplete="off"
@@ -154,7 +208,7 @@ const ShowingMovies = () => {
 
 						<div className="mt-3">
 							<label for="trailer" className="block pb-1">
-								Trailer:
+								Trailer:<span className="text-2xl text-red-500">*</span>
 							</label>
 							<input
 								autocomplete="off"
@@ -168,19 +222,21 @@ const ShowingMovies = () => {
 					<div className="w-1/2">
 						<div className="">
 							<label for="banner" className="block pb-1">
-								Banner:
+								Banner:<span className="text-2xl text-red-500">*</span>
 							</label>
 							<input
 								autocomplete="off"
 								type="file"
 								id="banner"
 								className="border border-zinc-500 rounded p-2"
-								onChange={(e) => setBanner(e.target.files[0])}
+								onChange={(e) => {
+									setBanner(e.target.files[0]);
+								}}
 							></input>
 						</div>
 						<div className="mt-3">
 							<label for="cinema" className="block pb-1">
-								Cinema:
+								Cinema:<span className="text-2xl text-red-500">*</span>
 								<div className=" grid grid-cols-4 gap-2 max-h-[100px] overflow-auto">
 									{cinema?.map((cinema) => {
 										return (
@@ -213,7 +269,7 @@ const ShowingMovies = () => {
 						</div>
 						<div className="mt-3">
 							<label for="day" className="block pb-1">
-								Day show:
+								Day show:<span className="text-2xl text-red-500">*</span>
 								<div className=" grid grid-cols-4 gap-2 max-h-[100px] overflow-auto">
 									{day?.map((day) => {
 										return (
@@ -241,7 +297,7 @@ const ShowingMovies = () => {
 
 						<div className="mt-3">
 							<label for="time" className="block pb-1">
-								Time:
+								Time:<span className="text-2xl text-red-500">*</span>
 								<div className=" grid grid-cols-5 gap-2 max-h-[100px] overflow-auto">
 									{time?.map((time) => {
 										return (

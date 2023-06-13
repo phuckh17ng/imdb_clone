@@ -1,8 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addShowingMovie } from "./showService";
+import {
+	addMovieBanner,
+	addShowingMovie,
+	getShowingMovies,
+} from "./showService";
 
 const initialState = {
-	showingMovie: [],
+	showingMovie: {},
+	banner: "",
 	isError: false,
 	isSuccess: false,
 	isLoading: false,
@@ -14,15 +19,41 @@ export const showSlice = createSlice({
 	initialState,
 	extraReducers: (builder) => {
 		builder
+			.addCase(getShowingMovies.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(getShowingMovies.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.showingMovie = action.payload;
+			})
+			.addCase(getShowingMovies.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
 			.addCase(addShowingMovie.pending, (state) => {
 				state.isLoading = true;
 			})
 			.addCase(addShowingMovie.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
-				state.showingMovie = action.payload;
 			})
 			.addCase(addShowingMovie.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
+			.addCase(addMovieBanner.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(addMovieBanner.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				console.log(action.payload);
+				state.banner = action.payload;
+			})
+			.addCase(addMovieBanner.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;
