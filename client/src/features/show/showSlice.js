@@ -2,11 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
 	addMovieBanner,
 	addShowingMovie,
+	getShowingMovie,
 	getShowingMovies,
 } from "./showService";
 
 const initialState = {
-	showingMovie: {},
+	showingMovie: [],
 	banner: "",
 	isError: false,
 	isSuccess: false,
@@ -28,6 +29,19 @@ export const showSlice = createSlice({
 				state.showingMovie = action.payload;
 			})
 			.addCase(getShowingMovies.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
+			.addCase(getShowingMovie.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(getShowingMovie.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.showingMovie = action.payload;
+			})
+			.addCase(getShowingMovie.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

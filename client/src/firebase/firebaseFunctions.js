@@ -186,6 +186,50 @@ const updateBannerMovie = async (movieId, selectedImage) => {
 	return bannerImg;
 };
 
+const seat = [
+	{ seat: "0", name: "", phoneNumber: "", status: "none" },
+	{ seat: "1", name: "", phoneNumber: "", status: "none" },
+	{ seat: "2", name: "", phoneNumber: "", status: "none" },
+	{ seat: "3", name: "", phoneNumber: "", status: "none" },
+	{ seat: "4", name: "", phoneNumber: "", status: "none" },
+	{ seat: "5", name: "", phoneNumber: "", status: "none" },
+	{ seat: "6", name: "", phoneNumber: "", status: "none" },
+	{ seat: "7", name: "", phoneNumber: "", status: "none" },
+	{ seat: "8", name: "", phoneNumber: "", status: "none" },
+	{ seat: "9", name: "", phoneNumber: "", status: "none" },
+];
+const addShowingMovieSeat = async (cinema, day, time) => {
+	const q = query(
+		collection(db, "seat"),
+		where("cinema", "==", cinema),
+		where("day", "==", day),
+		where("time", "==", time)
+	);
+	const docs = await getDocs(q);
+
+	let data = {
+		cinema: cinema,
+		day: day,
+		time: time,
+		_A: seat,
+		_B: seat,
+		_C: seat,
+		_D: seat,
+		_E: seat,
+		_F: seat,
+		_G: seat,
+		_H: seat,
+	};
+	if (docs.docs.length === 0) {
+		addDoc(collection(db, "seat"), data);
+	} else {
+		docs.forEach((doc) => {
+			data = doc.data();
+		});
+	}
+	return data;
+};
+
 const logout = () => {
 	signOut(auth);
 };
@@ -209,9 +253,9 @@ const addShowingMovieFunc = async (movie) => {
 };
 
 export {
-	updateBannerMovie,
 	addMovieToWatchlist,
 	addShowingMovieFunc,
+	addShowingMovieSeat,
 	logInWithEmailAndPassword,
 	logout,
 	registerWithEmailAndPassword,
@@ -219,6 +263,7 @@ export {
 	sendPasswordReset,
 	signInWithFacebook,
 	signInWithGoogle,
+	updateBannerMovie,
 	updateUserImage,
 	updateUserName,
 };

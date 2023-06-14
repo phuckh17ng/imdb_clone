@@ -23,7 +23,7 @@ const UserMenu = ({ uid, mouseLeave }) => {
 					Watchlist
 				</Link>
 				<Link
-					to="nowshowing"
+					to="admin/nowshowing"
 					className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
 				>
 					Showing Movie

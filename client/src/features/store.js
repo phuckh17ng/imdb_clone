@@ -10,6 +10,7 @@ import authReducers from "./auth/authSlice";
 import moviesReducers from "./movie/movieSlice";
 import searchReducer from "./search/searchSlice";
 import showReducers from "./show/showSlice";
+import ticketReducers from "./ticket/ticketSlice";
 import userReducers from "./user/userSlice";
 import watchlistReducers from "./watchlist/watchlistSlice";
 let reducers = combineReducers({
@@ -20,6 +21,7 @@ let reducers = combineReducers({
 	auth: authReducers,
 	search: searchReducer,
 	show: showReducers,
+	ticket: ticketReducers,
 });
 const middleware = [thunk];
 
