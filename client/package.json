@@ -37,6 +37,7 @@
 		"react-toastify": "^9.1.2",
 		"redux": "^4.2.1",
 		"redux-thunk": "^2.4.2",
+		"sass": "^1.63.4",
 		"slick-carousel": "^1.8.1",
 		"swiper": "^9.2.4",
 		"tailwind-merge": "^1.13.1",

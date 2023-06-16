@@ -5,7 +5,7 @@ const initialState = {
 	seat: {},
 	isError: false,
 	isSuccess: false,
-	isLoading: false,
+	isLoading: true,
 	message: "",
 };
 

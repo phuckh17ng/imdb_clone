@@ -7,20 +7,28 @@ import "./BuyTicketPage.css";
 
 const BuyTicketPage = () => {
 	const showingMovies = useSelector((state) => state.show);
-	const { showingMovie, isLoading } = showingMovies;
+	const [seatState, setSeatState] = useState(false);
+	const [searchState, setSearchState] = useState(false);
+	const { showingMovie } = showingMovies;
 	const { movieId } = useParams();
 
 	const movie = showingMovie.filter((movie) => {
 		return movie.movieId === movieId;
 	});
-
+	const ticket = useSelector((state) => state.ticket);
+	const { seat, isLoading } = ticket;
+	console.log(isLoading);
 	const [cinema, setCinema] = useState("");
 	const [day, setDay] = useState("");
 	const [time, setTime] = useState("");
 	console.log(cinema, day, time);
 	const dispatch = useDispatch();
 	const handleBuyTicket = () => {
+		console.log(searchState);
+		if (!searchState) return;
 		dispatch(getShowingMovieSeat({ cinema, day, time }));
+		setSeatState(true);
+		setSearchState(false);
 	};
 
 	return (
@@ -55,27 +63,36 @@ const BuyTicketPage = () => {
 										{item._name}
 									</p>
 									<div className="mt-3">
-										<div className="text-xl">
-											<span className="font-bold">Director:</span>{" "}
-											{item._director}
+										<div className="text-2xl">
+											<span className="font-bold">Director: </span>
+											<span className="font-light">{item._director}</span>
 										</div>
-										<div className="text-xl mt-2">
-											<span className="font-bold">Actor:</span> {item._actor}
+										<div className="text-2xl mt-2">
+											<span className="font-bold">Actor: </span>
+											<span className="font-light">{item._actor}</span>
 										</div>
-										<div className="text-xl mt-2">
-											<span className="font-bold">Gerne:</span> {item._gerne}
+										<div className="text-2xl mt-2">
+											<span className="font-bold">Gerne: </span>
+											<span className="font-light">{item._gerne}</span>
 										</div>
-										<span className="mt-3 font-bold text-xl inline-block border-3 rounded border-zinc-800 p-2">
+										<span
+											style={{
+												background:
+													"linear-gradient(to top right, #C850C0 0%, #FFCC70 100%)",
+											}}
+											className=" drop-shadow mt-3 font-extrabold text-white/90 text-2xl inline-block rounded py-2 px-[10px]"
+										>
 											{item._type}
 										</span>
 									</div>
 								</div>
 								<form className="mt-6 mb-6">
-									<div className="grid grid-cols-3 gap-3">
+									<div className="grid grid-cols-3 gap-2">
 										<select
-											className="py-3 px-3 text-bold rounded-tl-2xl text-xl select"
+											className="cursor-pointer focus:outline-none py-3 px-3 text-bold rounded-tl-2xl text-xl select font-light"
 											onChange={(e) => {
 												setCinema(e.target.value);
+												setSearchState(true);
 											}}
 										>
 											<option value="" disabled selected hidden>
@@ -98,9 +115,10 @@ const BuyTicketPage = () => {
 											})}
 										</select>
 										<select
-											className="py-2 text-xl select"
+											className="cursor-pointer focus:outline-none py-2 text-xl select font-light"
 											onChange={(e) => {
 												setDay(e.target.value);
+												setSearchState(true);
 											}}
 										>
 											<option value="" disabled selected hidden>
@@ -115,9 +133,10 @@ const BuyTicketPage = () => {
 											})}
 										</select>
 										<select
-											className="py-2 text-xl select rounded-tr-2xl"
+											className="cursor-pointer focus:outline-none py-2 text-xl select rounded-tr-2xl font-light"
 											onChange={(e) => {
 												setTime(e.target.value);
+												setSearchState(true);
 											}}
 										>
 											<option value="" disabled selected hidden>
@@ -137,7 +156,7 @@ const BuyTicketPage = () => {
 											background:
 												"linear-gradient(to right, #4158D0 0%, #C850C0 50%, #FFCC70 100%)",
 										}}
-										className="w-full text-white py-3 rounded-b-2xl text-center font-bold text-xl mt-3"
+										className="cursor-pointer w-full text-white/90 py-2 rounded-b-2xl text-center font-bold text-5xl mt-2"
 										onClick={handleBuyTicket}
 									>
 										Search
@@ -148,7 +167,7 @@ const BuyTicketPage = () => {
 					</div>
 				);
 			})}
-			<AllSeat />
+			{seatState && cinema && day && time && !isLoading && <AllSeat />}
 		</div>
 	);
 };

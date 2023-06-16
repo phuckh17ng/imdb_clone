@@ -187,16 +187,16 @@ const updateBannerMovie = async (movieId, selectedImage) => {
 };
 
 const seat = [
-	{ seat: "0", name: "", phoneNumber: "", status: "none" },
-	{ seat: "1", name: "", phoneNumber: "", status: "none" },
-	{ seat: "2", name: "", phoneNumber: "", status: "none" },
-	{ seat: "3", name: "", phoneNumber: "", status: "none" },
-	{ seat: "4", name: "", phoneNumber: "", status: "none" },
-	{ seat: "5", name: "", phoneNumber: "", status: "none" },
-	{ seat: "6", name: "", phoneNumber: "", status: "none" },
-	{ seat: "7", name: "", phoneNumber: "", status: "none" },
-	{ seat: "8", name: "", phoneNumber: "", status: "none" },
-	{ seat: "9", name: "", phoneNumber: "", status: "none" },
+	{ seat: "0", name: "", email: "", phoneNumber: "", status: "none" },
+	{ seat: "1", name: "", email: "", phoneNumber: "", status: "none" },
+	{ seat: "2", name: "", email: "", phoneNumber: "", status: "none" },
+	{ seat: "3", name: "", email: "", phoneNumber: "", status: "none" },
+	{ seat: "4", name: "", email: "", phoneNumber: "", status: "none" },
+	{ seat: "5", name: "", email: "", phoneNumber: "", status: "none" },
+	{ seat: "6", name: "", email: "", phoneNumber: "", status: "none" },
+	{ seat: "7", name: "", email: "", phoneNumber: "", status: "none" },
+	{ seat: "8", name: "", email: "", phoneNumber: "", status: "none" },
+	{ seat: "9", name: "", email: "", phoneNumber: "", status: "none" },
 ];
 const addShowingMovieSeat = async (cinema, day, time) => {
 	const q = query(
