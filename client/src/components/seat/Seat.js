@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Seat = ({ seat, status, ticket }) => {
+const Seat = ({ seat, status, seatSelect }) => {
 	const [mouseOverState, setMouseOverState] = useState(false);
 	const [onClickState, setOnClickState] = useState(false);
 	const handleOnClick = () => {
@@ -8,7 +8,7 @@ const Seat = ({ seat, status, ticket }) => {
 		if (status === "selected") {
 			return;
 		}
-		ticket(seat);
+		seatSelect(seat);
 	};
 	return (
 		<div

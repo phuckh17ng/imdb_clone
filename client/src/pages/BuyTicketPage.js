@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import AllSeat from "../components/seat/AllSeat";
 import { getShowingMovieSeat } from "../features/ticket/ticketService";
 import "./BuyTicketPage.css";
 
 const BuyTicketPage = () => {
 	const showingMovies = useSelector((state) => state.show);
-	const [seatState, setSeatState] = useState(false);
+	const [searchBtnState, setSearchBtnState] = useState(false);
 	const [searchState, setSearchState] = useState(false);
 	const { showingMovie } = showingMovies;
 	const { movieId } = useParams();
@@ -24,17 +25,28 @@ const BuyTicketPage = () => {
 	const [time, setTime] = useState("");
 	console.log(cinema, day, time);
 	const dispatch = useDispatch();
+	useEffect(() => {
+		if (cinema === "" || day === "" || time === "") {
+			setSearchBtnState(false);
+		} else {
+			setSearchBtnState(true);
+		}
+	}, [cinema, day, time]);
+	const [showAllSeats, setShowAllSeats] = useState(false);
 	const handleBuyTicket = () => {
 		const name = movie[0]._name;
-		console.log(name);
+		if (cinema === "" || day === "" || time === "") {
+			return;
+		}
 		if (!searchState) return;
 		dispatch(getShowingMovieSeat({ name, cinema, day, time }));
-		setSeatState(true);
 		setSearchState(false);
+		setShowAllSeats(true);
 	};
 
 	return (
 		<div className="py-9 w-full h-full max-w-[1280px] mx-auto px-3">
+			<ToastContainer />
 			{movie.map((item) => {
 				return (
 					<div className="text-zinc-800 flex relative" key={item.movieId}>
@@ -158,7 +170,9 @@ const BuyTicketPage = () => {
 											background:
 												"linear-gradient(to right, #4158D0 0%, #C850C0 50%, #FFCC70 100%)",
 										}}
-										className="cursor-pointer w-full text-white/90 py-2 rounded-b-2xl text-center font-bold text-5xl mt-2"
+										className={`transition-all duration-700 ease-linear w-full text-white/90 cursor-default py-2 rounded-b-2xl text-center font-bold text-5xl mt-2 opacity-50 ${
+											searchBtnState && "opacity-100 !cursor-pointer"
+										}`}
 										onClick={handleBuyTicket}
 									>
 										Search
@@ -169,7 +183,7 @@ const BuyTicketPage = () => {
 					</div>
 				);
 			})}
-			{seatState && cinema && day && time && !isLoading && <AllSeat />}
+			{showAllSeats && cinema && day && time && !isLoading && <AllSeat />}
 		</div>
 	);
 };

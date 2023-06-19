@@ -214,8 +214,6 @@ const addShowingMovieSeat = async (name, cinema, day, time) => {
 };
 
 const seatPaymentFunc = async (form) => {
-	console.log(form.seat);
-	console.log(form);
 	const q = query(
 		collection(db, "seat"),
 		where("name", "==", form.movieName),
@@ -223,12 +221,8 @@ const seatPaymentFunc = async (form) => {
 		where("day", "==", form.movieDay),
 		where("time", "==", form.movieTime)
 	);
-
-	console.log(q);
 	const docs = await getDocs(q);
-	console.log(docs);
 	docs.forEach((document) => {
-		console.log(document.ref.id);
 		for (let i = 0; i < form.seat.length; i++) {
 			const seatId = form.seat[i];
 			let updatedObj = {

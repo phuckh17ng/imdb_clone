@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { seatPayment } from "../../features/payment/paymentService";
 import "./AllSeat.css";
 import Seat from "./Seat";
@@ -8,65 +9,101 @@ const AllSeat = () => {
 	const ticket = useSelector((state) => state.ticket);
 	const { seat, isLoading } = ticket;
 	const allSeat = Object.values(seat.allSeat);
-	console.log(seat);
-	console.log(allSeat);
 	const [form, setForm] = useState({
 		seat: null,
-		name: "",
-		email: "",
-		phoneNumber: "",
+		name: undefined,
+		email: undefined,
+		phoneNumber: undefined,
 		movieName: seat.name,
 		movieCinema: seat.cinema,
 		movieDay: seat.day,
 		movieTime: seat.time,
 	});
 	const [seatSelect, setSeatSelect] = useState([]);
-
-	const handleBuyTicket = (seatSelected) => {
-		console.log(seatSelected);
+	const [seatValidation, setSeatValidation] = useState(false);
+	const [nameValidation, setNameValidation] = useState(true);
+	const [emailValidation, setEmailValidation] = useState(true);
+	const [phoneNumberValidation, setPhoneNumberValidation] = useState(true);
+	const handleSeatSelect = (seatSelected) => {
 		if (seatSelect.some((item) => item === seatSelected)) {
 			setSeatSelect(() => seatSelect.filter((item) => item !== seatSelected));
 			return;
 		}
 		setSeatSelect((item) => [...item, seatSelected]);
 	};
-	console.log(seatSelect);
-	useEffect(() => {
-		setForm({ ...form, seat: seatSelect });
-	}, [seatSelect]);
-	const dispatch = useDispatch();
-	// const formValidation = (obj) => {
-	// 	for (var key in obj) {
-	// 		if (obj.hasOwnProperty(key)) {
-	// 			if (!obj[key] || obj[key].length === 0) {
-	// 				return false;
-	// 			}
-	// 		}
-	// 	}
-	// 	return true;
-	// };
 
-	const [formValidation, setFormValidation] = useState({
-		name: true,
-		email: true,
-		phoneNumber: true,
-		seat: true,
-	});
+	const handleInputNameChange = (e) => {
+		setForm({ ...form, name: e.target.value });
+		setNameValidation(true);
+		if (e.target.value === "" || e.target.value === undefined) {
+			setNameValidation(false);
+		}
+	};
+	const handleInputEmailChange = (e) => {
+		setForm({ ...form, email: e.target.value });
+		setEmailValidation(true);
+		if (e.target.value === "" || e.target.value === undefined) {
+			setEmailValidation(false);
+		}
+	};
+	const handleInputPhoneNumberChange = (e) => {
+		setForm({ ...form, phoneNumber: e.target.value });
+		setPhoneNumberValidation(true);
+		if (
+			e.target.value === "" ||
+			e.target.value === undefined ||
+			isNaN(e.target.value)
+		) {
+			setPhoneNumberValidation(false);
+		}
+	};
+	const [paymentState, setPaymentState] = useState(false);
+	useEffect(() => {
+		console.log(seatValidation);
+		if (seatSelect.length === 0) {
+			setSeatValidation(false);
+		} else {
+			setSeatValidation(true);
+		}
+		setForm({ ...form, seat: seatSelect });
+		if (
+			form.name !== undefined &&
+			form.name !== "" &&
+			form.email !== undefined &&
+			form.email !== "" &&
+			form.phoneNumber !== undefined &&
+			form.phoneNumber !== "" &&
+			seatValidation
+		) {
+			setPaymentState(true);
+		} else {
+			setPaymentState(false);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [form.name, form.email, form.phoneNumber, seatSelect, seatValidation]);
+	const dispatch = useDispatch();
 	const handlePayment = () => {
-		if (form.name === "") {
-			setFormValidation({ ...formValidation, name: false });
-			console.log(formValidation.name);
+		if (form.name === undefined || !nameValidation) {
+			setNameValidation(false);
+			toast.warn("Please enter your name!");
+			return;
 		}
-		if (form.email === "") {
-			setFormValidation({ ...formValidation, email: false });
+		if (form.email === undefined || !emailValidation) {
+			setEmailValidation(false);
+			toast.warn("Please enter your email!");
+			return;
 		}
-		if (form.phoneNumber === "") {
-			setFormValidation({ ...formValidation, phoneNumber: false });
+		if (form.phoneNumber === undefined || !phoneNumberValidation) {
+			setPhoneNumberValidation(false);
+			toast.warn("Please enter your phone number!");
+			return;
 		}
-		console.log(form);
+		if (!seatValidation) {
+			toast.warn("Please select your seat!");
+			return;
+		}
 		dispatch(seatPayment({ form }));
 	};
-	console.log(formValidation);
 	return (
 		<div className="z-10 relative mt-24">
 			<div className="w-full text-black/50 py-2 bg-white/90 flex items-center justify-center text-3xl font-bold rounded-t-3xl mb-6">
@@ -82,7 +119,7 @@ const AllSeat = () => {
 								<Seat
 									key={item.seat}
 									seat={item.seat}
-									ticket={handleBuyTicket}
+									seatSelect={handleSeatSelect}
 									status={item.status}
 								/>
 							);
@@ -117,7 +154,7 @@ const AllSeat = () => {
 				<form className="flex w-[75%] justify-between" autoComplete="off">
 					<div
 						className={`flex items-center border rounded-full h-14 pr-6 ${
-							formValidation.name === "" ? "" : "!border-red-500"
+							nameValidation ? "" : "!border-red-500"
 						}`}
 					>
 						<img
@@ -126,48 +163,53 @@ const AllSeat = () => {
 							alt="user"
 						/>
 						<input
+							inputMode="text"
 							autoComplete="false"
 							className="font-light text-lg ml-2 mr-4 h-full border-none focus:outline-none"
 							type="text"
 							name="name"
 							placeholder="Enter your name (*)"
-							onChange={(e) => {
-								setForm({ ...form, name: e.target.value });
-							}}
+							onChange={handleInputNameChange}
 						/>
 					</div>
-					<div className="flex items-center border rounded-full h-14 pr-6 ">
+					<div
+						className={`flex items-center border rounded-full h-14 pr-6 ${
+							emailValidation ? "" : "!border-red-500"
+						}`}
+					>
 						<img
 							className="ml-3 w-9"
 							src={require("../../images/icons8-email-50.png")}
 							alt="email"
 						/>
 						<input
-							autoComplete="false"
+							inputMode="email"
 							className=" font-light text-lg ml-2 mr-4 h-full border-none focus:outline-none"
-							type="text"
+							type="email"
 							name="email"
 							placeholder="Your email (*)"
-							onChange={(e) => {
-								setForm({ ...form, email: e.target.value });
-							}}
+							onChange={handleInputEmailChange}
 						/>
 					</div>
-					<div className="flex items-center border rounded-full h-14 pr-6">
+					<div
+						className={`flex items-center border rounded-full h-14 pr-6 ${
+							phoneNumberValidation ? "" : "!border-red-500"
+						}`}
+					>
 						<img
 							className="ml-3 w-8"
 							src={require("../../images/icons8-phone-50.png")}
 							alt="phone"
 						/>
 						<input
+							inputMode="tel"
 							autoComplete="false"
 							className=" font-light text-lg ml-2 mr-6 h-full border-none focus:outline-none"
-							type="text"
+							type="tel"
 							name="phone"
 							placeholder="Phone number (*)"
-							onChange={(e) => {
-								setForm({ ...form, phoneNumber: e.target.value });
-							}}
+							maxLength="11"
+							onChange={handleInputPhoneNumberChange}
 						/>
 					</div>
 				</form>
@@ -175,9 +217,10 @@ const AllSeat = () => {
 					style={{
 						background:
 							"linear-gradient(to left, #4158D0 0%, #C850C0 50%, #FFCC70 100%)",
-						opacity: "0.9",
 					}}
-					className="text-2xl font-light text-white w-[20%] rounded-full h-14 flex items-center justify-center"
+					className={`text-2xl font-light text-white w-[20%] rounded-full h-14 flex items-center cursor-default transition-all ease-in-out duration-700 justify-center ${
+						paymentState && "opacity-100 !cursor-pointer"
+					} opacity-50`}
 					onClick={handlePayment}
 				>
 					Payment
