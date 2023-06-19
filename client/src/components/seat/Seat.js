@@ -5,11 +5,16 @@ const Seat = ({ seat, status, ticket }) => {
 	const [onClickState, setOnClickState] = useState(false);
 	const handleOnClick = () => {
 		setOnClickState(!onClickState);
+		if (status === "selected") {
+			return;
+		}
 		ticket(seat);
 	};
 	return (
 		<div
-			className="flex items-center justify-center flex-col relative cursor-pointer"
+			className={`flex items-center justify-center flex-col relative ${
+				status === "selected" ? "" : "cursor-pointer"
+			} `}
 			onMouseOver={() => {
 				setMouseOverState(true);
 			}}

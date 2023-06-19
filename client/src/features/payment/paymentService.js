@@ -3,12 +3,11 @@ import { seatPaymentFunc } from "../../firebase/firebaseFunctions";
 
 export const seatPayment = createAsyncThunk(
 	"payment",
-	async ({ form, name, cinema, day, time }, thunkAPI) => {
+	async ({ form }, thunkAPI) => {
 		try {
-			console.log(name, cinema, day, time);
 			let data = {};
-			await seatPaymentFunc(form, name, cinema, day, time);
-			return form;
+			await seatPaymentFunc(form);
+			// return form;
 		} catch (error) {
 			const message =
 				(error.response &&

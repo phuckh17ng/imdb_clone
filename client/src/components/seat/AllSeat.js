@@ -7,15 +7,18 @@ import Seat from "./Seat";
 const AllSeat = () => {
 	const ticket = useSelector((state) => state.ticket);
 	const { seat, isLoading } = ticket;
-	const movieName = seat.name;
-	const movieCinema = seat.cinema;
-	const movieDay = seat.day;
-	const movieTime = seat.time;
+	const allSeat = Object.values(seat.allSeat);
+	console.log(seat);
+	console.log(allSeat);
 	const [form, setForm] = useState({
 		seat: null,
 		name: "",
 		email: "",
 		phoneNumber: "",
+		movieName: seat.name,
+		movieCinema: seat.cinema,
+		movieDay: seat.day,
+		movieTime: seat.time,
 	});
 	const [seatSelect, setSeatSelect] = useState([]);
 
@@ -32,14 +35,38 @@ const AllSeat = () => {
 		setForm({ ...form, seat: seatSelect });
 	}, [seatSelect]);
 	const dispatch = useDispatch();
-	const handlePayment = () => {
-		console.log(form);
-		console.log(movieName, movieCinema, movieDay, movieTime);
-		dispatch(
-			seatPayment({ form, movieName, movieCinema, movieDay, movieTime })
-		);
-	};
+	// const formValidation = (obj) => {
+	// 	for (var key in obj) {
+	// 		if (obj.hasOwnProperty(key)) {
+	// 			if (!obj[key] || obj[key].length === 0) {
+	// 				return false;
+	// 			}
+	// 		}
+	// 	}
+	// 	return true;
+	// };
 
+	const [formValidation, setFormValidation] = useState({
+		name: true,
+		email: true,
+		phoneNumber: true,
+		seat: true,
+	});
+	const handlePayment = () => {
+		if (form.name === "") {
+			setFormValidation({ ...formValidation, name: false });
+			console.log(formValidation.name);
+		}
+		if (form.email === "") {
+			setFormValidation({ ...formValidation, email: false });
+		}
+		if (form.phoneNumber === "") {
+			setFormValidation({ ...formValidation, phoneNumber: false });
+		}
+		console.log(form);
+		dispatch(seatPayment({ form }));
+	};
+	console.log(formValidation);
 	return (
 		<div className="z-10 relative mt-24">
 			<div className="w-full text-black/50 py-2 bg-white/90 flex items-center justify-center text-3xl font-bold rounded-t-3xl mb-6">
@@ -48,20 +75,22 @@ const AllSeat = () => {
 
 			<div className="flex justify-between">
 				<div className="grid grid-cols-10 gap-2 w-[100%]">
-					{seat.allSeat.map((item) => {
-						return (
-							<Seat
-								key={item.seat}
-								seat={item.seat}
-								ticket={handleBuyTicket}
-								status={item.status}
-							/>
-						);
-					})}
+					{allSeat
+						.sort((a, b) => a.seat.localeCompare(b.seat))
+						.map((item) => {
+							return (
+								<Seat
+									key={item.seat}
+									seat={item.seat}
+									ticket={handleBuyTicket}
+									status={item.status}
+								/>
+							);
+						})}
 				</div>
 			</div>
 
-			<div className="flex justify-evenly text-zinc-700 pb-2">
+			<div className="flex justify-evenly text-zinc-700 pb-2 mt-12">
 				<div className="flex items-center">
 					<img
 						src={require("../../images/icons8-armchair-60 (3).png")}
@@ -86,7 +115,11 @@ const AllSeat = () => {
 			</div>
 			<div className="flex items-center justify-between border-t-2 pt-9">
 				<form className="flex w-[75%] justify-between" autoComplete="off">
-					<div className="flex items-center border rounded-full h-14 pr-6">
+					<div
+						className={`flex items-center border rounded-full h-14 pr-6 ${
+							formValidation.name === "" ? "" : "!border-red-500"
+						}`}
+					>
 						<img
 							className="ml-3 w-10"
 							src={require("../../images/icons8-user-50.png")}
@@ -94,7 +127,7 @@ const AllSeat = () => {
 						/>
 						<input
 							autoComplete="false"
-							className=" font-light text-lg ml-2 mr-4 h-full border-none focus:outline-none"
+							className="font-light text-lg ml-2 mr-4 h-full border-none focus:outline-none"
 							type="text"
 							name="name"
 							placeholder="Enter your name (*)"

@@ -213,29 +213,33 @@ const addShowingMovieSeat = async (name, cinema, day, time) => {
 	return data;
 };
 
-const seatPaymentFunc = async (form, name, cinema, day, time) => {
+const seatPaymentFunc = async (form) => {
 	console.log(form.seat);
-	console.log(name, cinema, day, time);
+	console.log(form);
 	const q = query(
 		collection(db, "seat"),
-		where("name", "==", name),
-		where("cinema", "==", cinema),
-		where("day", "==", day),
-		where("time", "==", time),
-		where("seat", "in", form.seat)
+		where("name", "==", form.movieName),
+		where("cinema", "==", form.movieCinema),
+		where("day", "==", form.movieDay),
+		where("time", "==", form.movieTime)
 	);
-	
+
 	console.log(q);
 	const docs = await getDocs(q);
 	console.log(docs);
 	docs.forEach((document) => {
 		console.log(document.ref.id);
-		updateDoc(doc(db, "seat", document.ref.id), {
-			name: form.name,
-			email: form.email,
-			phoneNumber: form.phoneNumber,
-			status: "selected",
-		});
+		for (let i = 0; i < form.seat.length; i++) {
+			const seatId = form.seat[i];
+			let updatedObj = {
+				[`allSeat.${seatId}.name`]: form.name,
+				[`allSeat.${seatId}.email`]: form.email,
+				[`allSeat.${seatId}.phoneNumber`]: form.phoneNumber,
+				[`allSeat.${seatId}.status`]: "selected",
+			};
+			console.log(updatedObj);
+			updateDoc(doc(db, "seat", document.ref.id), updatedObj);
+		}
 	});
 };
 
