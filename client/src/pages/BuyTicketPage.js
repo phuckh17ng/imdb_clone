@@ -15,6 +15,7 @@ const BuyTicketPage = () => {
 	const movie = showingMovie.filter((movie) => {
 		return movie.movieId === movieId;
 	});
+	console.log(movie);
 	const ticket = useSelector((state) => state.ticket);
 	const { seat, isLoading } = ticket;
 	console.log(isLoading);
@@ -24,9 +25,10 @@ const BuyTicketPage = () => {
 	console.log(cinema, day, time);
 	const dispatch = useDispatch();
 	const handleBuyTicket = () => {
-		console.log(searchState);
+		const name = movie[0]._name;
+		console.log(name);
 		if (!searchState) return;
-		dispatch(getShowingMovieSeat({ cinema, day, time }));
+		dispatch(getShowingMovieSeat({ name, cinema, day, time }));
 		setSeatState(true);
 		setSearchState(false);
 	};

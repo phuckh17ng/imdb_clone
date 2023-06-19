@@ -37,7 +37,7 @@ const Navbar = () => {
 					<div className="flex items-center h-full">
 						<Link
 							to="/"
-							className="bg-[#f5c518] mr-3 rounded flex items-center justify-center text-black font-black text-lg w-16 px-4 h-8 no-underline max-[960px]:mr-3"
+							className="bg-zinc-800/70 mr-3 rounded flex items-center justify-center text-white font-black text-lg w-16 px-4 h-8 no-underline max-[960px]:mr-3"
 						>
 							IMDb
 						</Link>

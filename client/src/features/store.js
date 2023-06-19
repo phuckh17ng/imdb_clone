@@ -8,6 +8,7 @@ import thunk from "redux-thunk";
 
 import authReducers from "./auth/authSlice";
 import moviesReducers from "./movie/movieSlice";
+import paymentReducers from "./payment/paymentSlice";
 import searchReducer from "./search/searchSlice";
 import showReducers from "./show/showSlice";
 import ticketReducers from "./ticket/ticketSlice";
@@ -22,6 +23,7 @@ let reducers = combineReducers({
 	search: searchReducer,
 	show: showReducers,
 	ticket: ticketReducers,
+	payment: paymentReducers,
 });
 const middleware = [thunk];
 

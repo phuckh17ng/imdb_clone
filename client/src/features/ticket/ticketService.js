@@ -1,17 +1,36 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { addShowingMovieSeat } from "../../firebase/firebaseFunctions";
+import {
+	addShowingMovieSeat,
+	seatPaymentFunc,
+} from "../../firebase/firebaseFunctions";
 
 export const getShowingMovieSeat = createAsyncThunk(
 	"ticket/getAllSeat",
-	async ({ cinema, day, time }, thunkAPI) => {
+	async ({ name, cinema, day, time }, thunkAPI) => {
 		try {
 			let data = {};
-			await addShowingMovieSeat(cinema, day, time).then((item) => {
-				console.log(item);
+			await addShowingMovieSeat(name, cinema, day, time).then((item) => {
 				data = item;
 			});
-			console.log(data);
 			return data;
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
+export const seatPayment = createAsyncThunk(
+	"ticket/payment",
+	async ({ form }, thunkAPI) => {
+		try {
+			await seatPaymentFunc(form);
+			return form;
 		} catch (error) {
 			const message =
 				(error.response &&

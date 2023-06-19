@@ -20,7 +20,7 @@ import {
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { toast } from "react-toastify";
 import { auth, db } from "./firebaseConfig";
-
+import { seat } from "./seat";
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
 const signInWithGoogle = async () => {
@@ -186,21 +186,10 @@ const updateBannerMovie = async (movieId, selectedImage) => {
 	return bannerImg;
 };
 
-const seat = [
-	{ seat: "0", name: "", email: "", phoneNumber: "", status: "none" },
-	{ seat: "1", name: "", email: "", phoneNumber: "", status: "none" },
-	{ seat: "2", name: "", email: "", phoneNumber: "", status: "none" },
-	{ seat: "3", name: "", email: "", phoneNumber: "", status: "none" },
-	{ seat: "4", name: "", email: "", phoneNumber: "", status: "none" },
-	{ seat: "5", name: "", email: "", phoneNumber: "", status: "none" },
-	{ seat: "6", name: "", email: "", phoneNumber: "", status: "none" },
-	{ seat: "7", name: "", email: "", phoneNumber: "", status: "none" },
-	{ seat: "8", name: "", email: "", phoneNumber: "", status: "none" },
-	{ seat: "9", name: "", email: "", phoneNumber: "", status: "none" },
-];
-const addShowingMovieSeat = async (cinema, day, time) => {
+const addShowingMovieSeat = async (name, cinema, day, time) => {
 	const q = query(
 		collection(db, "seat"),
+		where("name", "==", name),
 		where("cinema", "==", cinema),
 		where("day", "==", day),
 		where("time", "==", time)
@@ -208,17 +197,11 @@ const addShowingMovieSeat = async (cinema, day, time) => {
 	const docs = await getDocs(q);
 
 	let data = {
+		name: name,
 		cinema: cinema,
 		day: day,
 		time: time,
-		_A: seat,
-		_B: seat,
-		_C: seat,
-		_D: seat,
-		_E: seat,
-		_F: seat,
-		_G: seat,
-		_H: seat,
+		allSeat: seat,
 	};
 	if (docs.docs.length === 0) {
 		addDoc(collection(db, "seat"), data);
@@ -228,6 +211,32 @@ const addShowingMovieSeat = async (cinema, day, time) => {
 		});
 	}
 	return data;
+};
+
+const seatPaymentFunc = async (form, name, cinema, day, time) => {
+	console.log(form.seat);
+	console.log(name, cinema, day, time);
+	const q = query(
+		collection(db, "seat"),
+		where("name", "==", name),
+		where("cinema", "==", cinema),
+		where("day", "==", day),
+		where("time", "==", time),
+		where("seat", "in", form.seat)
+	);
+	
+	console.log(q);
+	const docs = await getDocs(q);
+	console.log(docs);
+	docs.forEach((document) => {
+		console.log(document.ref.id);
+		updateDoc(doc(db, "seat", document.ref.id), {
+			name: form.name,
+			email: form.email,
+			phoneNumber: form.phoneNumber,
+			status: "selected",
+		});
+	});
 };
 
 const logout = () => {
@@ -260,6 +269,7 @@ export {
 	logout,
 	registerWithEmailAndPassword,
 	removeFromWatchlist,
+	seatPaymentFunc,
 	sendPasswordReset,
 	signInWithFacebook,
 	signInWithGoogle,

@@ -1,17 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getShowingMovieSeat, seatPayment } from "./ticketService";
+import { seatPayment } from "./paymentService";
 
 const initialState = {
-	seat: {},
-	seatSelect: {},
+	seatSelect: [],
 	isError: false,
 	isSuccess: false,
 	isLoading: true,
 	message: "",
 };
 
-export const ticketSlice = createSlice({
-	name: "ticket",
+export const paymentSlice = createSlice({
+	name: "payment",
 	initialState,
 	extraReducers: (builder) => {
 		builder
@@ -27,21 +26,8 @@ export const ticketSlice = createSlice({
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;
-			})
-			.addCase(getShowingMovieSeat.pending, (state) => {
-				state.isLoading = true;
-			})
-			.addCase(getShowingMovieSeat.fulfilled, (state, action) => {
-				state.isLoading = false;
-				state.isSuccess = true;
-				state.seat = action.payload;
-			})
-			.addCase(getShowingMovieSeat.rejected, (state, action) => {
-				state.isLoading = false;
-				state.isError = true;
-				state.message = action.payload;
 			});
 	},
 });
 
-export default ticketSlice.reducer;
+export default paymentSlice.reducer;
