@@ -138,6 +138,7 @@ const AllSeat = () => {
 						.map((item) => {
 							return (
 								<Seat
+									form={form}
 									key={item.seat}
 									seat={item.seat}
 									seatSelect={handleSeatSelect}

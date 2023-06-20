@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { seatPayment } from "../../features/payment/paymentService";
 import { getShowingMovieDetails } from "../../features/show/showSlice";
 
@@ -16,17 +17,18 @@ const PaymentModal = ({ ticketInfo, show, click }) => {
 	console.log(movieInfo);
 	console.log(ticketInfo);
 	const form = ticketInfo;
-	console.log(form);
 	const root = document.getElementById("root");
 
 	const handlePayment = () => {
 		dispatch(seatPayment({ form }));
+		click();
+		show = false;
+		toast.success("Successful Ticket Purchase!");
 	};
-
+	console.log(show);
 	console.log(paymentState.isSuccess);
 
 	// if (paymentState.isSuccess) {
-	// 	show = false;
 	// }
 	if (show) {
 		root.style.overflow = "hidden";
