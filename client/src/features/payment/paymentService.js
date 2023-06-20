@@ -5,9 +5,8 @@ export const seatPayment = createAsyncThunk(
 	"payment",
 	async ({ form }, thunkAPI) => {
 		try {
-			let data = {};
 			await seatPaymentFunc(form);
-			// return form;
+			return form;
 		} catch (error) {
 			const message =
 				(error.response &&

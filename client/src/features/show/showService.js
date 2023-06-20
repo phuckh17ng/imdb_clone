@@ -9,10 +9,8 @@ import {
 	where,
 } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
-import {
-	addShowingMovieFunc,
-	updateBannerMovie,
-} from "../../firebase/firebaseFunctions";
+import { addShowingMovieFunc } from "../../firebase/firebaseFunctions";
+import { updateBannerMovie } from "../../firebase/firestoreFunctions";
 
 export const getShowingMovies = createAsyncThunk(
 	"showingMovies/get",

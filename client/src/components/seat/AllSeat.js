@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { seatPayment } from "../../features/payment/paymentService";
+import PaymentModal from "../payment/PaymentModal";
 import "./AllSeat.css";
 import Seat from "./Seat";
 
@@ -102,8 +103,28 @@ const AllSeat = () => {
 			toast.warn("Please select your seat!");
 			return;
 		}
-		dispatch(seatPayment({ form }));
+		setPaymentModalState(true);
 	};
+
+	const [paymentModalState, setPaymentModalState] = useState(false);
+	const root = document.getElementById("root");
+	if (!paymentModalState) {
+		root.style.overflow = "auto";
+	}
+
+	const setInitialForm = () => {
+		setForm({
+			seat: null,
+			name: undefined,
+			email: undefined,
+			phoneNumber: undefined,
+			movieName: seat.name,
+			movieCinema: seat.cinema,
+			movieDay: seat.day,
+			movieTime: seat.time,
+		});
+	};
+	console.log(paymentModalState);
 	return (
 		<div className="z-10 relative mt-24">
 			<div className="w-full text-black/50 py-2 bg-white/90 flex items-center justify-center text-3xl font-bold rounded-t-3xl mb-6">
@@ -164,7 +185,7 @@ const AllSeat = () => {
 						/>
 						<input
 							inputMode="text"
-							autoComplete="false"
+							autoComplete="off"
 							className="font-light text-lg ml-2 mr-4 h-full border-none focus:outline-none"
 							type="text"
 							name="name"
@@ -203,7 +224,7 @@ const AllSeat = () => {
 						/>
 						<input
 							inputMode="tel"
-							autoComplete="false"
+							autoComplete="off"
 							className=" font-light text-lg ml-2 mr-6 h-full border-none focus:outline-none"
 							type="tel"
 							name="phone"
@@ -226,6 +247,13 @@ const AllSeat = () => {
 					Payment
 				</div>
 			</div>
+
+			<PaymentModal
+				ticketInfo={form}
+				show={paymentModalState}
+				click={() => setPaymentModalState(false)}
+				clearForm={setInitialForm}
+			/>
 		</div>
 	);
 };

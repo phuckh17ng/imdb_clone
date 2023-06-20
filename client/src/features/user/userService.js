@@ -2,10 +2,8 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import { db } from "../../firebase/firebaseConfig";
-import {
-	updateUserImage,
-	updateUserName,
-} from "../../firebase/firebaseFunctions";
+import { updateUserName } from "../../firebase/firebaseFunctions";
+import { updateUserImage } from "../../firebase/firestoreFunctions";
 
 export const getUserData = createAsyncThunk(
 	"user/get",

@@ -8,6 +8,7 @@ import {
 
 const initialState = {
 	showingMovie: [],
+	details: {},
 	banner: "",
 	isError: false,
 	isSuccess: false,
@@ -18,6 +19,14 @@ const initialState = {
 export const showSlice = createSlice({
 	name: "show",
 	initialState,
+	reducers: {
+		getShowingMovieDetails: (state, action) => {
+			const movieDetailsArr = state.showingMovie.filter((item) => {
+				return item.movieId === action.payload;
+			});
+			state.details = movieDetailsArr[0];
+		},
+	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(getShowingMovies.pending, (state) => {
@@ -74,5 +83,5 @@ export const showSlice = createSlice({
 			});
 	},
 });
-
+export const { getShowingMovieDetails } = showSlice.actions;
 export default showSlice.reducer;

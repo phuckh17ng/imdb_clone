@@ -8,8 +8,10 @@ import {
 	signOut,
 } from "firebase/auth";
 import "firebase/compat/firestore";
+import { child, getDatabase, push, ref, update } from "firebase/database";
 import {
 	addDoc,
+	arrayUnion,
 	collection,
 	doc,
 	getDocs,
@@ -17,7 +19,7 @@ import {
 	updateDoc,
 	where,
 } from "firebase/firestore";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+
 import { toast } from "react-toastify";
 import { auth, db } from "./firebaseConfig";
 import { seat } from "./seat";
@@ -168,23 +170,23 @@ const updateUserName = async (uid, name) => {
 	});
 };
 
-const updateUserImage = async (uid, selectedImage) => {
-	const storage = getStorage();
-	const storageRef = ref(storage, `userImages/${uid}`);
-	await uploadBytes(storageRef, selectedImage);
-};
+// const updateUserImage = async (uid, selectedImage) => {
+// 	const storage = getStorage();
+// 	const storageRef = ref(storage, `userImages/${uid}`);
+// 	await uploadBytes(storageRef, selectedImage);
+// };
 
-const updateBannerMovie = async (movieId, selectedImage) => {
-	console.log(selectedImage);
-	const storage = getStorage();
-	const storageRef = ref(storage, `banner/${movieId}`);
-	let bannerImg;
-	await uploadBytes(storageRef, selectedImage);
-	await getDownloadURL(storageRef).then((url) => {
-		bannerImg = url;
-	});
-	return bannerImg;
-};
+// const updateBannerMovie = async (movieId, selectedImage) => {
+// 	console.log(selectedImage);
+// 	const storage = getStorage();
+// 	const storageRef = ref(storage, `banner/${movieId}`);
+// 	let bannerImg;
+// 	await uploadBytes(storageRef, selectedImage);
+// 	await getDownloadURL(storageRef).then((url) => {
+// 		bannerImg = url;
+// 	});
+// 	return bannerImg;
+// };
 
 const addShowingMovieSeat = async (name, cinema, day, time) => {
 	const q = query(
@@ -213,7 +215,24 @@ const addShowingMovieSeat = async (name, cinema, day, time) => {
 	return data;
 };
 
+const getAvailbleSeat = async (form) => {
+	let data;
+	const q = query(
+		collection(db, "seat"),
+		where("name", "==", form.movieName),
+		where("cinema", "==", form.movieCinema),
+		where("day", "==", form.movieDay),
+		where("time", "==", form.movieTime)
+	);
+	const docs = await getDocs(q);
+	docs.forEach((doc) => {
+		data = doc.data();
+	});
+	return data.seatSelected;
+};
+
 const seatPaymentFunc = async (form) => {
+	// const db = getDatabase();
 	const q = query(
 		collection(db, "seat"),
 		where("name", "==", form.movieName),
@@ -230,6 +249,7 @@ const seatPaymentFunc = async (form) => {
 				[`allSeat.${seatId}.email`]: form.email,
 				[`allSeat.${seatId}.phoneNumber`]: form.phoneNumber,
 				[`allSeat.${seatId}.status`]: "selected",
+				seatSelected: [seatId],
 			};
 			console.log(updatedObj);
 			updateDoc(doc(db, "seat", document.ref.id), updatedObj);
@@ -263,6 +283,7 @@ export {
 	addMovieToWatchlist,
 	addShowingMovieFunc,
 	addShowingMovieSeat,
+	getAvailbleSeat,
 	logInWithEmailAndPassword,
 	logout,
 	registerWithEmailAndPassword,
@@ -271,7 +292,5 @@ export {
 	sendPasswordReset,
 	signInWithFacebook,
 	signInWithGoogle,
-	updateBannerMovie,
-	updateUserImage,
 	updateUserName,
 };

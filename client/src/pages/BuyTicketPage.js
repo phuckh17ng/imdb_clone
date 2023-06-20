@@ -170,7 +170,7 @@ const BuyTicketPage = () => {
 											background:
 												"linear-gradient(to right, #4158D0 0%, #C850C0 50%, #FFCC70 100%)",
 										}}
-										className={`transition-all duration-700 ease-linear w-full text-white/90 cursor-default py-2 rounded-b-2xl text-center font-bold text-5xl mt-2 opacity-50 ${
+										className={`transition-all duration-300 ease-linear w-full text-white/90 cursor-default py-2 rounded-b-2xl text-center font-bold text-5xl mt-2 opacity-50 ${
 											searchBtnState && "opacity-100 !cursor-pointer"
 										}`}
 										onClick={handleBuyTicket}

@@ -16,6 +16,7 @@ export const paymentSlice = createSlice({
 		builder
 			.addCase(seatPayment.pending, (state) => {
 				state.isLoading = true;
+				state.isSuccess = false;
 			})
 			.addCase(seatPayment.fulfilled, (state, action) => {
 				state.isLoading = false;
