@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import AllSeat from "../components/seat/AllSeat";
 import { getShowingMovieSeat } from "../features/ticket/ticketService";
+import { getAllSeatRealTime } from "../firebase/firebaseFunctions";
 import "./BuyTicketPage.css";
 
 const BuyTicketPage = () => {
@@ -16,14 +17,11 @@ const BuyTicketPage = () => {
 	const movie = showingMovie.filter((movie) => {
 		return movie.movieId === movieId;
 	});
-	console.log(movie);
 	const ticket = useSelector((state) => state.ticket);
 	const { seat, isLoading } = ticket;
-	console.log(isLoading);
 	const [cinema, setCinema] = useState("");
 	const [day, setDay] = useState("");
 	const [time, setTime] = useState("");
-	console.log(cinema, day, time);
 	const dispatch = useDispatch();
 	useEffect(() => {
 		if (cinema === "" || day === "" || time === "") {
@@ -33,8 +31,9 @@ const BuyTicketPage = () => {
 		}
 	}, [cinema, day, time]);
 	const [showAllSeats, setShowAllSeats] = useState(false);
+
+	const name = movie[0]?._name;
 	const handleBuyTicket = () => {
-		const name = movie[0]._name;
 		if (cinema === "" || day === "" || time === "") {
 			return;
 		}
@@ -43,6 +42,11 @@ const BuyTicketPage = () => {
 		setSearchState(false);
 		setShowAllSeats(true);
 	};
+	// useEffect(() => {
+	// 	getAllSeatRealTime(name, cinema, day, time).then((item) => {
+	// 		console.log(item);
+	// 	});
+	// });
 
 	return (
 		<div className="py-9 w-full h-full max-w-[1280px] mx-auto px-3">

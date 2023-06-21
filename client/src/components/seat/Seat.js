@@ -6,8 +6,6 @@ const Seat = ({ form, seat, status, seatSelect }) => {
 	const [onClickState, setOnClickState] = useState(false);
 
 	const paymentState = useSelector((state) => state.payment);
-	console.log(paymentState);
-	console.log(form);
 	const handleOnClick = () => {
 		setOnClickState(!onClickState);
 		if (

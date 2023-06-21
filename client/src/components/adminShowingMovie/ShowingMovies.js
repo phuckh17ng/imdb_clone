@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import {
 	addMovieBanner,
 	addShowingMovie,
@@ -113,10 +114,31 @@ const ShowingMovies = () => {
 	]);
 	console.log(form);
 
-	const handleFormSubmit = () => {
-		console.log(movieId, banner);
+	const handleFormSubmit = (e) => {
+		console.log(form);
+		console.log(formValidation(form));
 		if (formValidation(form)) {
 			dispatch(addShowingMovie(form));
+			toast.success("Upload new movie successfully!");
+			e.preventDefault();
+
+			const inputs = document.querySelectorAll(
+				"#movieId, #name, #genre, #actor, #director, #type, #trailer, #banner, #cinema, #day, #time"
+			);
+			inputs.forEach((input) => {
+				input.value = "";
+			});
+			setMovieId("");
+			setName("");
+			setGerne("");
+			setActor("");
+			setDirector("");
+			setType("");
+			setTrailer("");
+			setBanner("");
+			setCinema([]);
+			setDay([]);
+			setTime([]);
 		} else {
 			alert("Please enter a valid value");
 		}

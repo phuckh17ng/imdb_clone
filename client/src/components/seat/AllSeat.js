@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { seatPayment } from "../../features/payment/paymentService";
+import { getAllSeatRealTime } from "../../firebase/firebaseFunctions";
 import PaymentModal from "../payment/PaymentModal";
 import "./AllSeat.css";
 import Seat from "./Seat";
@@ -32,7 +33,6 @@ const AllSeat = () => {
 		}
 		setSeatSelect((item) => [...item, seatSelected]);
 	};
-
 	const handleInputNameChange = (e) => {
 		setForm({ ...form, name: e.target.value });
 		setNameValidation(true);
@@ -60,7 +60,6 @@ const AllSeat = () => {
 	};
 	const [paymentState, setPaymentState] = useState(false);
 	useEffect(() => {
-		console.log(seatValidation);
 		if (seatSelect.length === 0) {
 			setSeatValidation(false);
 		} else {
@@ -113,6 +112,13 @@ const AllSeat = () => {
 	}
 
 	const setInitialForm = () => {
+		setSeatSelect([]);
+		const inputs = document.querySelectorAll(
+			".username, .useremail, .userphone"
+		);
+		inputs.forEach((input) => {
+			input.value = "";
+		});
 		setForm({
 			seat: null,
 			name: undefined,
@@ -124,7 +130,10 @@ const AllSeat = () => {
 			movieTime: seat.time,
 		});
 	};
-	console.log(paymentModalState);
+	useEffect(() => {
+		getAllSeatRealTime(seat.name, seat.cinema, seat.day, seat.time);
+	});
+	console.log(getAllSeatRealTime(seat.name, seat.cinema, seat.day, seat.time));
 	return (
 		<div className="z-10 relative mt-24">
 			<div className="w-full text-black/50 py-2 bg-white/90 flex items-center justify-center text-3xl font-bold rounded-t-3xl mb-6">
@@ -187,7 +196,7 @@ const AllSeat = () => {
 						<input
 							inputMode="text"
 							autoComplete="off"
-							className="font-light text-lg ml-2 mr-4 h-full border-none focus:outline-none"
+							className="username font-light text-lg ml-2 mr-4 h-full border-none focus:outline-none"
 							type="text"
 							name="name"
 							placeholder="Enter your name (*)"
@@ -206,7 +215,7 @@ const AllSeat = () => {
 						/>
 						<input
 							inputMode="email"
-							className=" font-light text-lg ml-2 mr-4 h-full border-none focus:outline-none"
+							className="useremail font-light text-lg ml-2 mr-4 h-full border-none focus:outline-none"
 							type="email"
 							name="email"
 							placeholder="Your email (*)"
@@ -226,7 +235,7 @@ const AllSeat = () => {
 						<input
 							inputMode="tel"
 							autoComplete="off"
-							className=" font-light text-lg ml-2 mr-6 h-full border-none focus:outline-none"
+							className="userphone font-light text-lg ml-2 mr-6 h-full border-none focus:outline-none"
 							type="tel"
 							name="phone"
 							placeholder="Phone number (*)"

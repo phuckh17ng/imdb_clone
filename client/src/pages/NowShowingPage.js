@@ -8,7 +8,6 @@ const NowShowingPage = () => {
 
 	const showingMovies = useSelector((state) => state.show);
 	const { showingMovie, isLoading } = showingMovies;
-	console.log(showingMovie, isLoading);
 	return (
 		<div className="w-full h-full bg-white text-black pt-10 pb-32">
 			<div className="mt-3 relative w-full flex items-center flex-col">

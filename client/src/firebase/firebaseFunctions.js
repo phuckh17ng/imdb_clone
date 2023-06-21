@@ -15,6 +15,7 @@ import {
 	collection,
 	doc,
 	getDocs,
+	onSnapshot,
 	query,
 	updateDoc,
 	where,
@@ -205,6 +206,29 @@ const addShowingMovieSeat = async (name, cinema, day, time) => {
 		time: time,
 		allSeat: seat,
 	};
+
+	// const unsubscribe = onSnapshot(q, (snapshot) => {
+	// 	snapshot.docChanges().forEach((change) => {
+	// 	  if (change.type === "added") {
+	// 		  console.log("New Ticket: ", change.doc.data());
+	// 	  }
+	// 	  if (change.type === "modified") {
+	// 		  console.log("Modified: ", change.doc.data());
+	// 	  }
+	// 	  if (change.type === "removed") {
+	// 		  console.log("Removed: ", change.doc.data());
+	// 	  }
+	// 	});
+	//   });;
+	// const unsubscribe = onSnapshot(q, (querySnapshot) => {
+	// 	let cities;
+	// 	querySnapshot.forEach((doc) => {
+	// 		cities = doc.data();
+	// 	});
+	// 	console.log("Current Seat: ", cities);
+	// 	return cities;
+	// });
+
 	if (docs.docs.length === 0) {
 		addDoc(collection(db, "seat"), data);
 	} else {
@@ -214,25 +238,25 @@ const addShowingMovieSeat = async (name, cinema, day, time) => {
 	}
 	return data;
 };
-
-const getAvailbleSeat = async (form) => {
-	let data;
+const getAllSeatRealTime = (name, cinema, day, time) => {
+	console.log(name, cinema, day, time);
 	const q = query(
 		collection(db, "seat"),
-		where("name", "==", form.movieName),
-		where("cinema", "==", form.movieCinema),
-		where("day", "==", form.movieDay),
-		where("time", "==", form.movieTime)
+		where("name", "==", name),
+		where("cinema", "==", cinema),
+		where("day", "==", day),
+		where("time", "==", time)
 	);
-	const docs = await getDocs(q);
-	docs.forEach((doc) => {
-		data = doc.data();
+	const cities = [];
+	onSnapshot(q, (querySnapshot) => {
+		querySnapshot.forEach((doc) => {
+			cities.push(doc.data());
+		});
 	});
-	return data.seatSelected;
+	console.log(cities);
+	return cities;
 };
-
 const seatPaymentFunc = async (form) => {
-	// const db = getDatabase();
 	const q = query(
 		collection(db, "seat"),
 		where("name", "==", form.movieName),
@@ -242,6 +266,8 @@ const seatPaymentFunc = async (form) => {
 	);
 	const docs = await getDocs(q);
 	docs.forEach((document) => {
+		// data = [...data, doc?.data()];
+
 		for (let i = 0; i < form.seat.length; i++) {
 			const seatId = form.seat[i];
 			let updatedObj = {
@@ -249,9 +275,8 @@ const seatPaymentFunc = async (form) => {
 				[`allSeat.${seatId}.email`]: form.email,
 				[`allSeat.${seatId}.phoneNumber`]: form.phoneNumber,
 				[`allSeat.${seatId}.status`]: "selected",
-				seatSelected: [seatId],
+				seatSelected: arrayUnion(seatId),
 			};
-			console.log(updatedObj);
 			updateDoc(doc(db, "seat", document.ref.id), updatedObj);
 		}
 	});
@@ -283,7 +308,7 @@ export {
 	addMovieToWatchlist,
 	addShowingMovieFunc,
 	addShowingMovieSeat,
-	getAvailbleSeat,
+	getAllSeatRealTime,
 	logInWithEmailAndPassword,
 	logout,
 	registerWithEmailAndPassword,

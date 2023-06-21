@@ -5,28 +5,23 @@ import { toast } from "react-toastify";
 import { seatPayment } from "../../features/payment/paymentService";
 import { getShowingMovieDetails } from "../../features/show/showSlice";
 
-const PaymentModal = ({ ticketInfo, show, click }) => {
+const PaymentModal = ({ clearForm, ticketInfo, show, click }) => {
 	const dispatch = useDispatch();
 	const { movieId } = useParams();
-	console.log(movieId);
 	useEffect(() => {
 		dispatch(getShowingMovieDetails(movieId));
 	}, [movieId, dispatch]);
 	let movieInfo = useSelector((state) => state.show.details);
 	let paymentState = useSelector((state) => state.payment);
-	console.log(movieInfo);
-	console.log(ticketInfo);
 	const form = ticketInfo;
 	const root = document.getElementById("root");
-
 	const handlePayment = () => {
 		dispatch(seatPayment({ form }));
 		click();
 		show = false;
+		clearForm();
 		toast.success("Successful Ticket Purchase!");
 	};
-	console.log(show);
-	console.log(paymentState.isSuccess);
 
 	// if (paymentState.isSuccess) {
 	// }

@@ -1,14 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-// import { data } from "../../redux/data";
+import { data } from "../../redux/data";
 
 export const getAllMovies = createAsyncThunk(
 	"movies/getAllMovies",
 	async (thunkAPI) => {
 		try {
-			const { data } = await axios.get(
-				"https://imdb-api.com/en/API/IMDbList/k_q2h77cjg/ls004285275"
-			);
+			// const { data } = await axios.get(
+			// 	"https://imdb-api.com/en/API/IMDbList/k_k3dk7ej7/ls004285275"
+			// );
 			return data;
 		} catch (error) {
 			const message =
@@ -27,7 +27,7 @@ export const getMovieDetails = createAsyncThunk(
 	async (movieId, thunkAPI) => {
 		try {
 			const { data } = await axios.get(
-				`https://imdb-api.com/en/API/Title/k_q2h77cjg/${movieId}`
+				`https://imdb-api.com/en/API/Title/k_k3dk7ej7/${movieId}`
 			);
 
 			return data;
@@ -48,7 +48,7 @@ export const getMovieTrailer = createAsyncThunk(
 	async (movieId, thunkAPI) => {
 		try {
 			const { data } = await axios.get(
-				`https://imdb-api.com/en/API/Trailer/k_q2h77cjg/${movieId}`
+				`https://imdb-api.com/en/API/Trailer/k_k3dk7ej7/${movieId}`
 			);
 
 			return data;

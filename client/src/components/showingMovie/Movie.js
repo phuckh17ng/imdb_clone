@@ -14,7 +14,6 @@ const Movie = ({
 	trailer,
 	type,
 }) => {
-	console.log(movieId);
 	return (
 		<div className="py-3 px-3 h-full flex hover:-translate-x-[6px] hover:-translate-y-[6px] transition-all duration-300 linear shadow-xl">
 			<img src={banner} alt={name} className="w-1/2" loading="lazy" />

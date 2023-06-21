@@ -73,7 +73,6 @@ export const showSlice = createSlice({
 			.addCase(addMovieBanner.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
-				console.log(action.payload);
 				state.banner = action.payload;
 			})
 			.addCase(addMovieBanner.rejected, (state, action) => {

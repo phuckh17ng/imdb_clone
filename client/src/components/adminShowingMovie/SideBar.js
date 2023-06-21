@@ -8,7 +8,6 @@ const SideBar = () => {
 		navLi.forEach((li) => {
 			li.classList.remove("active");
 			if (li.classList.contains(current)) {
-				console.log(li.classList.contains(current));
 				li.classList.add("active");
 			}
 		});

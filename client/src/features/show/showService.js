@@ -64,14 +64,11 @@ export const getShowingMovie = createAsyncThunk(
 export const addMovieBanner = createAsyncThunk(
 	"showingMovie/addBanner",
 	async ({ movieId, banner }, thunkAPI) => {
-		console.log(movieId, banner);
 		let imgURL;
 		try {
 			await updateBannerMovie(movieId, banner).then((url) => {
-				console.log(url);
 				imgURL = url;
 			});
-			console.log(imgURL);
 			return imgURL;
 		} catch (error) {
 			const message =
