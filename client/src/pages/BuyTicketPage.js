@@ -1,3 +1,4 @@
+import { current } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -42,11 +43,72 @@ const BuyTicketPage = () => {
 		setSearchState(false);
 		setShowAllSeats(true);
 	};
-	// useEffect(() => {
-	// 	getAllSeatRealTime(name, cinema, day, time).then((item) => {
-	// 		console.log(item);
-	// 	});
-	// });
+
+	let currentDate = new Date();
+	const currentTime = new Date().toLocaleTimeString("en-US", {
+		hour12: false,
+		hour: "numeric",
+		minute: "numeric",
+	});
+
+	const getShowDate = (dateArr) => {
+		let showDate = [];
+		showDate = dateArr.filter((date) => {
+			const x = new Date(date);
+			x.setDate(x.getDate());
+			x.setUTCHours(23, 59, 59, 999);
+			console.log("date: " + x, "current date: " + currentDate);
+			return x > currentDate;
+		});
+		return showDate;
+	};
+
+	const dateArr = [
+		"2023-06-20",
+		"2023-06-21",
+		"2023-06-22",
+		"2023-06-23",
+		"2023-06-24",
+	];
+	console.log(getShowDate(dateArr));
+
+	const getShowTime = (currentTime, showTimeArr) => {
+		var movieLength = "01:30";
+
+		const date = new Date(day);
+		date.setDate(date.getDate() + 1);
+		if (currentDate.getMonth() !== date.getMonth()) {
+			if (currentDate.getDate() !== date.getDate()) return showTimeArr;
+		}
+		if (date > currentDate) {
+			return showTimeArr;
+		}
+		// Chuyển đổi chuỗi thành giờ và phút
+		var [hours1, minutes1] = currentTime.split(":").map(Number);
+		var [hours2, minutes2] = movieLength.split(":").map(Number);
+		// Cộng giờ và phút
+		var sumHours = hours1 + hours2;
+		var sumMinutes = minutes1 + minutes2;
+
+		// Xử lý khi tổng phút vượt quá 60
+		if (sumMinutes >= 60) {
+			sumHours += Math.floor(sumMinutes / 60);
+			sumMinutes %= 60;
+		}
+
+		// Định dạng lại chuỗi kết quả
+		var timePoint =
+			sumHours.toString().padStart(2, "0") +
+			":" +
+			sumMinutes.toString().padStart(2, "0");
+
+		var showTime = [];
+		showTime = showTimeArr.filter((time) => {
+			console.log(time, timePoint);
+			return time >= timePoint;
+		});
+		return showTime;
+	};
 
 	return (
 		<div className="py-9 w-full h-full max-w-[1280px] mx-auto px-3">
@@ -142,7 +204,8 @@ const BuyTicketPage = () => {
 											<option value="" disabled selected hidden>
 												Select Day
 											</option>
-											{item._day.map((day) => {
+											{getShowDate(item._day).map((day) => {
+												console.log(item._day);
 												return (
 													<option value={day} key={day}>
 														{day}
@@ -151,7 +214,7 @@ const BuyTicketPage = () => {
 											})}
 										</select>
 										<select
-											className="cursor-pointer focus:outline-none py-2 text-xl select rounded-tr-2xl font-light"
+											className="cursor-pointer focus:border-none focus:outline-none outline-none py-2 text-xl select rounded-tr-2xl font-light"
 											onChange={(e) => {
 												setTime(e.target.value);
 												setSearchState(true);
@@ -160,7 +223,7 @@ const BuyTicketPage = () => {
 											<option value="" disabled selected hidden>
 												Select Time
 											</option>
-											{item._time.map((time) => {
+											{getShowTime(currentTime, item._time).map((time) => {
 												return (
 													<option value={time} key={time}>
 														{time}

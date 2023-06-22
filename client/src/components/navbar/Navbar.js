@@ -29,7 +29,7 @@ const Navbar = () => {
 	};
 	const location = useLocation();
 	return (
-		<div className="bg-black z-50">
+		<div className="bg-black z-50">	
 			{location.pathname === "/signin/imdb" ||
 			location.pathname === "/signin/register" ||
 			location.pathname === "/signin/imdb/resetpassword" ? null : (

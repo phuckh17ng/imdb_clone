@@ -16,6 +16,7 @@ const PaymentModal = ({ clearForm, ticketInfo, show, click }) => {
 	const form = ticketInfo;
 	const root = document.getElementById("root");
 	const handlePayment = () => {
+		console.log(form);
 		dispatch(seatPayment({ form }));
 		click();
 		show = false;
@@ -23,8 +24,6 @@ const PaymentModal = ({ clearForm, ticketInfo, show, click }) => {
 		toast.success("Successful Ticket Purchase!");
 	};
 
-	// if (paymentState.isSuccess) {
-	// }
 	if (show) {
 		root.style.overflow = "hidden";
 		root.style.height = "100%";

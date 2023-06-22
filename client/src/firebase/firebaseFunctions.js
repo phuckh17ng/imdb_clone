@@ -239,7 +239,6 @@ const addShowingMovieSeat = async (name, cinema, day, time) => {
 	return data;
 };
 const getAllSeatRealTime = (name, cinema, day, time) => {
-	console.log(name, cinema, day, time);
 	const q = query(
 		collection(db, "seat"),
 		where("name", "==", name),
@@ -247,14 +246,14 @@ const getAllSeatRealTime = (name, cinema, day, time) => {
 		where("day", "==", day),
 		where("time", "==", time)
 	);
-	const cities = [];
 	onSnapshot(q, (querySnapshot) => {
 		querySnapshot.forEach((doc) => {
-			cities.push(doc.data());
+			console.log(doc?.data());
+			return doc?.data();
 		});
 	});
-	console.log(cities);
-	return cities;
+	// console.log(cities);
+	// return cities;
 };
 const seatPaymentFunc = async (form) => {
 	const q = query(

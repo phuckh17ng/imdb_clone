@@ -1,7 +1,9 @@
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { seatPayment } from "../../features/payment/paymentService";
+import { db } from "../../firebase/firebaseConfig";
 import { getAllSeatRealTime } from "../../firebase/firebaseFunctions";
 import PaymentModal from "../payment/PaymentModal";
 import "./AllSeat.css";
@@ -81,29 +83,6 @@ const AllSeat = () => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [form.name, form.email, form.phoneNumber, seatSelect, seatValidation]);
-	const dispatch = useDispatch();
-	const handlePayment = () => {
-		if (form.name === undefined || !nameValidation) {
-			setNameValidation(false);
-			toast.warn("Please enter your name!");
-			return;
-		}
-		if (form.email === undefined || !emailValidation) {
-			setEmailValidation(false);
-			toast.warn("Please enter your email!");
-			return;
-		}
-		if (form.phoneNumber === undefined || !phoneNumberValidation) {
-			setPhoneNumberValidation(false);
-			toast.warn("Please enter your phone number!");
-			return;
-		}
-		if (!seatValidation) {
-			toast.warn("Please select your seat!");
-			return;
-		}
-		setPaymentModalState(true);
-	};
 
 	const [paymentModalState, setPaymentModalState] = useState(false);
 	const root = document.getElementById("root");
@@ -130,10 +109,66 @@ const AllSeat = () => {
 			movieTime: seat.time,
 		});
 	};
+	const [data, getData] = useState();
+
 	useEffect(() => {
-		getAllSeatRealTime(seat.name, seat.cinema, seat.day, seat.time);
-	});
-	console.log(getAllSeatRealTime(seat.name, seat.cinema, seat.day, seat.time));
+		const q = query(
+			collection(db, "seat"),
+			where("name", "==", seat.name),
+			where("cinema", "==", seat.cinema),
+			where("day", "==", seat.day),
+			where("time", "==", seat.time)
+		);
+		onSnapshot(q, (querySnapshot) => {
+			querySnapshot.forEach((doc) => {
+				getData(doc.data());
+			});
+		});
+	}, [seat.cinema, seat.day, seat.name, seat.time]);
+	if (data !== undefined && data.allSeat !== undefined) {
+		getData(Object.values(data?.allSeat));
+		console.log(data);
+	}
+	console.log(data);
+	const handlePayment = () => {
+		if (form.name === undefined || !nameValidation) {
+			setNameValidation(false);
+			toast.warn("Please enter your name!");
+			return;
+		}
+		if (form.email === undefined || !emailValidation) {
+			setEmailValidation(false);
+			toast.warn("Please enter your email!");
+			return;
+		}
+		if (form.phoneNumber === undefined || !phoneNumberValidation) {
+			setPhoneNumberValidation(false);
+			toast.warn("Please enter your phone number!");
+			return;
+		}
+		if (!seatValidation) {
+			toast.warn("Please select your seat!");
+			return;
+		}
+		
+		var seatSelected = [];
+		data?.filter((item) => {
+			if (item.status === "selected") {
+				seatSelected.push(item.seat);
+			}
+		});
+
+		setSeatSelect(
+			form?.seat?.filter((element) => {
+				if (!seatSelected.includes(element)) {
+					return element;
+				}
+			})
+		);
+		console.log(form?.seat);
+		console.log(seatSelect);
+		setPaymentModalState(true);
+	};
 	return (
 		<div className="z-10 relative mt-24">
 			<div className="w-full text-black/50 py-2 bg-white/90 flex items-center justify-center text-3xl font-bold rounded-t-3xl mb-6">
@@ -142,19 +177,33 @@ const AllSeat = () => {
 
 			<div className="flex justify-between">
 				<div className="grid grid-cols-10 gap-2 w-[100%]">
-					{allSeat
-						.sort((a, b) => a.seat.localeCompare(b.seat))
-						.map((item) => {
-							return (
-								<Seat
-									form={form}
-									key={item.seat}
-									seat={item.seat}
-									seatSelect={handleSeatSelect}
-									status={item.status}
-								/>
-							);
-						})}
+					{data !== undefined && Array.isArray(data)
+						? data
+								.sort((a, b) => a.seat.localeCompare(b.seat))
+								.map((item) => {
+									return (
+										<Seat
+											form={form}
+											key={item.seat}
+											seat={item.seat}
+											seatSelect={handleSeatSelect}
+											status={item.status}
+										/>
+									);
+								})
+						: allSeat
+								.sort((a, b) => a.seat.localeCompare(b.seat))
+								.map((item) => {
+									return (
+										<Seat
+											form={form}
+											key={item.seat}
+											seat={item.seat}
+											seatSelect={handleSeatSelect}
+											status={item.status}
+										/>
+									);
+								})}
 				</div>
 			</div>
 
