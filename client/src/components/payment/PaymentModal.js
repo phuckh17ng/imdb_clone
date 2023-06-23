@@ -14,9 +14,10 @@ const PaymentModal = ({ clearForm, ticketInfo, show, click }) => {
 	let movieInfo = useSelector((state) => state.show.details);
 	let paymentState = useSelector((state) => state.payment);
 	const form = ticketInfo;
+	console.log(form);
 	const root = document.getElementById("root");
 	const handlePayment = () => {
-		console.log(form);
+		if (form?.seat?.length === 0) return;
 		dispatch(seatPayment({ form }));
 		click();
 		show = false;
@@ -215,7 +216,11 @@ const PaymentModal = ({ clearForm, ticketInfo, show, click }) => {
 						</div>
 						<div className="w-full h-full flex items-end justify-end">
 							<div
-								className=" cursor-pointer drop-shadow-lg mt-3 h-12 px-6 flex items-center justify-center text-white font-bold text-2xl rounded-xl"
+								className={`${
+									form?.seat?.length === 0
+										? "!opacity-50 !cursor-default"
+										: "!opacity-100"
+								} cursor-pointer drop-shadow-lg mt-3 h-12 px-6 flex items-center justify-center text-white font-bold text-2xl rounded-xl`}
 								style={{
 									background:
 										"linear-gradient(to top left, #4158D0 0%, #C850C0 50%, #FFCC70 100%)",

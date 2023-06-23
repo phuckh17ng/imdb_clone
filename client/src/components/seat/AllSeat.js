@@ -29,7 +29,7 @@ const AllSeat = () => {
 	const [emailValidation, setEmailValidation] = useState(true);
 	const [phoneNumberValidation, setPhoneNumberValidation] = useState(true);
 	const handleSeatSelect = (seatSelected) => {
-		if (seatSelect.some((item) => item === seatSelected)) {
+		if (seatSelect?.some((item) => item === seatSelected)) {
 			setSeatSelect(() => seatSelect.filter((item) => item !== seatSelected));
 			return;
 		}
@@ -62,7 +62,7 @@ const AllSeat = () => {
 	};
 	const [paymentState, setPaymentState] = useState(false);
 	useEffect(() => {
-		if (seatSelect.length === 0) {
+		if (seatSelect?.length === 0) {
 			setSeatValidation(false);
 		} else {
 			setSeatValidation(true);
@@ -150,25 +150,50 @@ const AllSeat = () => {
 			toast.warn("Please select your seat!");
 			return;
 		}
-		
-		var seatSelected = [];
-		data?.filter((item) => {
-			if (item.status === "selected") {
-				seatSelected.push(item.seat);
-			}
-		});
 
-		setSeatSelect(
-			form?.seat?.filter((element) => {
-				if (!seatSelected.includes(element)) {
-					return element;
-				}
-			})
-		);
+		// var seatSelected = [];
+		// data?.filter((item) => {
+		// 	if (item.status === "selected") {
+		// 		seatSelected.push(item.seat);
+		// 	}
+		// });
+
+		// setSeatSelect(
+		// 	form?.seat?.filter((element) => {
+		// 		if (!seatSelected.includes(element)) {
+		// 			return element;
+		// 		}
+		// 	})
+		// );
 		console.log(form?.seat);
 		console.log(seatSelect);
 		setPaymentModalState(true);
 	};
+
+	useEffect(() => {
+		var seatSelected = [];
+		if (data !== undefined && form.seat !== undefined) {
+			data?.filter((item) => {
+				if (item.status === "selected") {
+					seatSelected.push(item.seat);
+				}
+			});
+
+			setSeatSelect(
+				form?.seat?.filter((element) => {
+					if (seatSelected.includes(element)) {
+						toast.error(
+							`Your selecting seat ${element} have been selected by other users. Please select a new one!`,
+							{ autoClose: false }
+						);
+					}
+					if (!seatSelected.includes(element)) {
+						return element;
+					}
+				})
+			);
+		}
+	}, [data]);
 	return (
 		<div className="z-10 relative mt-24">
 			<div className="w-full text-black/50 py-2 bg-white/90 flex items-center justify-center text-3xl font-bold rounded-t-3xl mb-6">

@@ -1,15 +1,18 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { resetWatchlist } from "../../features/watchlist/watchlistSlice";
 import { logout } from "../../firebase/firebaseFunctions";
-
 const UserMenu = ({ uid, mouseLeave }) => {
 	const dispatch = useDispatch();
 	const handleLogout = () => {
 		logout();
 		dispatch(resetWatchlist());
 	};
+
+	const user = useSelector((state) => state.user);
+	const { userData, isLoading } = user;
+	console.log(userData);
 	return (
 		mouseLeave && (
 			<div
@@ -22,12 +25,15 @@ const UserMenu = ({ uid, mouseLeave }) => {
 				>
 					Watchlist
 				</Link>
-				<Link
-					to="admin/nowshowing"
-					className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
-				>
-					Showing Movie
-				</Link>
+				{userData.data.role === "mod" && (
+					<Link
+						to="admin/nowshowing"
+						className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"
+					>
+						Mod
+					</Link>
+				)}
+
 				<Link
 					to={`user`}
 					className=" hover:bg-zinc-500/50 w-full px-8 text-left py-2"

@@ -1,14 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { ToastContainer } from "react-toastify";
-import ShowingMovies from "../components/adminShowingMovie/ShowingMovies";
+import AddMovie from "../components/adminShowingMovie/AddMovie";
 import SideBar from "../components/adminShowingMovie/SideBar";
+import UpdateMovie from "../components/adminShowingMovie/UpdateMovie";
+import AllMovie from "../components/adminShowingMovie/allMovie/AllMovie";
+import { getShowingMovies } from "../features/show/showService";
 
 const AdminShowPage = () => {
+	const [sideBarActive, setSideBarActive] = useState("show");
+	const getSideBarActive = (active) => {
+		setSideBarActive(active);
+	};
+
+	const dispatch = useDispatch();
+	useEffect(() => {
+		dispatch(getShowingMovies());
+	}, []);
 	return (
-		<div className="w-full h-[100vh] bg-zinc-100 text-white flex">
-			<SideBar />
-			<ShowingMovies />
-			<ToastContainer/>
+		<div className="w-full h-full bg-zinc-100 text-white flex">
+			<SideBar click={getSideBarActive} />
+			<AllMovie show={sideBarActive} />
+			<AddMovie show={sideBarActive} />
+			<UpdateMovie show={sideBarActive} />
+			<ToastContainer />
 		</div>
 	);
 };

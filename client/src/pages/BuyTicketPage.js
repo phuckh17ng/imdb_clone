@@ -111,7 +111,7 @@ const BuyTicketPage = () => {
 	};
 
 	return (
-		<div className="py-9 w-full h-full max-w-[1280px] mx-auto px-3">
+		<div className="py-9 w-full h-full min-h-screen max-w-[1280px] mx-auto px-3">
 			<ToastContainer />
 			{movie.map((item) => {
 				return (
@@ -138,7 +138,7 @@ const BuyTicketPage = () => {
 											webkitBackgroundClip: "text",
 											webkitTextFillColor: "transparent",
 										}}
-										className="block w-full text-5xl font-bold text-zinc-800 border-b border-zinc-400 pb-3"
+										className="block w-full text-5xl font-bold text-zinc-800 border-b border-zinc-400/30 pb-6"
 									>
 										{item._name}
 									</p>

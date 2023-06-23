@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Sidebar.css";
 
-const SideBar = () => {
-	const [current, setCurrent] = useState("add");
+const SideBar = ({ click }) => {
+	const [current, setCurrent] = useState("show");
 	const navLi = document.querySelectorAll(".sidebar li");
 	if (navLi) {
 		navLi.forEach((li) => {
@@ -12,12 +12,17 @@ const SideBar = () => {
 			}
 		});
 	}
+	useEffect(() => {
+		click(current);
+	}, [click, current]);
 	return (
-		<div className="w-[260px] h-full bg-black py-9">
+		<div className="w-[260px] min-h-full bg-black py-9">
 			<ul className="bg-zinc-900 sidebar">
 				<li
 					className="cursor-pointer w-full p-3 show relative"
-					onClick={() => setCurrent("show")}
+					onClick={() => {
+						setCurrent("show");
+					}}
 				>
 					<div className="hidden w-4 h-4 absolute right-0 top-[-16px] bg-zinc-100">
 						<div className="w-full h-full bg-black rounded-br-full"></div>
@@ -29,7 +34,9 @@ const SideBar = () => {
 				</li>
 				<li
 					className="cursor-pointer w-full p-3 border-y-2 border-black add relative active"
-					onClick={() => setCurrent("add")}
+					onClick={() => {
+						setCurrent("add");
+					}}
 				>
 					<div className="hidden w-4 h-4 absolute right-0 top-[-16px] bg-zinc-100">
 						<div className="w-full h-full bg-zinc-900 rounded-br-full"></div>
@@ -41,7 +48,9 @@ const SideBar = () => {
 				</li>
 				<li
 					className="cursor-pointer w-full p-3 update relative"
-					onClick={() => setCurrent("update")}
+					onClick={() => {
+						setCurrent("update");
+					}}
 				>
 					<div className="hidden w-4 h-4 absolute right-0 top-[-16px] bg-zinc-100">
 						<div className="w-full h-full bg-zinc-900 rounded-br-full"></div>

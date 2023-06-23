@@ -1,0 +1,5 @@
+.content-table {
+	display: grid;
+	grid-template-columns: max-content 1fr max-content max-content max-content max-content;
+	gap: 0 8px;
+}

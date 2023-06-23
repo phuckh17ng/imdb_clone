@@ -1,14 +1,19 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Movie from "../components/showingMovie/Movie";
+import { getShowingMovies } from "../features/show/showService";
 
 const NowShowingPage = () => {
+	const dispatch = useDispatch();
+	useEffect(() => {
+		dispatch(getShowingMovies());
+	}, [dispatch]);
 	const showingMovies = useSelector((state) => state.show);
 	const { showingMovie, isLoading } = showingMovies;
 	return (
-		<div className="w-full h-full bg-white text-black pt-10 pb-32">
-			<div className="mt-3 relative w-full flex items-center flex-col">
-				<div className="h-full bg-white flex items-center justify-center z-10">
+		<div className="w-full min-h-screen h-full bg-white text-black pt-9 pb-32">
+			<div className="w-full max-w-[1280px] mx-auto mt-3 px-3">
+				<div className="h-full bg-white z-10">
 					<h1
 						// style={{
 						// 	background:
@@ -16,25 +21,30 @@ const NowShowingPage = () => {
 						// 	webkitBackgroundClip: "text",
 						// 	webkitTextFillColor: "transparent",
 						// }}
-						className="text-zinc-800 text-6xl font-extrabold z-10 bg-white px-3 py-3"
+						className="text-zinc-800 text-7xl font-bold z-10 bg-white"
 					>
 						Now Showing
 					</h1>
 				</div>
-
-				<div
-					className="w-[80%] h-[1.5px] bg-slate-500 absolute top-12 z-0"
-					style={{
-						// background: "rgb(255,255,255)",
-						// background: "linear-gradient(90deg, #fff 0%, #000 50%, #fff 100%)",
-
-						background:
-							"linear-gradient(to right, #fff 0%, #4158D0 40%, #C850C0 50%, #FFCC70 75%, #fff 100%)",
-					}}
-				></div>
+				<div className="mt-3 relative h-full">
+					<div
+						style={{
+							background:
+								"linear-gradient(to right, #4158D0 0%, #C850C0 50%, #FFCC70 100%)",
+						}}
+						className="bg-black w-[10%] h-6 absolute top-0 left-0 z-10"
+					></div>
+					{/* <div
+						// style={{
+						// 	background:
+						// 		"linear-gradient(to right, #4158D0 0%, #C850C0 50%, #FFCC70 100%)",
+						// }}
+						className="bg-zinc-100 absolute w-[45%] h-1 top-5 left-0"
+					></div> */}
+				</div>
 			</div>
 
-			<div className="grid grid-cols-2 mx-auto gap-y-20 gap-x-16 w-full max-w-[1280px] px-3 mt-20">
+			<div className="grid grid-cols-2 mx-auto gap-y-20 gap-x-16 w-full max-w-[1280px] px-3 mt-28">
 				{showingMovie?.map((movie) => {
 					return (
 						<Movie

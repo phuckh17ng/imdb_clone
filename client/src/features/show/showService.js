@@ -13,7 +13,7 @@ import { addShowingMovieFunc } from "../../firebase/firebaseFunctions";
 import { updateBannerMovie } from "../../firebase/firestoreFunctions";
 
 export const getShowingMovies = createAsyncThunk(
-	"showingMovies/get",
+	"showingMovie/getAll",
 	async (thunkAPI) => {
 		try {
 			var data = [];

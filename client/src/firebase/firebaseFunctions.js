@@ -39,6 +39,7 @@ const signInWithGoogle = async () => {
 				authProvider: "google",
 				email: user.email,
 				profileImage: user.photoURL,
+				role: "user",
 			});
 		}
 	} catch (err) {
@@ -89,6 +90,7 @@ const registerWithEmailAndPassword = async (name, email, password) => {
 			password: password,
 			profileImage: require("../images/icons8-customer-96.png"),
 			watchlist: [],
+			role: "user",
 		});
 		toast("Create account successfully!", {
 			position: "top-right",

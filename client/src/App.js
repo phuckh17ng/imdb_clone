@@ -35,9 +35,9 @@ function App() {
 		if (user?.uid === undefined) return;
 		setTimeout(() => dispatch(getUserData(user?.uid)), 2000);
 	}, [dispatch, user?.uid]);
-	// useEffect(() => {
-	// 	dispatch(getAllMovies());
-	// }, [dispatch]);
+	useEffect(() => {
+		dispatch(getAllMovies());
+	}, [dispatch]);
 	useEffect(() => {
 		if (user?.uid === undefined) return;
 		dispatch(getUserWatchlist(user?.uid));
