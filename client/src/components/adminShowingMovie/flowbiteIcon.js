@@ -1,6 +1,6 @@
 const FilterIcon = (
 	<svg
-		class="w-6 h-6 text-zinc-700"
+		class="w-6 h-6 text-zinc-500 hover:text-zinc-800"
 		aria-hidden="true"
 		xmlns="http://www.w3.org/2000/svg"
 		fill="none"
@@ -17,7 +17,7 @@ const FilterIcon = (
 );
 const DotsIcon = (
 	<svg
-		class="w-6 h-6 text-zinc-700"
+		class="w-6 h-6 text-zinc-500 hover:text-zinc-800"
 		aria-hidden="true"
 		xmlns="http://www.w3.org/2000/svg"
 		fill="currentColor"
@@ -47,7 +47,7 @@ const SearchIcon = (
 
 const FileEditIcon = (
 	<svg
-		class="w-6 h-6 text-zinc-700 "
+		className="w-6 h-6 text-zinc-500 hover:text-zinc-800 cursor-pointer"
 		aria-hidden="true"
 		xmlns="http://www.w3.org/2000/svg"
 		fill="none"
@@ -64,7 +64,7 @@ const FileEditIcon = (
 );
 const DeleteIcon = (
 	<svg
-		class="w-6 h-6 text-zinc-700"
+		className="w-6 h-6 text-zinc-500 hover:text-zinc-800 cursor-pointer"
 		aria-hidden="true"
 		xmlns="http://www.w3.org/2000/svg"
 		fill="none"

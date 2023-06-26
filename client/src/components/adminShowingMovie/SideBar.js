@@ -16,10 +16,10 @@ const SideBar = ({ click }) => {
 		click(current);
 	}, [click, current]);
 	return (
-		<div className="w-[260px] min-h-full bg-black py-9">
+		<div className="w-[260px] min-h-screen bg-black py-9">
 			<ul className="bg-zinc-900 sidebar">
 				<li
-					className="cursor-pointer w-full p-3 show relative"
+					className="cursor-pointer w-full p-3 show relative active"
 					onClick={() => {
 						setCurrent("show");
 					}}
@@ -33,7 +33,7 @@ const SideBar = ({ click }) => {
 					</div>
 				</li>
 				<li
-					className="cursor-pointer w-full p-3 border-y-2 border-black add relative active"
+					className="cursor-pointer w-full p-3 border-y-2 border-black add relative"
 					onClick={() => {
 						setCurrent("add");
 					}}

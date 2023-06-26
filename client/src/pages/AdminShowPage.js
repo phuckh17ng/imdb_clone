@@ -5,7 +5,7 @@ import AddMovie from "../components/adminShowingMovie/AddMovie";
 import SideBar from "../components/adminShowingMovie/SideBar";
 import UpdateMovie from "../components/adminShowingMovie/UpdateMovie";
 import AllMovie from "../components/adminShowingMovie/allMovie/AllMovie";
-import { getShowingMovies } from "../features/show/showService";
+import { adminGetAllMovie } from "../features/admin/adminService";
 
 const AdminShowPage = () => {
 	const [sideBarActive, setSideBarActive] = useState("show");
@@ -15,7 +15,7 @@ const AdminShowPage = () => {
 
 	const dispatch = useDispatch();
 	useEffect(() => {
-		dispatch(getShowingMovies());
+		dispatch(adminGetAllMovie());
 	}, []);
 	return (
 		<div className="w-full h-full bg-zinc-100 text-white flex">

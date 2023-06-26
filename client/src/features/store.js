@@ -6,6 +6,7 @@ import {
 } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
 
+import adminReducers from "./admin/adminSlice";
 import authReducers from "./auth/authSlice";
 import moviesReducers from "./movie/movieSlice";
 import paymentReducers from "./payment/paymentSlice";
@@ -24,6 +25,7 @@ let reducers = combineReducers({
 	show: showReducers,
 	ticket: ticketReducers,
 	payment: paymentReducers,
+	admin: adminReducers,
 });
 const middleware = [thunk];
 

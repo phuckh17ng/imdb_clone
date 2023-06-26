@@ -78,7 +78,7 @@ const ShowingMovies = ({ show }) => {
 	const showingMovie = useSelector((state) => state.show);
 	useEffect(() => {
 		dispatch(addMovieBanner({ movieId, banner }));
-	}, [banner, dispatch]);
+	}, [banner, dispatch, movieId]);
 	console.log(showingMovie);
 	useEffect(() => {
 		setForm({
@@ -117,6 +117,10 @@ const ShowingMovies = ({ show }) => {
 	const handleFormSubmit = (e) => {
 		console.log(form);
 		console.log(formValidation(form));
+		if (showingMovie.isLoading) {
+			toast.warning("Please wait...");
+			return;
+		}
 		if (formValidation(form)) {
 			dispatch(addShowingMovie(form));
 			toast.success("Upload new movie successfully!");
@@ -148,7 +152,8 @@ const ShowingMovies = ({ show }) => {
 		show === "add" && (
 			<div className="text-black w-full h-full flex items-center justify-center py-9">
 				<div className="relative w-[90%] h-full bg-white rounded-2xl p-6">
-					<form className="flex relative pb-3">
+					<p className="text-3xl font-bold ml-2">Add Movie</p>
+					<form className="flex relative pb-3 mt-3 px-3">
 						<div className="w-1/2">
 							<div className="">
 								<label for="movieId" className="block pb-1">

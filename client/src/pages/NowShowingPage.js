@@ -10,6 +10,7 @@ const NowShowingPage = () => {
 	}, [dispatch]);
 	const showingMovies = useSelector((state) => state.show);
 	const { showingMovie, isLoading } = showingMovies;
+	let showingMovieArr = [...showingMovie];
 	return (
 		<div className="w-full min-h-screen h-full bg-white text-black pt-9 pb-32">
 			<div className="w-full max-w-[1280px] mx-auto mt-3 px-3">
@@ -45,26 +46,34 @@ const NowShowingPage = () => {
 			</div>
 
 			<div className="grid grid-cols-2 mx-auto gap-y-20 gap-x-16 w-full max-w-[1280px] px-3 mt-28">
-				{showingMovie?.map((movie) => {
-					return (
-						<Movie
-							key={movie.movieId}
-							movieId={movie.movieId}
-							dayCreate={movie.dayCreate}
-							actor={movie._actor}
-							banner={movie._banner}
-							cinema={movie._cinema}
-							day={movie._day}
-							director={movie._director}
-							gerne={movie._gerne}
-							name={movie._name}
-							time={movie._time}
-							trailer={movie._trailer}
-							type={movie._type}
-							isLoading={isLoading}
-						/>
-					);
-				})}
+				{showingMovieArr
+					?.sort((a, b) =>
+						b.movieId.localeCompare(a.movieId, undefined, {
+							numeric: true,
+							sensitivity: "base",
+						})
+					)
+					.map((movie) => {
+						return (
+							<Movie
+								key={movie.movieId}
+								movieId={movie.movieId}
+								dayCreate={movie.dayCreate}
+								actor={movie._actor}
+								banner={movie._banner}
+								cinema={movie._cinema}
+								day={movie._day}
+								director={movie._director}
+								gerne={movie._gerne}
+								name={movie._name}
+								time={movie._time}
+								trailer={movie._trailer}
+								type={movie._type}
+								isLoading={isLoading}
+								isDeleted={movie.isDeleted}
+							/>
+						);
+					})}
 			</div>
 		</div>
 	);

@@ -42,9 +42,9 @@ function App() {
 		if (user?.uid === undefined) return;
 		dispatch(getUserWatchlist(user?.uid));
 	}, [user?.uid, dispatch]);
-	useEffect(() => {
-		dispatch(getShowingMovies());
-	}, [dispatch]);
+	// useEffect(() => {
+	// 	dispatch(getShowingMovies());
+	// }, [dispatch]);
 	return (
 		<Router>
 			<main className="App">
