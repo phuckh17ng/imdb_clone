@@ -1,14 +1,12 @@
 import { Dismiss } from "flowbite";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	adminRemoveMovie,
 	adminUndoRemoveMovie,
 } from "../../../features/admin/adminService";
 import { DeleteIcon, FileEditIcon } from "../flowbiteIcon";
-
 import { DeleteModal, UndoRemoveModal } from "./FlowbiteModals";
-import styles from "./MovieItem.module.css";
 
 const MovieItem = ({ movieId, _name, dayCreate, lastModified }) => {
 	const movieState = useSelector((state) => state.admin);

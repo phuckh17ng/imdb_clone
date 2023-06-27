@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { getUserData } from "../features/user/userService";
 import { auth } from "../firebase/firebaseConfig";
 import {
 	signInWithFacebook,
@@ -10,15 +12,19 @@ import {
 const SignInPage = () => {
 	const [user, loading] = useAuthState(auth);
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const googleSignin = () => {
 		signInWithGoogle();
 	};
 	useEffect(() => {
 		if (loading) return;
 		if (user !== null) {
-			navigate("/");
+			setTimeout(() => {
+				navigate("/");
+				dispatch(getUserData(user?.uid));
+			}, 2000);
 		}
-	}, [user, loading, navigate]);
+	}, [user, loading, navigate, dispatch]);
 
 	return (
 		<div className="w-full h-[100vh] bg-zinc-300">

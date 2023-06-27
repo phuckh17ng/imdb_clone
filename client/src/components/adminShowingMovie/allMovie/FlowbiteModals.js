@@ -13,7 +13,7 @@ export const DeleteModal = ({
 				removeAlertModal
 					? "-translate-x-0 !opacity-100 !visible"
 					: "translate-x-full opacity-0 invisible"
-			} transition-all duration-500 p-4 mt-3 mr-3 fixed top-0 right-0 text-red-800 border border-red-300 rounded-lg bg-red-50 ${
+			} transition-all duration-300 ease-in-out p-4 mt-3 mr-6 fixed top-0 right-0 text-red-800 border border-red-300 rounded-lg bg-red-50 ${
 				styles.modal
 			}`}
 			role="alert"
@@ -79,7 +79,7 @@ export const UndoRemoveModal = ({
 				removeSuccessModal
 					? "-translate-x-0 !opacity-100 !visible"
 					: "translate-x-full opacity-0 invisible"
-			} transition-all duration-500 p-4 mt-3 mr-3 fixed top-0 right-0 text-blue-800 border border-blue-300 rounded-lg bg-blue-50 ${
+			} transition-all ease-in-out duration-300 p-4 mt-3 mr-6 fixed top-0 right-0 text-blue-800 border border-blue-300 rounded-lg bg-blue-50 ${
 				styles.modal
 			}`}
 			role="alert"

@@ -33,7 +33,7 @@ function App() {
 	const dispatch = useDispatch();
 	useEffect(() => {
 		if (user?.uid === undefined) return;
-		setTimeout(() => dispatch(getUserData(user?.uid)), 2000);
+		setTimeout(() => dispatch(getUserData(user?.uid)), 5);
 	}, [dispatch, user?.uid]);
 	useEffect(() => {
 		dispatch(getAllMovies());

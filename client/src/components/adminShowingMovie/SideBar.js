@@ -16,7 +16,7 @@ const SideBar = ({ click }) => {
 		click(current);
 	}, [click, current]);
 	return (
-		<div className="w-[260px] min-h-screen bg-black py-9">
+		<div className="max-lg:hidden w-[260px] min-h-screen bg-black py-9">
 			<ul className="bg-zinc-900 sidebar">
 				<li
 					className="cursor-pointer w-full p-3 show relative active"
