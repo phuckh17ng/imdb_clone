@@ -125,11 +125,10 @@ const AllSeat = () => {
 			});
 		});
 	}, [seat.cinema, seat.day, seat.name, seat.time]);
+	
 	if (data !== undefined && data.allSeat !== undefined) {
 		getData(Object.values(data?.allSeat));
-		console.log(data);
 	}
-	console.log(data);
 	const handlePayment = () => {
 		if (form.name === undefined || !nameValidation) {
 			setNameValidation(false);
@@ -150,23 +149,6 @@ const AllSeat = () => {
 			toast.warn("Please select your seat!");
 			return;
 		}
-
-		// var seatSelected = [];
-		// data?.filter((item) => {
-		// 	if (item.status === "selected") {
-		// 		seatSelected.push(item.seat);
-		// 	}
-		// });
-
-		// setSeatSelect(
-		// 	form?.seat?.filter((element) => {
-		// 		if (!seatSelected.includes(element)) {
-		// 			return element;
-		// 		}
-		// 	})
-		// );
-		console.log(form?.seat);
-		console.log(seatSelect);
 		setPaymentModalState(true);
 	};
 
