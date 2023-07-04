@@ -26,7 +26,7 @@ const SearchPage = () => {
 						<div className="text-white text-3xl border-l-[3.5px] border-[#f5c518] pl-3 mb-3 mr-6">
 							Titles
 						</div>
-						{searchData?.data?.results.map((movie) => {
+						{searchData?.results.map((movie) => {
 							if (movie.id.search("tt") !== -1) {
 								return (
 									<Link
@@ -108,7 +108,7 @@ const SearchPage = () => {
 						People
 					</div>
 					<div className="grid grid-cols-2 w-3/5 max-[1024px]:w-full max-md:grid-cols-1">
-						{searchData?.data?.results.map((people) => {
+						{searchData?.results.map((people) => {
 							if (people.id.search("nm") !== -1) {
 								return (
 									<Link

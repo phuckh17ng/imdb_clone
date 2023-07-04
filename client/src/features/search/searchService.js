@@ -1,15 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
+import { searchData, searchMovieData } from "../data";
 export const getSearchData = createAsyncThunk(
 	"search",
 	async ({ searchOption, searchValue }, thunkAPI) => {
 		try {
 			let data = {};
 			if (searchOption === "All") {
-				data = await axios.get(
-					`https://imdb-api.com/en/API/SearchAll/k_k3dk7ej7/${searchValue}`
-				);
+				// data = await axios.get(
+				// 	`https://imdb-api.com/en/API/SearchAll/k_k3dk7ej7/${searchValue}`
+				// );
+
+				data = searchData;
 			}
 			if (searchOption === "Title") {
 				data = await axios.get(
@@ -17,9 +19,10 @@ export const getSearchData = createAsyncThunk(
 				);
 			}
 			if (searchOption === "Movie") {
-				data = await axios.get(
-					`https://imdb-api.com/en/API/SearchMovie/k_k3dk7ej7/${searchValue}`
-				);
+				// data = await axios.get(
+				// 	`https://imdb-api.com/en/API/SearchMovie/k_k3dk7ej7/${searchValue}`
+				// );
+				data = searchMovieData;
 			}
 			if (searchOption === "Series") {
 				data = await axios.get(
