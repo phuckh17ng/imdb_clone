@@ -118,11 +118,11 @@ const BuyTicketPage = () => {
 					<div className="text-zinc-800 flex relative" key={item.movieId}>
 						<div
 							style={{
-								backgroundPosition: "",
+								backgroundPosition: "center center",
 								backgroundRepeat: "no-repeat",
 								backgroundSize: "cover",
 								backgroundBlendMode: "normal",
-								filter: "blur(120px)",
+								filter: "blur(100px)",
 								backgroundImage: `url(${item._banner})`,
 							}}
 							className="w-full m-auto h-[600px] relative top-[120px]"

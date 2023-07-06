@@ -23,7 +23,7 @@ const RegisterPage = () => {
 			<div className="w-[400px] m-auto flex justify-center items-center flex-col border py-10 rounded">
 				<Link
 					to="/"
-					className="bg-[#f5c518] rounded text-zinc-800 font-black text-4xl px-2 pt-1 pb-[6px] cursor-pointer"
+					className="rounded text-zinc-800 font-black text-4xl px-2 pt-1 pb-[6px] cursor-pointer"
 				>
 					IMDb
 				</Link>

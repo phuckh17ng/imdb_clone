@@ -93,7 +93,7 @@ const SignInPage = () => {
 
 						<Link
 							to="/signin/register"
-							className="bg-[#f5c518] mt-6 rounded hover:brightness-90 h-9 flex items-center justify-center text-black font-bold pb-1 w-[242px] mx-auto"
+							className="bg-zinc-800 mt-6 rounded hover:brightness-90 h-9 flex items-center justify-center text-white/90 font-bold pb-1 w-[242px] mx-auto"
 						>
 							Create a New Account
 						</Link>
