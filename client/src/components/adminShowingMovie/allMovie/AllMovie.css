@@ -1,0 +1,8 @@
+.content-table {
+	display: grid;
+	grid-template-columns:
+		minmax(max-content, 100px) minmax(120px, 1fr) minmax(max-content, 120px)
+		minmax(100px, 120px) minmax(max-content, 80px) minmax(max-content, 60px);
+	gap: 0 8px;
+}
+

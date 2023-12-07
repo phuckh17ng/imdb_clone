@@ -1,0 +1,9 @@
+{
+	"type": "module",
+	"dependencies": {
+		"@firebase/firestore": "^3.12.2",
+		"express": "^4.18.2",
+		"firebase": "^9.22.2",
+		"routes": "^2.1.0"
+	}
+}
