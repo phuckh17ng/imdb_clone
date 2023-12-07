@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .App {
   text-align: center;
 }
@@ -35,4 +36,8 @@
   to {
     transform: rotate(360deg);
   }
+=======
+html {
+	scroll-behavior: initial;
+>>>>>>> e05b5f56928029ab4f6c7101a5ce06ba70ea5085
 }
